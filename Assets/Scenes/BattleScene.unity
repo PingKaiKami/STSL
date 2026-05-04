@@ -1832,6 +1832,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: 0
   placeableArea: {fileID: 1817992790}
+  playerCount: 0
+  enemyCount: 0
 --- !u!4 &1892108977
 Transform:
   m_ObjectHideFlags: 0
@@ -3528,7 +3530,7 @@ Transform:
   m_GameObject: {fileID: 2132963150}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.51, y: -0.5, z: 0}
+  m_LocalPosition: {x: 4.5, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3548,7 +3550,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 3
-  attackSpeed: 0.8
+  attackTime: 1
   attackRange: 1.5
   unitName: Slime
   health: 50
