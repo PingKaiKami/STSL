@@ -4,24 +4,12 @@ using UnityEngine;
 
 public class Player : CharacterBase
 {
-    [Header("戰鬥設定")]
-    public float moveSpeed = 3f;
-    public float attackRange = 1.5f;
-    
-    private Transform currentTarget;
-    public float scaleOffset = 1.2f;
     void Update()
     {
         if (GameManager.Instance.currentState == GameState.Combat)
         {
             CombatLogic();
         }
-    }
-    public virtual void AdjustStats(float h, float a, float d)
-    {
-        health = Mathf.Max(health + h, 0);
-        attack = Mathf.Max(attack + a, 0);
-        defense = Mathf.Max(defense + d, 0);
     }
 
     protected override void Die()
@@ -30,98 +18,84 @@ public class Player : CharacterBase
         Debug.Log("遊戲結束，請重新開始");
     }
 
-    public void SetSelected(bool isSelected)
-    {
-        if (isSelected)
-        {
-            transform.localScale *= scaleOffset;
-        }
-        else
-        {
-            transform.localScale /= scaleOffset;
-        }
-    }
-
     public void CombatLogic()
     {
-        if (currentTarget == null)
+        // 1. 尋找最近的敵人
+        GameObject targetEnemy = FindNearestEnemy();
+
+        if (targetEnemy == null)
         {
-            FindTarget();
+            Debug.Log("場上沒有敵人");
             return;
+        }
+
+        // 2. 計算與敵人的距離
+        float distance = Vector2.Distance(transform.position, targetEnemy.transform.position);
+
+        if (distance > attackRange)
+        {
+            // 3. 距離太遠：向敵人移動
+            if (!isMoving)
+            {
+                Vector2 diff = (Vector2)targetEnemy.transform.position - (Vector2)transform.position;
+                MoveDirection dir;
+
+                // 比較 X 軸與 Y 軸的絕對值，看哪邊距離比較遠
+                if (Mathf.Abs(diff.x) > Mathf.Abs(diff.y))
+                {
+                    // 左右距離較遠，優先走左右
+                    dir = (diff.x > 0) ? MoveDirection.Right : MoveDirection.Left;
+                }
+                else
+                {
+                    // 上下距離較遠，優先走上下
+                    dir = (diff.y > 0) ? MoveDirection.Up : MoveDirection.Down;
+                }
+
+                Move(dir);
+            }
         }
         else
         {
-            float distance = Vector2.Distance(transform.position, currentTarget.position);
-
-            if (distance > attackRange)
+            // 4. 距離夠近：執行攻擊
+            if (attackTimer < 0f)
             {
-                MoveTowardsTarget();
-                attackTimer = 0f;
+                Attack(targetEnemy);
+                attackTimer = attackTime;
             }
             else
             {
-                HandleAttack();
+                attackTimer -= Time.deltaTime;
             }
         }
     }
-    public void HandleAttack()
+
+    private GameObject FindNearestEnemy()
     {
-        float attackInterval = 1f / attackSpeed;
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        GameObject nearest = null;
+        float minDistance = Mathf.Infinity;
+        Vector2 currentPos = transform.position;
 
-        attackTimer += Time.deltaTime;
-
-        if (attackTimer >= attackInterval)
+        foreach (GameObject enemy in enemies)
         {
-            PerformAttack();
-            attackTimer = 0f;
-        }
-    }
-
-    public void PerformAttack()
-    {
-        if (currentTarget != null)
-        {
-            CharacterBase targetStats = currentTarget.GetComponent<CharacterBase>();
-            
-            if (targetStats != null)
+            float dist = Vector2.Distance(enemy.transform.position, currentPos);
+            if (dist < minDistance)
             {
-                Debug.Log($"{unitName} 攻擊了 {targetStats.unitName}！");
-                targetStats.TakeDamage(attack); 
-                StartCoroutine(AttackAnimationEffect());
+                nearest = enemy;
+                minDistance = dist;
             }
         }
+        return nearest;
     }
 
-    // 簡單的縮放效果，讓攻擊看起來有動感
-    public IEnumerator AttackAnimationEffect()
+    private void Attack(GameObject target)
     {
-        transform.localScale = Vector3.one * 1.2f;
-        yield return new WaitForSeconds(0.1f);
-        transform.localScale = Vector3.one;
-    }
-
-    public void FindTarget()
-    {
-        GameObject enemyObj = GameObject.FindGameObjectWithTag("Enemy");
-        
-        if (enemyObj != null)
+        Debug.Log($"正在攻擊 {target.name}");
+        CharacterBase enemyStats = target.GetComponent<CharacterBase>();
+        if (enemyStats != null)
         {
-            currentTarget = enemyObj.transform;
-            Debug.Log($"{unitName} 鎖定了目標：{currentTarget.name}");
+            enemyStats.TakeDamage(attack);
         }
-        else
-        {
-            Debug.Log("場上沒有敵人了！");
-        }
-    }
-
-    // 移動的邏輯
-    public void MoveTowardsTarget()
-    {
-        transform.position = Vector2.MoveTowards(
-            transform.position, 
-            currentTarget.position, 
-            moveSpeed * Time.deltaTime
-        );
     }
 }

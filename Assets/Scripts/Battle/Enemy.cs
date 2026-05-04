@@ -2,60 +2,98 @@ using UnityEngine;
 
 public class Enemy : CharacterBase
 {
-    [Header("戰鬥設定")]
-    public float moveSpeed = 2f;      // 史萊姆走慢一點
-    public float attackRange = 1.2f;  // 手短一點
-    private Transform currentTarget;
-
-    void Start()
-    {
-        unitName = "邪惡史萊姆";
-        health = 50f;
-        attack = 5f;
-        defense = 2f;
-        attackSpeed = 0.8f; // 攻擊頻率稍微慢一點
-    }
-
     void Update()
     {
-        // 只有開戰時才動
         if (GameManager.Instance.currentState == GameState.Combat)
         {
             CombatLogic();
         }
     }
 
-    void CombatLogic()
+    protected override void Die()
     {
-        if (currentTarget == null)
+        base.Die();
+        Debug.Log("遊戲結束，請重新開始");
+    }
+
+    protected virtual void CombatLogic()
+    {
+        // 1. 尋找最近的玩家
+        GameObject targetPlayer = FindNearestPlayer();
+
+        if (targetPlayer == null)
         {
-            // 尋找玩家 (注意這裡是找 Player 標籤)
-            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-            if (playerObj != null) currentTarget = playerObj.transform;
+            Debug.Log("場上沒有玩家");
             return;
         }
 
-        float distance = Vector2.Distance(transform.position, currentTarget.position);
+        // 2. 計算與玩家的距離
+        float distance = Vector2.Distance(transform.position, targetPlayer.transform.position);
 
         if (distance > attackRange)
         {
-            transform.position = Vector2.MoveTowards(transform.position, currentTarget.position, moveSpeed * Time.deltaTime);
-            attackTimer = 0f;
+            // 3. 距離太遠：向玩家移動
+            if (!isMoving)
+            {
+                Vector2 diff = (Vector2)targetPlayer.transform.position - (Vector2)transform.position;
+                MoveDirection dir;
+
+                // 比較 X 軸與 Y 軸的絕對值，看哪邊距離比較遠
+                if (Mathf.Abs(diff.x) > Mathf.Abs(diff.y))
+                {
+                    // 左右距離較遠，優先走左右
+                    dir = (diff.x > 0) ? MoveDirection.Right : MoveDirection.Left;
+                }
+                else
+                {
+                    // 上下距離較遠，優先走上下
+                    dir = (diff.y > 0) ? MoveDirection.Up : MoveDirection.Down;
+                }
+
+                Move(dir);
+            }
         }
         else
         {
-            // 處理攻擊
-            attackTimer += Time.deltaTime;
-            if (attackTimer >= (1f / attackSpeed))
+            // 4. 距離夠近：執行攻擊
+            if (attackTimer < 0f)
             {
-                CharacterBase targetStats = currentTarget.GetComponent<CharacterBase>();
-                if (targetStats != null)
-                {
-                    Debug.Log($"{unitName} 咬了 {targetStats.unitName}！");
-                    targetStats.TakeDamage(attack);
-                }
-                attackTimer = 0f;
+                Attack(targetPlayer);
+                attackTimer = attackTime;
             }
+            else
+            {
+                attackTimer -= Time.deltaTime;
+            }
+        }
+    }
+
+    private GameObject FindNearestPlayer()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        GameObject nearest = null;
+        float minDistance = Mathf.Infinity;
+        Vector2 currentPos = transform.position;
+
+        foreach (GameObject player in players)
+        {
+            float dist = Vector2.Distance(player.transform.position, currentPos);
+            if (dist < minDistance)
+            {
+                nearest = player;
+                minDistance = dist;
+            }
+        }
+        return nearest;
+    }
+
+    private void Attack(GameObject target)
+    {
+        Debug.Log($"正在攻擊 {target.name}");
+        CharacterBase playerStats = target.GetComponent<CharacterBase>();
+        if (playerStats != null)
+        {
+            playerStats.TakeDamage(attack);
         }
     }
 }

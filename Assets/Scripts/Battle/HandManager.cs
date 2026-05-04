@@ -7,6 +7,13 @@ public class HandManager : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.Instance.currentState == GameState.Combat)
+        {
+            SetCardsActive(false);
+            return;
+        }
+
+        SetCardsActive(true);
         ArrangeCards();
     }
 
@@ -31,6 +38,19 @@ public class HandManager : MonoBehaviour
                 
                 // 【核心修改】：直接把位置寫入卡片的變數裡
                 cardScript.baseLocalPosition = pos;
+            }
+        }
+    }
+
+    void SetCardsActive(bool isActive)
+    {
+        // 遍歷所有子物件
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            GameObject child = transform.GetChild(i).gameObject;
+            if (child.activeSelf != isActive)
+            {
+                child.SetActive(isActive);
             }
         }
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Card : MonoBehaviour
@@ -21,9 +22,7 @@ public class Card : MonoBehaviour
     private Vector3 currentTargetLocal; // 新增：計算懸停後的「實際」目標位置
 
     [Header("卡片設定")]
-    public float health;
-    public float att;
-    public float def;
+    public GameObject prefab;
 
     void Update()
     {
@@ -72,19 +71,6 @@ public class Card : MonoBehaviour
                 break; 
             }
         }
-
-        // --- 以下狀態切換邏輯不變 ---
-        if (currentPlayerFound != null && currentPlayerFound != lastTargetPlayer)
-        {
-            if (lastTargetPlayer != null) lastTargetPlayer.SetSelected(false);
-            currentPlayerFound.SetSelected(true);
-            lastTargetPlayer = currentPlayerFound;
-        }
-        else if (currentPlayerFound == null && lastTargetPlayer != null)
-        {
-            lastTargetPlayer.SetSelected(false);
-            lastTargetPlayer = null;
-        }
     }
 
     void OnMouseEnter() 
@@ -115,21 +101,21 @@ public class Card : MonoBehaviour
         screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
         Vector3 cursorScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
         offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(cursorScreenPoint);
+
+        // 顯示可放置區域
+        GameManager.Instance.placeableArea.SetActive(true);
     }
     void OnMouseUp()
     {
         isDragging = false;
         isHovering = false; // 修正：放開時也確保 Hover 狀態清除
         
-        CheckForPlayer();
+        CheckForPlace();
 
-        // 原有的清理 lastTargetPlayer 和 Layer 邏輯...
-        if (lastTargetPlayer != null)
-        {
-            lastTargetPlayer.SetSelected(false);
-            lastTargetPlayer = null;
-        }
         gameObject.layer = originalLayer;
+
+        // 關閉可放置區域
+        GameManager.Instance.placeableArea.SetActive(false);
     }
 
     // 當滑鼠按住並移動時
@@ -145,7 +131,7 @@ public class Card : MonoBehaviour
         transform.position = curPosition;
     }
 
-    void CheckForPlayer()
+    void CheckForPlace()
     {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         // 這裡改用 OverlapPoint 檢查單一物件
@@ -153,11 +139,11 @@ public class Card : MonoBehaviour
 
         if (hit != null && hit.gameObject != gameObject)
         {
-            Player p = hit.GetComponent<Player>();
-            if (p != null)
+            string name = hit.gameObject.name;
+            if (name.Contains("PlayerArea"))
             {
-                p.AdjustStats(health, att, def);
-                Debug.Log("效果施加成功！");
+                Instantiate(prefab, hit.gameObject.transform.position, Quaternion.identity);
+                hit.gameObject.SetActive(false);
                 Destroy(gameObject);
             }
         }
