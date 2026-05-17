@@ -9,11 +9,25 @@ public class BattleSceneController : MonoBehaviour
     [Header("Scene Names")]
     public string mapSceneName = "MapGenerationScene";
     public string failSceneName = "FailScene";
+    public string finalWinSceneName = "FinalWinScene";
+
+    [Header("Rewards")]
+    public int victoryGoldReward = 20;
 
     public void WinBattleForTest()
     {
         RunStateManager runState = RunStateManager.EnsureExists();
+        bool isFinalBoss = runState.IsPendingBossRoom();
+
+        runState.AddPlayerGold(victoryGoldReward);
         runState.CompletePendingRoom();
+
+        if (isFinalBoss)
+        {
+            SceneManager.LoadScene(finalWinSceneName);
+            return;
+        }
+
         SceneManager.LoadScene(mapSceneName);
     }
 

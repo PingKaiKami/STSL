@@ -38,6 +38,7 @@ public class MapGenerationSceneBootstrap : MonoBehaviour
 
         RectTransform canvasRect = canvasObject.GetComponent<RectTransform>();
 
+        Text playerInfoText = CreatePlayerInfoPanel(canvasRect);
         Text statusText = CreateText(canvasRect, "StatusText", "Map Generation", new Vector2(0.5f, 1f), new Vector2(0f, -28f), new Vector2(640f, 40f), 20);
         Button newRunButton = CreateButton(canvasRect, "NewRunButton", "New Run", new Vector2(1f, 1f), new Vector2(-90f, -32f), new Vector2(140f, 44f));
 
@@ -54,6 +55,7 @@ public class MapGenerationSceneBootstrap : MonoBehaviour
         MapUIRenderer renderer = mapRootObject.AddComponent<MapUIRenderer>();
         renderer.mapRoot = mapRoot;
         renderer.statusText = statusText;
+        renderer.playerInfoText = playerInfoText;
         renderer.generateButton = newRunButton;
         renderer.battleSceneName = "BattleScene";
         renderer.shopSceneName = "ShopScene";
@@ -62,6 +64,31 @@ public class MapGenerationSceneBootstrap : MonoBehaviour
         renderer.generateOnStart = true;
 
         newRunButton.onClick.AddListener(renderer.GenerateAndRenderMap);
+    }
+
+    private Text CreatePlayerInfoPanel(Transform parent)
+    {
+        GameObject panelObject = new GameObject("PlayerInfoPanel", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        panelObject.transform.SetParent(parent, false);
+
+        RectTransform panelRect = panelObject.GetComponent<RectTransform>();
+        panelRect.anchorMin = new Vector2(0f, 1f);
+        panelRect.anchorMax = new Vector2(0f, 1f);
+        panelRect.pivot = new Vector2(0f, 1f);
+        panelRect.anchoredPosition = new Vector2(12f, -12f);
+        panelRect.sizeDelta = new Vector2(230f, 118f);
+
+        Image panelImage = panelObject.GetComponent<Image>();
+        panelImage.color = new Color(0.05f, 0.08f, 0.1f, 0.82f);
+
+        Text text = CreateText(panelObject.transform, "PlayerInfoText", "", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(206f, 94f), 18);
+        text.alignment = TextAnchor.MiddleLeft;
+        text.color = Color.white;
+        text.resizeTextForBestFit = true;
+        text.resizeTextMinSize = 12;
+        text.resizeTextMaxSize = 18;
+
+        return text;
     }
 
     private Text CreateText(

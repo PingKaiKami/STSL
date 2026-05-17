@@ -397,6 +397,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapSceneName: MapGenerationScene
   failSceneName: FailScene
+  finalWinSceneName: FinalWinScene
+  victoryGoldReward: 20
 --- !u!4 &379396360
 Transform:
   m_ObjectHideFlags: 0

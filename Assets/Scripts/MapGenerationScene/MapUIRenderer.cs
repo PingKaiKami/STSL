@@ -29,6 +29,7 @@ public class MapUIRenderer : MonoBehaviour
     public Button generateButton;
     public Button nodeButtonPrefab;
     public Text statusText;
+    public Text playerInfoText;
 
     [Header("UI Layout")]
     public Vector2 cellSpacing = new Vector2(120f, 58f);
@@ -87,6 +88,8 @@ public class MapUIRenderer : MonoBehaviour
 
     private void Update()
     {
+        RefreshPlayerInfo();
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             GenerateAndRenderMap();
@@ -158,6 +161,8 @@ public class MapUIRenderer : MonoBehaviour
                 + ", Edges: "
                 + currentMap.Edges.Count;
         }
+
+        RefreshPlayerInfo();
     }
 
     private void ClearMap()
@@ -511,9 +516,37 @@ public class MapUIRenderer : MonoBehaviour
                 break;
 
             case RoomType.Event:
-                CompleteSimpleRoomAndStayOnMap(node);
+                LoadRandomEventScene();
                 break;
         }
+    }
+
+    private void LoadRandomEventScene()
+    {
+        int randomSceneIndex = Random.Range(0, 4);
+        string selectedSceneName;
+
+        switch (randomSceneIndex)
+        {
+            case 0:
+                selectedSceneName = shopSceneName;
+                break;
+
+            case 1:
+                selectedSceneName = battleSceneName;
+                break;
+
+            case 2:
+                selectedSceneName = restSceneName;
+                break;
+
+            default:
+                selectedSceneName = chestSceneName;
+                break;
+        }
+
+        Debug.Log("Event room selected random scene: " + selectedSceneName);
+        SceneManager.LoadScene(selectedSceneName);
     }
 
     private void CompleteSimpleRoomAndStayOnMap(MapNode node)
@@ -521,5 +554,27 @@ public class MapUIRenderer : MonoBehaviour
         RunStateManager runState = RunStateManager.EnsureExists();
         runState.CompletePendingRoom();
         RenderCurrentMap(node.Type + " room completed.");
+    }
+
+    private void RefreshPlayerInfo()
+    {
+        if (playerInfoText == null)
+        {
+            return;
+        }
+
+        RunStateManager runState = RunStateManager.EnsureExists();
+        PlayerRunState state = runState.GetPlayerState();
+
+        playerInfoText.text = "HP: "
+            + state.currentHP
+            + " / "
+            + state.maxHP
+            + "\nGold: "
+            + state.gold
+            + "\nCards: "
+            + state.cards.Count
+            + "\nEquipment: "
+            + state.equipment.Count;
     }
 }
