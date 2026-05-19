@@ -1,99 +1,390 @@
+using System.Collections;
 using UnityEngine;
 
 public class Enemy : CharacterBase
 {
-    void Update()
+    [Header("Pathfinding")]
+    [SerializeField] private int maxSearchDepth = 50;
+
+    [Header("Animation")]
+    [SerializeField] protected Animator animator;
+
+    [Header("Debug")]
+    [SerializeField] private bool debugOccupancy = false;
+
+    [Header("Death")]
+    [SerializeField] private float deathAnimationDelay = 0.8f;
+
+    private bool isDying = false;
+    private bool hasReservedCell = false;
+    private Vector3 lastSafeWorldPosition;
+    private bool initializedSafePosition = false;
+
+    protected virtual void Update()
     {
+        if (isDying) return;
+        if (GameManager.Instance == null) return;
+
+        EnsureSafePositionInitialized();
+
         if (GameManager.Instance.currentState == GameState.Combat)
         {
+            if (attackTimer > 0f)
+            {
+                attackTimer -= Time.deltaTime;
+            }
+
+            UpdateReservationLifecycle();
+
             CombatLogic();
+
+            UpdateReservationLifecycle();
+
+            UpdateMoveAnimation();
         }
+    }
+
+    private void EnsureSafePositionInitialized()
+    {
+        if (initializedSafePosition) return;
+
+        lastSafeWorldPosition = transform.position;
+        initializedSafePosition = true;
     }
 
     protected override void Die()
     {
+        if (isDying) return;
+
+        isDying = true;
+        isMoving = false;
+
+        GridReservationManager.ReleaseReservation(gameObject);
+        hasReservedCell = false;
+
+        if (animator != null)
+        {
+            animator.ResetTrigger("Attack");
+            animator.ResetTrigger("Cast");
+            animator.SetBool("IsMoving", false);
+            animator.SetTrigger("Death");
+        }
+
+        Debug.Log($"{unitName} 播放死亡動畫");
+
+        StartCoroutine(DieAfterAnimation());
+    }
+
+    private IEnumerator DieAfterAnimation()
+    {
+        yield return new WaitForSeconds(deathAnimationDelay);
+
         base.Die();
-        Debug.Log("遊戲結束，請重新開始");
+    }
+
+    private void OnDisable()
+    {
+        GridReservationManager.ReleaseReservation(gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        GridReservationManager.ReleaseReservation(gameObject);
     }
 
     protected virtual void CombatLogic()
     {
-        // 1. 尋找最近的玩家
-        GameObject targetPlayer = FindNearestPlayer();
+        if (isMoving) return;
+
+        Vector2Int currentCell = WorldToGrid(transform.position);
+
+        Vector2Int nextStep;
+        GameObject pathTarget;
+
+        bool hasPath = GridAStarPathfinder.TryFindNextStepToNearestPlayer(
+            gameObject,
+            attackRange,
+            maxSearchDepth,
+            out nextStep,
+            out pathTarget
+        );
+
+        GameObject targetPlayer = pathTarget;
 
         if (targetPlayer == null)
         {
-            Debug.Log("場上沒有玩家");
+            targetPlayer = FindNearestPlayerByDistance();
+        }
+
+        if (targetPlayer == null)
+        {
+            Debug.Log($"{unitName} 找不到玩家");
             return;
         }
 
-        // 2. 計算與玩家的距離
-        float distance = Vector2.Distance(transform.position, targetPlayer.transform.position);
+        Vector2Int targetCell = WorldToGrid(targetPlayer.transform.position);
+        int distance = GetGridDistance(currentCell, targetCell);
 
-        if (distance > attackRange)
+        if (distance <= GetAttackRangeInGrid())
         {
-            // 3. 距離太遠：向玩家移動
-            if (!isMoving)
-            {
-                Vector2 diff = (Vector2)targetPlayer.transform.position - (Vector2)transform.position;
-                MoveDirection dir;
-
-                // 比較 X 軸與 Y 軸的絕對值，看哪邊距離比較遠
-                if (Mathf.Abs(diff.x) > Mathf.Abs(diff.y))
-                {
-                    // 左右距離較遠，優先走左右
-                    dir = (diff.x > 0) ? MoveDirection.Right : MoveDirection.Left;
-                }
-                else
-                {
-                    // 上下距離較遠，優先走上下
-                    dir = (diff.y > 0) ? MoveDirection.Up : MoveDirection.Down;
-                }
-
-                Move(dir);
-            }
+            FaceTarget(targetPlayer);
+            TryAttack(targetPlayer);
+            return;
         }
-        else
+
+        if (!hasPath)
         {
-            // 4. 距離夠近：執行攻擊
-            if (attackTimer < 0f)
+            if (debugOccupancy)
             {
-                Attack(targetPlayer);
-                attackTimer = attackTime;
+                Debug.Log($"{unitName} 找不到可行路徑 | current={currentCell}, target={targetCell}");
             }
-            else
+
+            return;
+        }
+
+        MoveDirection moveDir;
+
+        if (!TryConvertStepToMoveDirection(currentCell, nextStep, out moveDir))
+        {
+            Debug.LogWarning($"{unitName} A* 下一格不是相鄰格 | current={currentCell}, next={nextStep}");
+            return;
+        }
+
+        if (!GridReservationManager.TryReserveCell(gameObject, nextStep))
+        {
+            if (debugOccupancy)
             {
-                attackTimer -= Time.deltaTime;
+                Debug.Log($"{unitName} 預約失敗或下一格被佔用 | current={currentCell}, next={nextStep}, target={targetCell}");
             }
+
+            return;
+        }
+
+        hasReservedCell = true;
+        lastSafeWorldPosition = transform.position;
+
+        PlayMoveAnimation(moveDir);
+
+        Move(moveDir);
+    }
+
+    private void UpdateReservationLifecycle()
+    {
+        if (isMoving) return;
+
+        if (hasReservedCell || GridReservationManager.HasReservation(gameObject))
+        {
+            GridReservationManager.ReleaseReservation(gameObject);
+            hasReservedCell = false;
+        }
+
+        Vector2Int currentCell = WorldToGrid(transform.position);
+
+        if (GridReservationManager.IsCellOccupiedByOther(gameObject, currentCell))
+        {
+            if (debugOccupancy)
+            {
+                Debug.LogWarning($"{unitName} 移動完成後發現重疊，退回安全位置");
+            }
+
+            transform.position = lastSafeWorldPosition;
+            isMoving = false;
+
+            if (animator != null)
+            {
+                animator.SetBool("IsMoving", false);
+            }
+
+            return;
+        }
+
+        lastSafeWorldPosition = transform.position;
+    }
+
+    protected void TryAttack(GameObject target)
+    {
+        if (target == null) return;
+        if (attackTimer > 0f) return;
+
+        Attack(target);
+        attackTimer = attackTime;
+    }
+
+    protected virtual void Attack(GameObject target)
+    {
+        if (target == null) return;
+
+        if (animator != null)
+        {
+            animator.SetTrigger("Attack");
+        }
+
+        Debug.Log($"{unitName} 正在攻擊 {target.name}");
+
+        CharacterBase targetStats = target.GetComponent<CharacterBase>();
+
+        if (targetStats != null)
+        {
+            targetStats.TakeDamage(attack);
+            OnAttackHit(targetStats);
         }
     }
 
-    private GameObject FindNearestPlayer()
+    protected virtual void OnAttackHit(CharacterBase targetStats)
+    {
+        // 子類別可覆寫，例如巫毒信徒的微弱詛咒
+    }
+
+    protected bool TryConvertStepToMoveDirection(
+        Vector2Int currentCell,
+        Vector2Int nextCell,
+        out MoveDirection moveDir
+    )
+    {
+        moveDir = MoveDirection.Down;
+
+        Vector2Int diff = nextCell - currentCell;
+
+        if (diff == Vector2Int.up)
+        {
+            moveDir = MoveDirection.Up;
+            return true;
+        }
+
+        if (diff == Vector2Int.down)
+        {
+            moveDir = MoveDirection.Down;
+            return true;
+        }
+
+        if (diff == Vector2Int.left)
+        {
+            moveDir = MoveDirection.Left;
+            return true;
+        }
+
+        if (diff == Vector2Int.right)
+        {
+            moveDir = MoveDirection.Right;
+            return true;
+        }
+
+        return false;
+    }
+
+    protected GameObject FindNearestPlayerByDistance()
     {
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
         GameObject nearest = null;
         float minDistance = Mathf.Infinity;
         Vector2 currentPos = transform.position;
 
         foreach (GameObject player in players)
         {
+            if (player == null) continue;
+            if (!player.activeInHierarchy) continue;
+
             float dist = Vector2.Distance(player.transform.position, currentPos);
+
             if (dist < minDistance)
             {
                 nearest = player;
                 minDistance = dist;
             }
         }
+
         return nearest;
     }
 
-    private void Attack(GameObject target)
+    protected void FaceTarget(GameObject target)
     {
-        Debug.Log($"正在攻擊 {target.name}");
-        CharacterBase playerStats = target.GetComponent<CharacterBase>();
-        if (playerStats != null)
+        if (target == null) return;
+
+        Vector2Int selfCell = WorldToGrid(transform.position);
+        Vector2Int targetCell = WorldToGrid(target.transform.position);
+
+        Vector2Int diff = targetCell - selfCell;
+
+        if (Mathf.Abs(diff.x) > Mathf.Abs(diff.y))
         {
-            playerStats.TakeDamage(attack);
+            if (diff.x > 0)
+            {
+                SetFacingDirection(MoveDirection.Right);
+            }
+            else if (diff.x < 0)
+            {
+                SetFacingDirection(MoveDirection.Left);
+            }
         }
+        else
+        {
+            if (diff.y > 0)
+            {
+                SetFacingDirection(MoveDirection.Up);
+            }
+            else if (diff.y < 0)
+            {
+                SetFacingDirection(MoveDirection.Down);
+            }
+        }
+    }
+
+    protected void PlayMoveAnimation(MoveDirection dir)
+    {
+        if (animator == null) return;
+
+        SetFacingDirection(dir);
+        animator.SetBool("IsMoving", true);
+    }
+
+    protected void UpdateMoveAnimation()
+    {
+        if (animator == null) return;
+
+        animator.SetBool("IsMoving", isMoving);
+    }
+
+    protected void SetFacingDirection(MoveDirection dir)
+    {
+        if (animator == null) return;
+
+        int directionValue = 0;
+
+        switch (dir)
+        {
+            case MoveDirection.Down:
+                directionValue = 0;
+                break;
+
+            case MoveDirection.Up:
+                directionValue = 1;
+                break;
+
+            case MoveDirection.Left:
+                directionValue = 2;
+                break;
+
+            case MoveDirection.Right:
+                directionValue = 3;
+                break;
+        }
+
+        animator.SetInteger("Direction", directionValue);
+    }
+
+    protected int GetAttackRangeInGrid()
+    {
+        return Mathf.Max(1, Mathf.FloorToInt(attackRange));
+    }
+
+    protected int GetGridDistance(Vector2Int a, Vector2Int b)
+    {
+        return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
+    }
+
+    protected Vector2Int WorldToGrid(Vector3 worldPosition)
+    {
+        return GridReservationManager.WorldToGrid(worldPosition);
     }
 }
