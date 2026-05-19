@@ -15,11 +15,22 @@ public class Enemy : CharacterBase
     [Header("Death")]
     [SerializeField] private float deathAnimationDelay = 0.8f;
 
+    [Header("Action Animation")]
+    [SerializeField] protected float attackAnimationDuration = 0.45f;
+
+    private int actionToken = 0;
     private bool isDying = false;
     private bool hasReservedCell = false;
     private Vector3 lastSafeWorldPosition;
     private bool initializedSafePosition = false;
 
+    protected virtual void Awake()
+    {
+        if (animator == null)
+        {
+            animator = GetComponent<Animator>();
+        }
+    }
     protected virtual void Update()
     {
         if (isDying) return;
@@ -39,9 +50,25 @@ public class Enemy : CharacterBase
             CombatLogic();
 
             UpdateReservationLifecycle();
+            UpdateFacingToTargetWhenIdle();
 
             UpdateMoveAnimation();
         }
+    }
+    protected void UpdateFacingToTargetWhenIdle()
+    {
+        if (animator == null) return;
+        if (isMoving) return;
+        if (isDying) return;
+
+        // 如果正在 Attack / Call / Death，不要中途改方向
+        if (animator.GetBool("IsActing")) return;
+
+        GameObject target = FindNearestPlayerByDistance();
+
+        if (target == null) return;
+
+        FaceTarget(target);
     }
 
     private void EnsureSafePositionInitialized()
@@ -65,8 +92,9 @@ public class Enemy : CharacterBase
         if (animator != null)
         {
             animator.ResetTrigger("Attack");
-            animator.ResetTrigger("Cast");
+            animator.ResetTrigger("Call");
             animator.SetBool("IsMoving", false);
+            animator.SetBool("IsActing", true);
             animator.SetTrigger("Death");
         }
 
@@ -214,8 +242,11 @@ public class Enemy : CharacterBase
     {
         if (target == null) return;
 
+        int token = BeginAction();
+
         if (animator != null)
         {
+            animator.ResetTrigger("Call");
             animator.SetTrigger("Attack");
         }
 
@@ -228,8 +259,9 @@ public class Enemy : CharacterBase
             targetStats.TakeDamage(attack);
             OnAttackHit(targetStats);
         }
-    }
 
+        StartCoroutine(EndActionAfter(attackAnimationDuration, token));
+    }
     protected virtual void OnAttackHit(CharacterBase targetStats)
     {
         // 子類別可覆寫，例如巫毒信徒的微弱詛咒
@@ -386,5 +418,34 @@ public class Enemy : CharacterBase
     protected Vector2Int WorldToGrid(Vector3 worldPosition)
     {
         return GridReservationManager.WorldToGrid(worldPosition);
+    }
+    protected int BeginAction()
+    {
+        actionToken++;
+
+        if (animator != null)
+        {
+            animator.SetBool("IsActing", true);
+            animator.SetBool("IsMoving", false);
+        }
+
+        return actionToken;
+    }
+
+    protected void EndAction(int token)
+    {
+        if (token != actionToken) return;
+
+        if (animator != null)
+        {
+            animator.SetBool("IsActing", false);
+        }
+    }
+
+    protected IEnumerator EndActionAfter(float duration, int token)
+    {
+        yield return new WaitForSeconds(duration);
+
+        EndAction(token);
     }
 }

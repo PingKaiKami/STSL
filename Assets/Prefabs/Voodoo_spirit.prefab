@@ -49,15 +49,17 @@ MonoBehaviour:
   moveSpeed: 3
   attackTime: 1
   attackRange: 1
-  unitName: 
+  unitName: Spirit
   health: 2
   attack: 9
   defense: 0
   maxSearchDepth: 20
   animator: {fileID: 6615021596647835741}
   debugOccupancy: 0
-  lifeTime: 5
-  baseAttackTime: 0
+  deathAnimationDelay: 0.8
+  attackAnimationDuration: 0.5
+  lifeTime: 6
+  baseAttackTime: 0.5
 --- !u!212 &8788271903489376293
 SpriteRenderer:
   m_ObjectHideFlags: 0
