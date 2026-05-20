@@ -7,16 +7,27 @@ public class VoodooSpirit : Enemy
 
     [Header("Buff Settings")]
     [SerializeField] private float baseAttackTime;
-    private float buffTimer = 0f;
 
+    [Header("Totem Resonance")]
+    [SerializeField] private float attackBonusPerTotem = 1f;
+
+    private float buffTimer = 0f;
     private float lifeTimer;
+    private float originalAttack;
+    private bool deathNotified = false;
 
     private void Start()
     {
         lifeTimer = lifeTime;
         baseAttackTime = attackTime;
+        originalAttack = attack;
 
         gameObject.tag = "Enemy";
+
+        ApplyTotemResonance(VoodooTotemRegistry.ActiveTotemCount);
+        VoodooTotemRegistry.OnTotemCountChanged += ApplyTotemResonance;
+
+        FaceNearestPlayerOnSpawn();
     }
 
     protected override void CombatLogic()
@@ -31,8 +42,17 @@ public class VoodooSpirit : Enemy
 
         UpdateBuffTimer();
 
-        // 使用 Enemy 原本的追擊與攻擊邏輯
         base.CombatLogic();
+    }
+
+    private void FaceNearestPlayerOnSpawn()
+    {
+        GameObject target = FindNearestPlayerByDistance();
+
+        if (target != null)
+        {
+            FaceTarget(target);
+        }
     }
 
     public void ApplyAttackSpeedBuff(float multiplier, float duration)
@@ -53,9 +73,30 @@ public class VoodooSpirit : Enemy
         }
     }
 
+    private void ApplyTotemResonance(int totemCount)
+    {
+        attack = originalAttack + totemCount * attackBonusPerTotem;
+
+        Debug.Log($"{unitName} 受到圖騰共鳴：目前 ATK = {attack}");
+    }
+
+    private void OnDisable()
+    {
+        VoodooTotemRegistry.OnTotemCountChanged -= ApplyTotemResonance;
+    }
+
+    private void OnDestroy()
+    {
+        VoodooTotemRegistry.OnTotemCountChanged -= ApplyTotemResonance;
+    }
+
     protected override void Die()
     {
+        if (!deathNotified)
+        {
+            deathNotified = true;
+            VoodooSummonEvents.NotifySummonDied(this);
+        }
         base.Die();
-        Destroy(gameObject, 0.1f);
     }
 }

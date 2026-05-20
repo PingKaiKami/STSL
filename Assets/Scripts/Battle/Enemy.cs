@@ -23,7 +23,15 @@ public class Enemy : CharacterBase
     private bool hasReservedCell = false;
     private Vector3 lastSafeWorldPosition;
     private bool initializedSafePosition = false;
+    [Header("Projectile Attack")]
+    [SerializeField] protected bool useProjectileAttack = false;
+    [SerializeField] protected GameObject projectilePrefab;
+    [SerializeField] protected float projectileSpeed = 6f;
+    [SerializeField] protected float projectileLaunchDelay = 0.2f;
+    [SerializeField] protected float projectileSpawnDistance = 0.45f;
+    [SerializeField] protected float projectileHitRadius = 0.2f;
 
+    protected MoveDirection currentFacingDirection = MoveDirection.Down;
     protected virtual void Awake()
     {
         if (animator == null)
@@ -242,12 +250,21 @@ public class Enemy : CharacterBase
     {
         if (target == null) return;
 
+        FaceTarget(target);
+
         int token = BeginAction();
 
         if (animator != null)
         {
             animator.ResetTrigger("Call");
             animator.SetTrigger("Attack");
+        }
+
+        if (useProjectileAttack && projectilePrefab != null)
+        {
+            MoveDirection fireDirection = currentFacingDirection;
+            StartCoroutine(LaunchProjectileAfterDelay(fireDirection, token));
+            return;
         }
 
         Debug.Log($"{unitName} 正在攻擊 {target.name}");
@@ -261,6 +278,84 @@ public class Enemy : CharacterBase
         }
 
         StartCoroutine(EndActionAfter(attackAnimationDuration, token));
+    }
+    protected IEnumerator LaunchProjectileAfterDelay(MoveDirection fireDirection, int token)
+    {
+        yield return new WaitForSeconds(projectileLaunchDelay);
+
+        if (projectilePrefab == null)
+        {
+            Debug.LogWarning($"{unitName} 沒有設定 Projectile Prefab");
+            EndAction(token);
+            yield break;
+        }
+
+        Vector3 origin = transform.position;
+        Vector3 spawnPos = GetProjectileSpawnPosition(fireDirection);
+
+        GameObject projectileObj = Instantiate(
+            projectilePrefab,
+            spawnPos,
+            Quaternion.identity
+        );
+
+        VoodooProjectile projectile = projectileObj.GetComponent<VoodooProjectile>();
+
+        if (projectile != null)
+        {
+            projectile.Init(
+                this,
+                origin,
+                fireDirection,
+                attack,
+                projectileSpeed,
+                attackRange,
+                projectileHitRadius
+            );
+        }
+
+        float remainingActionTime = Mathf.Max(
+            0f,
+            attackAnimationDuration - projectileLaunchDelay
+        );
+
+        yield return new WaitForSeconds(remainingActionTime);
+
+        EndAction(token);
+    }
+
+    protected Vector3 GetProjectileSpawnPosition(MoveDirection direction)
+    {
+        Vector3 dir = Vector3.down;
+
+        switch (direction)
+        {
+            case MoveDirection.Up:
+                dir = Vector3.up;
+                break;
+
+            case MoveDirection.Down:
+                dir = Vector3.down;
+                break;
+
+            case MoveDirection.Left:
+                dir = Vector3.left;
+                break;
+
+            case MoveDirection.Right:
+                dir = Vector3.right;
+                break;
+        }
+
+        return transform.position + dir * projectileSpawnDistance;
+    }
+    public virtual void ResolveProjectileHit(CharacterBase targetStats, float projectileDamage)
+    {
+        if (targetStats == null) return;
+
+        targetStats.TakeDamage(projectileDamage);
+
+        OnAttackHit(targetStats);
     }
     protected virtual void OnAttackHit(CharacterBase targetStats)
     {
@@ -379,6 +474,8 @@ public class Enemy : CharacterBase
 
     protected void SetFacingDirection(MoveDirection dir)
     {
+        currentFacingDirection = dir;
+
         if (animator == null) return;
 
         int directionValue = 0;
