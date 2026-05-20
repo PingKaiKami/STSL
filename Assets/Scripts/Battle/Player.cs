@@ -5,6 +5,7 @@ public class Player : CharacterBase
     private bool hasReservedCell = false;
     private Vector3 lastSafeWorldPosition;
 
+    public GameObject sourceCardPrefab;
     void Update()
     {
         if (GameManager.Instance == null) return;
