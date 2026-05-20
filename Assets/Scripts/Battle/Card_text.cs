@@ -5,25 +5,36 @@ using UnityEngine;
 
 public class Card_text : MonoBehaviour
 {
-    public Card card;
+    private Card card;
     private TextMeshPro tmp;
-    void Start()
+
+    void Awake()
     {
         tmp = GetComponent<TextMeshPro>();
-        tmp.text = GetText(card.prefab);
+        card = GetComponentInParent<Card>();
     }
 
-    private string GetText(GameObject prefab)
+    public void UpdateText()
     {
         List<string> lines = new List<string>();
-        CharacterBase cb = prefab.GetComponent<CharacterBase>();
 
-        lines.Add(cb.unitName);
-        lines.Add(cb.attack.ToString());
-        lines.Add(cb.defense.ToString());
-        lines.Add(cb.health.ToString());
+        lines.Add(card.cardName);
 
-        return string.Join("\n", lines);
+        if (card.att != 0) lines.Add($"att: {card.att.ToString("+0;-0")}");
+        if (card.def != 0) lines.Add($"def: {card.def.ToString("+0;-0")}");
+        
+        if (card.hp != 0)  
+        {
+            string hpText = $"hp: {card.hp}";
+            float lostHp = card.maxHp - card.hp; // 透過 maxHp 減去當前 hp 算出損失血量
+            
+            if (lostHp > 0)
+            {
+                hpText += $" (-{lostHp})";
+            }
+            lines.Add(hpText);
+        }
+
+        tmp.text = string.Join("\n", lines);
     }
-
 }

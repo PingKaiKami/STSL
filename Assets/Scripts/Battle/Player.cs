@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : CharacterBase
 {
+    public GameObject sourceCardPrefab;
     void Update()
     {
         if (GameManager.Instance.currentState == GameState.Combat)
