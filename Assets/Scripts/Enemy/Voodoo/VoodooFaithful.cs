@@ -103,6 +103,12 @@ public class VoodooFaithful : Enemy
 
         GameObject spirit = Instantiate(spiritPrefab, spawnPos, Quaternion.identity);
         spirit.tag = "Enemy";
+        CharacterBase summonCharacter = spirit.GetComponent<CharacterBase>();
+
+        if (summonCharacter != null && GameManager.Instance != null)
+        {
+            GameManager.Instance.RegisterEnemyFromPrefab(summonCharacter, spiritPrefab);
+        }
 
         ownSummons.Add(spirit);
 
