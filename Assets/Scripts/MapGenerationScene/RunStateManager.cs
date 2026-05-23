@@ -269,16 +269,6 @@ public class RunStateManager : MonoBehaviour
         return GetPlayerState().RemoveCardAt(index);
     }
 
-    public List<PlayerEquipmentRuntimeData> GetPlayerEquipment()
-    {
-        return GetPlayerState().GetEquipmentSnapshot();
-    }
-
-    public void AddPlayerEquipment(PlayerEquipmentRuntimeData equipment)
-    {
-        GetPlayerState().AddEquipment(equipment);
-    }
-
     private void EnsurePlayerStateInitialized()
     {
         if (playerState == null)

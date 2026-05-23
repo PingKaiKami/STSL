@@ -42,18 +42,33 @@ public class MapGenerationSceneBootstrap : MonoBehaviour
         Text statusText = CreateText(canvasRect, "StatusText", "Map Generation", new Vector2(0.5f, 1f), new Vector2(0f, -28f), new Vector2(640f, 40f), 20);
         Button newRunButton = CreateButton(canvasRect, "NewRunButton", "New Run", new Vector2(1f, 1f), new Vector2(-90f, -32f), new Vector2(140f, 44f));
 
+        GameObject viewportObject = new GameObject("MapViewport", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(RectMask2D));
+        viewportObject.transform.SetParent(canvasObject.transform, false);
+
+        RectTransform viewportRect = viewportObject.GetComponent<RectTransform>();
+        viewportRect.anchorMin = new Vector2(0.5f, 0.5f);
+        viewportRect.anchorMax = new Vector2(0.5f, 0.5f);
+        viewportRect.pivot = new Vector2(0.5f, 0.5f);
+        viewportRect.anchoredPosition = new Vector2(0f, -20f);
+        viewportRect.sizeDelta = new Vector2(1100f, 560f);
+
+        Image viewportImage = viewportObject.GetComponent<Image>();
+        viewportImage.color = new Color(0.03f, 0.04f, 0.05f, 0.35f);
+        viewportImage.raycastTarget = false;
+
         GameObject mapRootObject = new GameObject("MapRoot", typeof(RectTransform));
-        mapRootObject.transform.SetParent(canvasObject.transform, false);
+        mapRootObject.transform.SetParent(viewportObject.transform, false);
 
         RectTransform mapRoot = mapRootObject.GetComponent<RectTransform>();
         mapRoot.anchorMin = new Vector2(0.5f, 0.5f);
         mapRoot.anchorMax = new Vector2(0.5f, 0.5f);
         mapRoot.pivot = new Vector2(0.5f, 0.5f);
-        mapRoot.anchoredPosition = new Vector2(0f, -20f);
-        mapRoot.sizeDelta = new Vector2(1100f, 620f);
+        mapRoot.anchoredPosition = Vector2.zero;
+        mapRoot.sizeDelta = new Vector2(1100f, 980f);
 
         MapUIRenderer renderer = mapRootObject.AddComponent<MapUIRenderer>();
         renderer.mapRoot = mapRoot;
+        renderer.viewport = viewportRect;
         renderer.statusText = statusText;
         renderer.playerInfoText = playerInfoText;
         renderer.generateButton = newRunButton;

@@ -6,6 +6,8 @@ public class HandManager : MonoBehaviour
     public float spacing = 2.0f;
     public static HandManager Instance;
     public GameObject basicCard;
+    public GameObject warriorPrefab;
+    private bool handBuiltForCurrentPreparation;
 
     void Awake()
     {
@@ -22,7 +24,25 @@ public class HandManager : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance.currentState == GameState.Combat || GameManager.Instance.currentState == GameState.MapSelection)
+        if (GameManager.Instance == null)
+        {
+            return;
+        }
+
+        if (GameManager.Instance.currentState == GameState.Preparation && !handBuiltForCurrentPreparation)
+        {
+            RebuildHandFromRunState();
+            handBuiltForCurrentPreparation = true;
+        }
+
+        if (GameManager.Instance.currentState != GameState.Preparation)
+        {
+            handBuiltForCurrentPreparation = false;
+        }
+
+        if (GameManager.Instance.currentState == GameState.Combat
+            || GameManager.Instance.currentState == GameState.MapSelection
+            || GameManager.Instance.currentState == GameState.Rest)
         {
             SetCardsActive(false);
             return;
@@ -30,6 +50,199 @@ public class HandManager : MonoBehaviour
 
         SetCardsActive(true);
         ArrangeCards();
+    }
+
+    public void RebuildHandFromRunState()
+    {
+        RunStateManager runState = RunStateManager.EnsureExists();
+        List<PlayerCardRuntimeData> cardData = runState.GetPlayerCards();
+        GameObject templateCard = GetCardTemplate();
+
+        if (templateCard == null)
+        {
+            Debug.LogError("HandManager: no card template is available.");
+            return;
+        }
+
+        List<GameObject> oldCards = new List<GameObject>();
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            oldCards.Add(transform.GetChild(i).gameObject);
+        }
+
+        for (int i = 0; i < cardData.Count; i++)
+        {
+            GameObject newCardObject = Instantiate(templateCard, transform);
+            newCardObject.SetActive(true);
+
+            Card card = newCardObject.GetComponent<Card>();
+
+            if (card != null)
+            {
+                ApplyRuntimeCardData(card, cardData[i]);
+            }
+        }
+
+        for (int i = 0; i < oldCards.Count; i++)
+        {
+            Destroy(oldCards[i]);
+        }
+
+        ArrangeCards();
+    }
+
+    public void ResetHandAfterBattle()
+    {
+        DestroyPlayersOnField();
+        RebuildHandFromRunState();
+        handBuiltForCurrentPreparation = false;
+    }
+
+    public void SyncRunStateFromHand()
+    {
+        RunStateManager runState = RunStateManager.EnsureExists();
+        List<PlayerCardRuntimeData> cards = new List<PlayerCardRuntimeData>();
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Card card = transform.GetChild(i).GetComponent<Card>();
+
+            if (card == null)
+            {
+                continue;
+            }
+
+            cards.Add(CreateRuntimeCardData(card, i));
+        }
+
+        runState.SetPlayerCards(cards);
+    }
+
+    private GameObject GetCardTemplate()
+    {
+        if (basicCard != null)
+        {
+            return basicCard;
+        }
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Card card = transform.GetChild(i).GetComponent<Card>();
+
+            if (card != null)
+            {
+                return card.gameObject;
+            }
+        }
+
+        return null;
+    }
+
+    private void ApplyRuntimeCardData(Card card, PlayerCardRuntimeData data)
+    {
+        if (data == null)
+        {
+            return;
+        }
+
+        card.cardName = data.cardName;
+        GameObject unitPrefab = ResolveUnitPrefab(data.unitPrefabId);
+
+        if (unitPrefab != null)
+        {
+            card.prefab = unitPrefab;
+            card.sourceCardPrefab = unitPrefab;
+
+            CharacterBase character = unitPrefab.GetComponent<CharacterBase>();
+
+            if (character != null)
+            {
+                card.att = Mathf.RoundToInt(character.attack);
+                card.def = Mathf.RoundToInt(character.defense);
+                card.hp = Mathf.RoundToInt(character.health);
+                card.maxHp = Mathf.RoundToInt(character.maxHealth);
+            }
+        }
+
+        if (data.att != 0f || data.def != 0f || data.hp != 0f || data.maxHp != 0f)
+        {
+            card.att = data.att;
+            card.def = data.def;
+            card.hp = data.hp;
+            card.maxHp = data.maxHp;
+        }
+
+        Card_text cardText = card.GetComponentInChildren<Card_text>();
+
+        if (cardText != null)
+        {
+            cardText.UpdateText();
+        }
+    }
+
+    private GameObject ResolveUnitPrefab(string unitPrefabId)
+    {
+        if (unitPrefabId == "Warrior" && warriorPrefab != null)
+        {
+            return warriorPrefab;
+        }
+
+        if (basicCard != null)
+        {
+            Card basicCardScript = basicCard.GetComponent<Card>();
+
+            if (basicCardScript != null && basicCardScript.prefab != null)
+            {
+                return basicCardScript.prefab;
+            }
+        }
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Card card = transform.GetChild(i).GetComponent<Card>();
+
+            if (card == null || card.prefab == null)
+            {
+                continue;
+            }
+
+            CharacterBase character = card.prefab.GetComponent<CharacterBase>();
+
+            if (character != null && character.unitName == unitPrefabId)
+            {
+                return card.prefab;
+            }
+
+            if (card.prefab.name == unitPrefabId)
+            {
+                return card.prefab;
+            }
+        }
+
+        return null;
+    }
+
+    private PlayerCardRuntimeData CreateRuntimeCardData(Card card, int index)
+    {
+        string runtimeCardId = string.IsNullOrEmpty(card.cardName)
+            ? "card_" + index
+            : card.cardName.ToLower().Replace(" ", "_") + "_" + index;
+        string unitPrefabId = card.sourceCardPrefab != null
+            ? card.sourceCardPrefab.name
+            : card.prefab != null
+                ? card.prefab.name
+                : card.cardName;
+
+        return new PlayerCardRuntimeData(
+            runtimeCardId,
+            card.cardName,
+            unitPrefabId,
+            card.att,
+            card.def,
+            card.hp,
+            card.maxHp
+        );
     }
 
     void ArrangeCards()
@@ -180,5 +393,16 @@ public class HandManager : MonoBehaviour
         }
 
         ArrangeCards();
+        SyncRunStateFromHand();
+    }
+
+    private void DestroyPlayersOnField()
+    {
+        GameObject[] playersOnField = GameObject.FindGameObjectsWithTag("Player");
+
+        for (int i = 0; i < playersOnField.Length; i++)
+        {
+            Destroy(playersOnField[i]);
+        }
     }
 }

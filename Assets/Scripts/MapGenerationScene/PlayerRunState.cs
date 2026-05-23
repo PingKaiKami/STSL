@@ -7,6 +7,10 @@ public class PlayerCardRuntimeData
     public string cardId;
     public string cardName;
     public string unitPrefabId;
+    public float att;
+    public float def;
+    public float hp;
+    public float maxHp;
 
     public PlayerCardRuntimeData()
     {
@@ -19,6 +23,17 @@ public class PlayerCardRuntimeData
         this.unitPrefabId = unitPrefabId;
     }
 
+    public PlayerCardRuntimeData(string cardId, string cardName, string unitPrefabId, float att, float def, float hp, float maxHp)
+    {
+        this.cardId = cardId;
+        this.cardName = cardName;
+        this.unitPrefabId = unitPrefabId;
+        this.att = att;
+        this.def = def;
+        this.hp = hp;
+        this.maxHp = maxHp;
+    }
+
     public PlayerCardRuntimeData(PlayerCardRuntimeData source)
     {
         if (source == null)
@@ -29,47 +44,15 @@ public class PlayerCardRuntimeData
         cardId = source.cardId;
         cardName = source.cardName;
         unitPrefabId = source.unitPrefabId;
+        att = source.att;
+        def = source.def;
+        hp = source.hp;
+        maxHp = source.maxHp;
     }
 
     public PlayerCardRuntimeData Clone()
     {
         return new PlayerCardRuntimeData(this);
-    }
-}
-
-[Serializable]
-public class PlayerEquipmentRuntimeData
-{
-    public string equipmentId;
-    public string equipmentName;
-    public string description;
-
-    public PlayerEquipmentRuntimeData()
-    {
-    }
-
-    public PlayerEquipmentRuntimeData(string equipmentId, string equipmentName, string description)
-    {
-        this.equipmentId = equipmentId;
-        this.equipmentName = equipmentName;
-        this.description = description;
-    }
-
-    public PlayerEquipmentRuntimeData(PlayerEquipmentRuntimeData source)
-    {
-        if (source == null)
-        {
-            return;
-        }
-
-        equipmentId = source.equipmentId;
-        equipmentName = source.equipmentName;
-        description = source.description;
-    }
-
-    public PlayerEquipmentRuntimeData Clone()
-    {
-        return new PlayerEquipmentRuntimeData(this);
     }
 }
 
@@ -109,7 +92,6 @@ public class PlayerRunState
     public int currentHP;
     public int gold;
     public List<PlayerCardRuntimeData> cards = new List<PlayerCardRuntimeData>();
-    public List<PlayerEquipmentRuntimeData> equipment = new List<PlayerEquipmentRuntimeData>();
 
     public void InitializeNewRun()
     {
@@ -117,9 +99,7 @@ public class PlayerRunState
         currentHP = DefaultMaxHP;
         gold = DefaultGold;
         EnsureCardsList();
-        EnsureEquipmentList();
         cards.Clear();
-        equipment.Clear();
         AddStarterDeck();
     }
 
@@ -131,7 +111,6 @@ public class PlayerRunState
     public void Normalize()
     {
         EnsureCardsList();
-        EnsureEquipmentList();
 
         if (maxHP <= 0)
         {
@@ -261,34 +240,6 @@ public class PlayerRunState
         return true;
     }
 
-    public List<PlayerEquipmentRuntimeData> GetEquipmentSnapshot()
-    {
-        EnsureEquipmentList();
-
-        List<PlayerEquipmentRuntimeData> snapshot = new List<PlayerEquipmentRuntimeData>();
-
-        for (int i = 0; i < equipment.Count; i++)
-        {
-            if (equipment[i] != null)
-            {
-                snapshot.Add(equipment[i].Clone());
-            }
-        }
-
-        return snapshot;
-    }
-
-    public void AddEquipment(PlayerEquipmentRuntimeData item)
-    {
-        if (item == null)
-        {
-            return;
-        }
-
-        EnsureEquipmentList();
-        equipment.Add(item.Clone());
-    }
-
     private void AddStarterDeck()
     {
         AddCard(CreateStarterWarriorCard("starter_warrior_1"));
@@ -298,7 +249,7 @@ public class PlayerRunState
 
     private PlayerCardRuntimeData CreateStarterWarriorCard(string cardId)
     {
-        return new PlayerCardRuntimeData(cardId, "Warrior", "Warrior");
+        return new PlayerCardRuntimeData(cardId, "Warrior", "Warrior", 0f, 0f, 0f, 0f);
     }
 
     private void EnsureCardsList()
@@ -306,14 +257,6 @@ public class PlayerRunState
         if (cards == null)
         {
             cards = new List<PlayerCardRuntimeData>();
-        }
-    }
-
-    private void EnsureEquipmentList()
-    {
-        if (equipment == null)
-        {
-            equipment = new List<PlayerEquipmentRuntimeData>();
         }
     }
 

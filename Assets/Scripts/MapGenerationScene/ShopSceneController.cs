@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,7 +8,7 @@ using UnityEngine.UI;
 public enum ShopItemType
 {
     Card,
-    Equipment,
+    StatModifier,
     RemoveCardService
 }
 
@@ -21,7 +22,7 @@ public class ShopItemData
     public int price;
 }
 
-// ShopScene displays gold, sells cards/equipment/removal, writes PlayerRunState, then returns to the map.
+// ShopScene displays gold, sells cards/stat upgrades/removal, writes PlayerRunState, then returns to the map.
 public class ShopSceneController : MonoBehaviour
 {
     [Header("Scene Names")]
@@ -29,7 +30,7 @@ public class ShopSceneController : MonoBehaviour
 
     [Header("Shop Prices")]
     public int cardPrice = 45;
-    public int equipmentPrice = 60;
+    public int swordPrice = 60;
     public int removeCardPrice = 35;
 
     [Header("UI References")]
@@ -39,14 +40,32 @@ public class ShopSceneController : MonoBehaviour
     public RectTransform itemRoot;
     public Button leaveButton;
 
+    [Header("Merchandise Layout")]
+    public Vector3 merchandiseStartPosition = new Vector3(-3f, 1.1f, 0f);
+    public float merchandiseSpacing = 3f;
+    public Vector2 merchandiseSize = new Vector2(2.2f, 3.2f);
+    public Color merchandiseBackgroundColor = new Color(0.08f, 0.08f, 0.08f, 1f);
+    public Color merchandiseBorderColor = new Color(0.37f, 0.12f, 0f, 1f);
+    public Color merchandiseTextColor = Color.white;
+
     private readonly List<ShopItemData> shopItems = new List<ShopItemData>();
+    private static Sprite generatedWhiteSprite;
 
     private void Start()
     {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.currentState = GameState.Shopping;
+        }
+
+        if (HandManager.Instance != null)
+        {
+            HandManager.Instance.RebuildHandFromRunState();
+        }
+
         EnsureUI();
-        CreateDefaultShopItems();
-        RenderShopItems();
-        RefreshUI("Choose an item.");
+        BuildMerchandiseShelf();
+        RefreshShopUi("Drag shop items onto cards.");
     }
 
     public void ReturnToMap()
@@ -62,9 +81,9 @@ public class ShopSceneController : MonoBehaviour
         TryBuyItem(CreateCardItem());
     }
 
-    public void BuyEquipment()
+    public void BuySword()
     {
-        TryBuyItem(CreateEquipmentItem());
+        RefreshUI("Drag Sword onto a card to buy it.");
     }
 
     public void BuyRemoveCardService()
@@ -81,6 +100,12 @@ public class ShopSceneController : MonoBehaviour
 
         RunStateManager runState = RunStateManager.EnsureExists();
 
+        if (item.itemType == ShopItemType.StatModifier)
+        {
+            RefreshUI("Drag " + item.itemName + " onto a card to buy it.");
+            return;
+        }
+
         if (!runState.TrySpendPlayerGold(item.price))
         {
             RefreshUI("Not enough gold for " + item.itemName + ".");
@@ -90,14 +115,13 @@ public class ShopSceneController : MonoBehaviour
         if (item.itemType == ShopItemType.Card)
         {
             runState.AddPlayerCard(new PlayerCardRuntimeData(item.itemId, item.itemName, item.itemName));
-            RefreshUI("Bought card: " + item.itemName + ".");
-            return;
-        }
 
-        if (item.itemType == ShopItemType.Equipment)
-        {
-            runState.AddPlayerEquipment(new PlayerEquipmentRuntimeData(item.itemId, item.itemName, item.description));
-            RefreshUI("Bought equipment: " + item.itemName + ".");
+            if (HandManager.Instance != null)
+            {
+                HandManager.Instance.RebuildHandFromRunState();
+            }
+
+            RefreshUI("Bought card: " + item.itemName + ".");
             return;
         }
 
@@ -110,15 +134,25 @@ public class ShopSceneController : MonoBehaviour
                 return;
             }
 
+            if (HandManager.Instance != null)
+            {
+                HandManager.Instance.RebuildHandFromRunState();
+            }
+
             RefreshUI("Removed the first card in your deck.");
         }
+    }
+
+    public void RefreshShopUi(string message)
+    {
+        RefreshUI(message);
     }
 
     private void CreateDefaultShopItems()
     {
         shopItems.Clear();
         shopItems.Add(CreateCardItem());
-        shopItems.Add(CreateEquipmentItem());
+        shopItems.Add(CreateSwordModifierItem());
         shopItems.Add(CreateRemoveCardServiceItem());
     }
 
@@ -133,14 +167,14 @@ public class ShopSceneController : MonoBehaviour
         return item;
     }
 
-    private ShopItemData CreateEquipmentItem()
+    private ShopItemData CreateSwordModifierItem()
     {
         ShopItemData item = new ShopItemData();
-        item.itemType = ShopItemType.Equipment;
-        item.itemId = "shop_equipment_training_sword";
-        item.itemName = "Training Sword";
-        item.description = "Equipment bought from the shop.";
-        item.price = equipmentPrice;
+        item.itemType = ShopItemType.StatModifier;
+        item.itemId = "shop_modifier_training_sword";
+        item.itemName = "Sword";
+        item.description = "Drag onto a card to add attack.";
+        item.price = swordPrice;
         return item;
     }
 
@@ -187,6 +221,155 @@ public class ShopSceneController : MonoBehaviour
         }
     }
 
+    private void BuildMerchandiseShelf()
+    {
+        Merchandise sword = FindExistingMerchandise("Sword");
+
+        CreateOrConfigureMerchandise(
+            FindExistingMerchandise("Warrior"),
+            0,
+            MerchandiseActionType.AddCardToDeck,
+            "Warrior",
+            cardPrice,
+            0f,
+            0f,
+            0f,
+            "shop_card_warrior",
+            "Warrior"
+        );
+
+        CreateOrConfigureMerchandise(
+            sword,
+            1,
+            MerchandiseActionType.StatModifier,
+            "Sword",
+            swordPrice,
+            10f,
+            0f,
+            0f,
+            "",
+            ""
+        );
+
+        CreateOrConfigureMerchandise(
+            FindExistingMerchandise("Remove Card"),
+            2,
+            MerchandiseActionType.RemoveTargetCard,
+            "Remove Card",
+            removeCardPrice,
+            0f,
+            0f,
+            0f,
+            "",
+            ""
+        );
+    }
+
+    private Merchandise FindExistingMerchandise(string itemName)
+    {
+        Merchandise[] merchandises = FindObjectsOfType<Merchandise>();
+
+        for (int i = 0; i < merchandises.Length; i++)
+        {
+            if (merchandises[i] != null && merchandises[i].obj_name == itemName)
+            {
+                return merchandises[i];
+            }
+        }
+
+        return null;
+    }
+
+    private void CreateOrConfigureMerchandise(
+        Merchandise merchandise,
+        int index,
+        MerchandiseActionType actionType,
+        string itemName,
+        int itemPrice,
+        float att,
+        float def,
+        float hp,
+        string cardId,
+        string unitPrefabId
+    )
+    {
+        if (merchandise == null)
+        {
+            merchandise = CreateMerchandiseObject(itemName);
+        }
+
+        Vector3 position = merchandiseStartPosition + new Vector3(index * merchandiseSpacing, 0f, 0f);
+        merchandise.transform.position = position;
+        merchandise.transform.localPosition = position;
+        merchandise.Configure(actionType, itemName, itemPrice, att, def, hp, cardId, unitPrefabId);
+    }
+
+    private Merchandise CreateMerchandiseObject(string itemName)
+    {
+        GameObject itemObject = new GameObject(itemName + "Merchandise", typeof(BoxCollider2D), typeof(Merchandise));
+        itemObject.transform.localScale = Vector3.one;
+
+        BoxCollider2D collider = itemObject.GetComponent<BoxCollider2D>();
+        collider.size = merchandiseSize;
+
+        CreateSpriteChild(itemObject.transform, "BG", merchandiseBackgroundColor, merchandiseSize, 0);
+        CreateSpriteChild(itemObject.transform, "Border", merchandiseBorderColor, merchandiseSize + new Vector2(0.2f, 0.2f), -1);
+        CreateMerchandiseText(itemObject.transform);
+
+        return itemObject.GetComponent<Merchandise>();
+    }
+
+    private void CreateSpriteChild(Transform parent, string objectName, Color color, Vector2 size, int sortingOrder)
+    {
+        GameObject child = new GameObject(objectName, typeof(SpriteRenderer));
+        child.transform.SetParent(parent, false);
+        child.transform.localScale = new Vector3(size.x, size.y, 1f);
+
+        SpriteRenderer renderer = child.GetComponent<SpriteRenderer>();
+        renderer.sprite = GetGeneratedWhiteSprite();
+        renderer.color = color;
+        renderer.sortingOrder = sortingOrder;
+    }
+
+    private void CreateMerchandiseText(Transform parent)
+    {
+        GameObject textObject = new GameObject("text", typeof(TextMeshPro), typeof(Merchandise_text));
+        textObject.transform.SetParent(parent, false);
+        textObject.transform.localPosition = Vector3.zero;
+        textObject.transform.localScale = new Vector3(0.1f, 0.1f, 1f);
+
+        TextMeshPro text = textObject.GetComponent<TextMeshPro>();
+        text.alignment = TextAlignmentOptions.Center;
+        text.color = merchandiseTextColor;
+        text.fontSize = 34f;
+        text.enableWordWrapping = true;
+        text.rectTransform.sizeDelta = new Vector2(22f, 10f);
+
+        Merchandise_text merchandiseText = textObject.GetComponent<Merchandise_text>();
+        merchandiseText.merchandise = parent.GetComponent<Merchandise>();
+    }
+
+    private Sprite GetGeneratedWhiteSprite()
+    {
+        if (generatedWhiteSprite != null)
+        {
+            return generatedWhiteSprite;
+        }
+
+        Texture2D texture = new Texture2D(1, 1);
+        texture.SetPixel(0, 0, Color.white);
+        texture.Apply();
+
+        generatedWhiteSprite = Sprite.Create(
+            texture,
+            new Rect(0f, 0f, 1f, 1f),
+            new Vector2(0.5f, 0.5f),
+            1f
+        );
+
+        return generatedWhiteSprite;
+    }
+
     private void RefreshUI(string message)
     {
         RunStateManager runState = RunStateManager.EnsureExists();
@@ -199,7 +382,7 @@ public class ShopSceneController : MonoBehaviour
 
         if (deckText != null)
         {
-            deckText.text = "Cards: " + state.cards.Count + " | Equipment: " + state.equipment.Count;
+            deckText.text = "Cards: " + state.cards.Count;
         }
 
         if (statusText != null)
@@ -210,7 +393,7 @@ public class ShopSceneController : MonoBehaviour
 
     private void EnsureUI()
     {
-        if (goldText != null && itemRoot != null)
+        if (goldText != null)
         {
             if (leaveButton != null)
             {
@@ -218,25 +401,54 @@ public class ShopSceneController : MonoBehaviour
                 leaveButton.onClick.AddListener(ReturnToMap);
             }
 
+            ApplyShopUILayout();
             return;
         }
 
         Canvas canvas = SceneUIFactory.CreateCanvas("ShopCanvas");
-        SceneUIFactory.CreateText(canvas.transform, "Shop", 44, FontStyle.Bold, new Vector2(0f, 230f), new Vector2(720f, 80f));
-        goldText = SceneUIFactory.CreateText(canvas.transform, "", 28, FontStyle.Bold, new Vector2(-260f, 155f), new Vector2(360f, 54f));
-        deckText = SceneUIFactory.CreateText(canvas.transform, "", 22, FontStyle.Normal, new Vector2(240f, 155f), new Vector2(460f, 54f));
+        SceneUIFactory.CreateText(canvas.transform, "Shop", 44, FontStyle.Bold, new Vector2(0f, 250f), new Vector2(720f, 80f));
+        goldText = SceneUIFactory.CreateText(canvas.transform, "", 28, FontStyle.Bold, new Vector2(-440f, 252f), new Vector2(360f, 54f));
+        deckText = SceneUIFactory.CreateText(canvas.transform, "", 22, FontStyle.Normal, new Vector2(380f, 252f), new Vector2(360f, 54f));
 
-        GameObject itemRootObject = new GameObject("ShopItems");
-        itemRootObject.transform.SetParent(canvas.transform, false);
-        itemRoot = itemRootObject.AddComponent<RectTransform>();
-        itemRoot.anchorMin = new Vector2(0.5f, 0.5f);
-        itemRoot.anchorMax = new Vector2(0.5f, 0.5f);
-        itemRoot.pivot = new Vector2(0.5f, 0.5f);
-        itemRoot.anchoredPosition = new Vector2(0f, 60f);
-        itemRoot.sizeDelta = new Vector2(620f, 260f);
-
-        leaveButton = SceneUIFactory.CreateButton(canvas.transform, "Leave Shop", new Vector2(0f, -230f), new Vector2(260f, 58f), ReturnToMap);
-        statusText = SceneUIFactory.CreateText(canvas.transform, "", 20, FontStyle.Normal, new Vector2(0f, -165f), new Vector2(860f, 54f));
+        leaveButton = SceneUIFactory.CreateButton(canvas.transform, "Leave Shop", new Vector2(500f, -310f), new Vector2(240f, 58f), ReturnToMap);
+        statusText = SceneUIFactory.CreateText(canvas.transform, "", 20, FontStyle.Normal, new Vector2(0f, -75f), new Vector2(760f, 54f));
         SceneUIFactory.EnsureEventSystem();
+        ApplyShopUILayout();
+    }
+
+    private void ApplyShopUILayout()
+    {
+        SetAnchoredPosition(goldText, new Vector2(-440f, 252f), new Vector2(360f, 54f));
+        SetAnchoredPosition(deckText, new Vector2(380f, 252f), new Vector2(360f, 54f));
+        SetAnchoredPosition(statusText, new Vector2(0f, -75f), new Vector2(760f, 54f));
+
+        if (leaveButton != null)
+        {
+            RectTransform buttonTransform = leaveButton.GetComponent<RectTransform>();
+
+            if (buttonTransform != null)
+            {
+                buttonTransform.anchoredPosition = new Vector2(500f, -310f);
+                buttonTransform.sizeDelta = new Vector2(240f, 58f);
+            }
+        }
+    }
+
+    private void SetAnchoredPosition(Graphic graphic, Vector2 position, Vector2 size)
+    {
+        if (graphic == null)
+        {
+            return;
+        }
+
+        RectTransform rectTransform = graphic.GetComponent<RectTransform>();
+
+        if (rectTransform == null)
+        {
+            return;
+        }
+
+        rectTransform.anchoredPosition = position;
+        rectTransform.sizeDelta = size;
     }
 }

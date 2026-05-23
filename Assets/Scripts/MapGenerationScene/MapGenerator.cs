@@ -123,6 +123,10 @@ public class MapGenerationConfig
     public float eventWeight = 22f;
     public float eliteWeightAct1 = 8f;
     public float eliteWeightAfterAct1 = 12f;
+
+    public int minimumShopCount = 2;
+    public int minimumRestCount = 2;
+    public int minimumChestCount = 2;
 }
 
 public static class SlayLikeMapGenerator
@@ -335,9 +339,6 @@ public static class SlayLikeMapGenerator
         System.Random rng
     )
     {
-        int chestLayer = Mathf.Clamp(8, 0, map.Height - 1);
-        int restLayerBeforeBoss = map.Height - 1;
-
         for (int layer = 0; layer <= map.Height; layer++)
         {
             List<MapNode> layerNodes = GetNodesInLayer(map, layer);
@@ -354,20 +355,105 @@ public static class SlayLikeMapGenerator
                 {
                     node.Type = RoomType.Normal;
                 }
-                else if (layer == chestLayer)
-                {
-                    node.Type = RoomType.Chest;
-                }
-                else if (layer == restLayerBeforeBoss)
-                {
-                    node.Type = RoomType.Rest;
-                }
                 else
                 {
-                    node.Type = PickWeightedRoomType(node, config, rng);
+                    node.Type = RoomType.Normal;
                 }
             }
         }
+
+        EnsureMinimumRoomCount(map, RoomType.Shop, config.minimumShopCount, rng);
+        EnsureMinimumRoomCount(map, RoomType.Rest, config.minimumRestCount, rng);
+        EnsureMinimumRoomCount(map, RoomType.Chest, config.minimumChestCount, rng);
+
+        for (int layer = 1; layer < map.Height; layer++)
+        {
+            List<MapNode> layerNodes = GetNodesInLayer(map, layer);
+
+            for (int i = 0; i < layerNodes.Count; i++)
+            {
+                MapNode node = layerNodes[i];
+
+                if (node.Type != RoomType.Normal)
+                {
+                    continue;
+                }
+
+                node.Type = PickWeightedRoomType(node, config, rng);
+            }
+        }
+    }
+
+    private static void EnsureMinimumRoomCount(
+        MapData map,
+        RoomType roomType,
+        int minimumCount,
+        System.Random rng
+    )
+    {
+        int targetCount = Mathf.Max(0, minimumCount);
+
+        while (CountRoomsOfType(map, roomType) < targetCount)
+        {
+            List<MapNode> candidates = GetSpecialRoomCandidates(map);
+
+            if (candidates.Count == 0)
+            {
+                Debug.LogWarning(
+                    "Could not place enough "
+                    + roomType
+                    + " rooms without making special rooms consecutive."
+                );
+                return;
+            }
+
+            MapNode selectedNode = candidates[rng.Next(0, candidates.Count)];
+            selectedNode.Type = roomType;
+        }
+    }
+
+    private static int CountRoomsOfType(MapData map, RoomType roomType)
+    {
+        int count = 0;
+
+        for (int i = 0; i < map.Nodes.Count; i++)
+        {
+            if (map.Nodes[i].Type == roomType)
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    private static List<MapNode> GetSpecialRoomCandidates(MapData map)
+    {
+        List<MapNode> candidates = new List<MapNode>();
+
+        for (int i = 0; i < map.Nodes.Count; i++)
+        {
+            MapNode node = map.Nodes[i];
+
+            if (node.Layer == 0 || node.Layer == map.Height)
+            {
+                continue;
+            }
+
+            if (node.Type != RoomType.Normal)
+            {
+                continue;
+            }
+
+            if (HasAdjacentPriorityRoom(node))
+            {
+                continue;
+            }
+
+            candidates.Add(node);
+        }
+
+        return candidates;
     }
 
     private static List<MapNode> GetNodesInLayer(MapData map, int layer)
@@ -391,6 +477,7 @@ public static class SlayLikeMapGenerator
         System.Random rng
     )
     {
+        bool canPlacePriorityRoom = !HasParentPriorityRoom(node) && !HasChildPriorityRoom(node);
         bool parentHasShop = HasParentOfType(node, RoomType.Shop);
         bool parentHasRest = HasParentOfType(node, RoomType.Rest);
         bool parentHasEvent = HasParentOfType(node, RoomType.Event);
@@ -429,12 +516,12 @@ public static class SlayLikeMapGenerator
             weights.Add(new RoomWeight(RoomType.Event, config.eventWeight));
         }
 
-        if (!parentHasShop)
+        if (canPlacePriorityRoom && !parentHasShop)
         {
             weights.Add(new RoomWeight(RoomType.Shop, config.shopWeight));
         }
 
-        if (!parentHasRest)
+        if (canPlacePriorityRoom && !parentHasRest)
         {
             weights.Add(new RoomWeight(RoomType.Rest, config.restWeight));
         }
@@ -461,6 +548,42 @@ public static class SlayLikeMapGenerator
         }
 
         return RoomType.Normal;
+    }
+
+    private static bool HasAdjacentPriorityRoom(MapNode node)
+    {
+        return HasParentPriorityRoom(node) || HasChildPriorityRoom(node);
+    }
+
+    private static bool HasParentPriorityRoom(MapNode node)
+    {
+        for (int i = 0; i < node.Parents.Count; i++)
+        {
+            if (IsPriorityRoom(node.Parents[i].Type))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool HasChildPriorityRoom(MapNode node)
+    {
+        for (int i = 0; i < node.Children.Count; i++)
+        {
+            if (IsPriorityRoom(node.Children[i].Type))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool IsPriorityRoom(RoomType roomType)
+    {
+        return roomType == RoomType.Shop || roomType == RoomType.Rest || roomType == RoomType.Chest;
     }
 
     private static bool HasParentOfType(MapNode node, RoomType type)

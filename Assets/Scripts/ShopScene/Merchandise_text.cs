@@ -6,16 +6,37 @@ using UnityEngine;
 public class Merchandise_text : MonoBehaviour
 {
     public Merchandise merchandise;
+
     void Start()
     {
-        GetComponent<TextMeshPro>().text = GetText(merchandise);
+        UpdateText();
+    }
+
+    public void UpdateText()
+    {
+        TextMeshPro text = GetComponent<TextMeshPro>();
+
+        if (text != null)
+        {
+            text.text = GetText(merchandise);
+        }
     }
 
     private string GetText(Merchandise input_merchandise)
     {
         List<string> lines = new List<string>();
 
+        if (input_merchandise == null)
+        {
+            return "";
+        }
+
         lines.Add(input_merchandise.obj_name);
+
+        if (input_merchandise.price > 0)
+        {
+            lines.Add(input_merchandise.price + " Gold");
+        }
 
         if (input_merchandise.att != 0)
         {

@@ -13,6 +13,7 @@ public class BattleSceneController : MonoBehaviour
 
     [Header("Rewards")]
     public int victoryGoldReward = 20;
+    public int lossHPPenalty = 30;
 
     public void WinBattleForTest()
     {
@@ -35,18 +36,37 @@ public class BattleSceneController : MonoBehaviour
 
     public void LoseBattleForTest()
     {
-        if (PlayerManager.Instance.ModifyHealth(-1))
-        {
-            Debug.Log($"Current health: {PlayerManager.Instance.health}");
-            GameManager.Instance.currentState = GameState.MapSelection;
-            SceneManager.LoadScene(mapSceneName);
-            return;
-        }
-        else
+        RunStateManager runState = RunStateManager.EnsureExists();
+
+        if (runState.IsPendingBossRoom())
         {
             GameManager.Instance.currentState = GameState.Menu;
             SceneManager.LoadScene(failSceneName);
             Debug.Log("Game Over");
+            return;
         }
+
+        PlayerRunState playerState = runState.GetPlayerState();
+        int hpAfterLoss = Mathf.Max(0, playerState.currentHP - lossHPPenalty);
+        runState.SetPlayerCurrentHP(hpAfterLoss);
+
+        if (hpAfterLoss <= 0)
+        {
+            GameManager.Instance.currentState = GameState.Menu;
+            SceneManager.LoadScene(failSceneName);
+            Debug.Log("Game Over");
+            return;
+        }
+
+        runState.CompletePendingRoom();
+
+        if (HandManager.Instance != null)
+        {
+            HandManager.Instance.ResetHandAfterBattle();
+        }
+
+        Debug.Log("Current run HP after loss: " + hpAfterLoss);
+        GameManager.Instance.currentState = GameState.MapSelection;
+        SceneManager.LoadScene(mapSceneName);
     }
 }

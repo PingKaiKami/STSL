@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public enum ChestRewardType
 {
-    Equipment,
+    Gold,
     Follower
 }
 
@@ -16,6 +16,7 @@ public class ChestRewardData
     public string rewardId;
     public string rewardName;
     public string description;
+    public int goldAmount;
 }
 
 // ChestScene gives one random reward, writes it into PlayerRunState, then returns to the map.
@@ -50,13 +51,9 @@ public class ChestSceneController : MonoBehaviour
 
         RunStateManager runState = RunStateManager.EnsureExists();
 
-        if (currentReward.rewardType == ChestRewardType.Equipment)
+        if (currentReward.rewardType == ChestRewardType.Gold)
         {
-            runState.AddPlayerEquipment(new PlayerEquipmentRuntimeData(
-                currentReward.rewardId,
-                currentReward.rewardName,
-                currentReward.description
-            ));
+            runState.AddPlayerGold(currentReward.goldAmount);
         }
         else
         {
@@ -81,15 +78,16 @@ public class ChestSceneController : MonoBehaviour
 
     private void RollReward()
     {
-        bool giveEquipment = UnityEngine.Random.Range(0, 2) == 0;
+        bool giveGold = UnityEngine.Random.Range(0, 2) == 0;
 
-        if (giveEquipment)
+        if (giveGold)
         {
             currentReward = new ChestRewardData();
-            currentReward.rewardType = ChestRewardType.Equipment;
-            currentReward.rewardId = "chest_equipment_lucky_charm";
-            currentReward.rewardName = "Lucky Charm";
-            currentReward.description = "Equipment reward from a chest.";
+            currentReward.rewardType = ChestRewardType.Gold;
+            currentReward.rewardId = "chest_gold";
+            currentReward.rewardName = "Gold";
+            currentReward.goldAmount = 40;
+            currentReward.description = "+" + currentReward.goldAmount + " Gold";
             return;
         }
 
