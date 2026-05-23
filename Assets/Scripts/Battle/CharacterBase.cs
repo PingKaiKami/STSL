@@ -21,6 +21,7 @@ public class CharacterBase : MonoBehaviour
 
     [Header("基礎屬性")]
     public string unitName;
+    public float maxHealth;
     public float health;
     public float attack;
     public float defense;

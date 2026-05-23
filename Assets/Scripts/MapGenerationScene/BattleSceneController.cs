@@ -21,6 +21,8 @@ public class BattleSceneController : MonoBehaviour
 
         runState.AddPlayerGold(victoryGoldReward);
         runState.CompletePendingRoom();
+        GameManager.Instance.currentState = GameState.MapSelection;
+        PlayerManager.Instance.ModifyMoney(10);
 
         if (isFinalBoss)
         {
@@ -33,6 +35,18 @@ public class BattleSceneController : MonoBehaviour
 
     public void LoseBattleForTest()
     {
-        SceneManager.LoadScene(failSceneName);
+        if (PlayerManager.Instance.ModifyHealth(-1))
+        {
+            Debug.Log($"Current health: {PlayerManager.Instance.health}");
+            GameManager.Instance.currentState = GameState.MapSelection;
+            SceneManager.LoadScene(mapSceneName);
+            return;
+        }
+        else
+        {
+            GameManager.Instance.currentState = GameState.Menu;
+            SceneManager.LoadScene(failSceneName);
+            Debug.Log("Game Over");
+        }
     }
 }

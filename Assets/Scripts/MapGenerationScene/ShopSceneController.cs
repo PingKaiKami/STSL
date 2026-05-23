@@ -54,6 +54,7 @@ public class ShopSceneController : MonoBehaviour
         RunStateManager runState = RunStateManager.EnsureExists();
         runState.CompletePendingRoom();
         SceneManager.LoadScene(mapSceneName);
+        GameManager.Instance.currentState = GameState.MapSelection;
     }
 
     public void BuyCard()

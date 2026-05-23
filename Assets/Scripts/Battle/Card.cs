@@ -8,21 +8,48 @@ public class Card : MonoBehaviour
     private Vector3 screenPoint;
     private Vector3 offset;
     private int originalLayer;
+
     [Header("移動設定")]
     public float smoothSpeed = 10f;
+    public Vector3 baseLocalPosition; // 新增/修改：記錄 HandManager 分配的「基礎」位置
+    private Vector3 currentTargetLocal; // 新增：計算懸停後的「實際」目標位置
     private bool isDragging = false;
-    private Player lastTargetPlayer;
 
     [Header("懸停設定")]
     public float moveUpOffset = 1.0f; // 2D 建議不要太大，1.5 ( Inspector 裡的舊數值) 很適合
     private bool isHovering = false; // // 新增：記錄滑鼠是否懸停
-
-    [Header("移動設定")]
-    public Vector3 baseLocalPosition; // 新增/修改：記錄 HandManager 分配的「基礎」位置
-    private Vector3 currentTargetLocal; // 新增：計算懸停後的「實際」目標位置
-
+    
     [Header("卡片設定")]
     public GameObject prefab;
+    public string cardName;
+    public float att;
+    public float def;
+    public float hp;
+    public float maxHp;
+    public GameObject sourceCardPrefab;
+    private Card_text cardTextComponent;
+
+    void Start()
+    {
+        cardTextComponent = GetComponentInChildren<Card_text>();
+
+        // 如果是全新抽到的卡，直接去讀取 prefab 檔案的 CharacterBase 初始化
+        if (string.IsNullOrEmpty(cardName) && prefab != null)
+        {
+            CharacterBase cb = prefab.GetComponent<CharacterBase>();
+            if (cb != null)
+            {
+                cardName = cb.unitName;
+                att = Mathf.RoundToInt(cb.attack);
+                def = Mathf.RoundToInt(cb.defense);
+                hp = Mathf.RoundToInt(cb.health);
+                maxHp = Mathf.RoundToInt(cb.health);
+                sourceCardPrefab = prefab;
+            }
+        }
+
+        RefreshUI();
+    }
 
     void Update()
     {
@@ -103,7 +130,7 @@ public class Card : MonoBehaviour
         offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(cursorScreenPoint);
 
         // 顯示可放置區域
-        GameManager.Instance.placeableArea.SetActive(true);
+        GameManager.Instance.SetAreaActive(true);
     }
     void OnMouseUp()
     {
@@ -114,8 +141,7 @@ public class Card : MonoBehaviour
 
         gameObject.layer = originalLayer;
 
-        // 關閉可放置區域
-        GameManager.Instance.placeableArea.SetActive(false);
+        GameManager.Instance.SetAreaActive(false);
     }
 
     // 當滑鼠按住並移動時
@@ -134,18 +160,57 @@ public class Card : MonoBehaviour
     void CheckForPlace()
     {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        // 這裡改用 OverlapPoint 檢查單一物件
         Collider2D hit = Physics2D.OverlapPoint(mousePos);
 
         if (hit != null && hit.gameObject != gameObject)
         {
-            string name = hit.gameObject.name;
-            if (name.Contains("PlayerArea"))
+            GridSlot slot = hit.GetComponent<GridSlot>();
+            
+            if (hit.gameObject.name.Contains("PlayerArea") && slot != null && !slot.isOccupied)
             {
-                Instantiate(prefab, hit.gameObject.transform.position, Quaternion.identity);
-                hit.gameObject.SetActive(false);
-                Destroy(gameObject);
+                // 1. 生成場上角色 (使用卡片紀錄的原始 prefab)
+                GameObject playerObj = Instantiate(sourceCardPrefab, hit.gameObject.transform.position, Quaternion.identity);
+                
+                // 2. 將這張卡片的「當前數據」（可能是殘血）同步給場上角色的 CharacterBase
+                CharacterBase cb = playerObj.GetComponent<CharacterBase>();
+                if (cb != null)
+                {
+                    cb.unitName = this.cardName;
+                    cb.attack = this.att;
+                    cb.defense = this.def;
+                    cb.health = this.hp;      // 灌入當前血量
+                    cb.maxHealth = this.maxHp; // 灌入最大血量
+                    
+                    // 讓場上的 Player 腳本（如果有繼承 CharacterBase）記住原始 Prefab 檔案
+                    Player p = playerObj.GetComponent<Player>();
+                    if (p != null) p.sourceCardPrefab = this.sourceCardPrefab;
+                }
+                
+                slot.isOccupied = true;
+                hit.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                hit.enabled = false; 
+
+                // 3. 卡牌功成身退，摧毀物件
+                Destroy(gameObject); 
             }
         }
     }
+
+    public void UpdateStats(float att_amount, float def_amount, float hp_amount)
+    {
+        att += att_amount;
+        def += def_amount;
+        hp += hp_amount;
+
+        RefreshUI();
+    }
+
+    private void RefreshUI()
+    {
+        if (cardTextComponent != null)
+        {
+            cardTextComponent.UpdateText();
+        }
+    }
+
 }

@@ -501,14 +501,17 @@ public class MapUIRenderer : MonoBehaviour
             case RoomType.Elite:
             case RoomType.Boss:
                 SceneManager.LoadScene(battleSceneName);
+                GameManager.Instance.currentState = GameState.Preparation;
                 break;
 
             case RoomType.Shop:
                 SceneManager.LoadScene(shopSceneName);
+                GameManager.Instance.currentState = GameState.Shopping;
                 break;
 
             case RoomType.Rest:
                 SceneManager.LoadScene(restSceneName);
+                GameManager.Instance.currentState = GameState.Rest;
                 break;
 
             case RoomType.Chest:
