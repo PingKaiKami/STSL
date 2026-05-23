@@ -40,9 +40,8 @@ public class HandManager : MonoBehaviour
             handBuiltForCurrentPreparation = false;
         }
 
-        if (GameManager.Instance.currentState == GameState.Combat
-            || GameManager.Instance.currentState == GameState.MapSelection
-            || GameManager.Instance.currentState == GameState.Rest)
+        if (GameManager.Instance.currentState != GameState.Preparation
+            && GameManager.Instance.currentState != GameState.Shopping)
         {
             SetCardsActive(false);
             return;

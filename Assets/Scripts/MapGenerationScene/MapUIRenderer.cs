@@ -241,11 +241,12 @@ public class MapUIRenderer : MonoBehaviour
         RectTransform effectiveViewport = GetViewport();
         float viewportHeight = effectiveViewport != null ? effectiveViewport.rect.height : mapRoot.rect.height;
         float topLayerY = GetLayerPositionY(currentMap.Height);
-        float currentLayerY = GetLayerPositionY(GetCurrentVisibleLayer());
+        float bottomLayerY = GetLayerPositionY(0);
 
         float topViewportY = viewportHeight * 0.5f - scrollPadding;
+        float bottomViewportY = -viewportHeight * 0.5f + scrollPadding;
         minScrollOffsetY = topViewportY - topLayerY;
-        maxScrollOffsetY = currentLayerViewportY - currentLayerY;
+        maxScrollOffsetY = bottomViewportY - bottomLayerY;
 
         if (minScrollOffsetY > maxScrollOffsetY)
         {
@@ -262,7 +263,7 @@ public class MapUIRenderer : MonoBehaviour
             return;
         }
 
-        scrollOffsetY = maxScrollOffsetY;
+        scrollOffsetY = currentLayerViewportY - GetLayerPositionY(GetCurrentVisibleLayer());
         ApplyScrollOffset();
     }
 

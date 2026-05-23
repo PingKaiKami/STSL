@@ -351,6 +351,10 @@ public static class SlayLikeMapGenerator
                 {
                     node.Type = RoomType.Boss;
                 }
+                else if (layer == map.Height - 1)
+                {
+                    node.Type = RoomType.Rest;
+                }
                 else if (layer == 0)
                 {
                     node.Type = RoomType.Normal;
