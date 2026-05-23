@@ -4,26 +4,54 @@ public class Player : CharacterBase
 {
     private bool hasReservedCell = false;
     private Vector3 lastSafeWorldPosition;
+    private float baseMoveSpeed;
+
+    [Header("Animation")]
+    [SerializeField] protected Animator animator;
+
+    protected override void Start()
+    {
+        base.Start();
+        baseMoveSpeed = moveSpeed;
+    }
 
     void Update()
     {
         if (GameManager.Instance == null) return;
 
+        UpdateStatusEffects();  // 計時所有狀態並觸發 DoT
+
         if (GameManager.Instance.currentState == GameState.Combat)
         {
             if (attackTimer > 0f)
-            {
                 attackTimer -= Time.deltaTime;
-            }
 
             EnsureSafePositionInitialized();
-
             UpdateReservationLifecycle();
 
-            CombatLogic();
+            // 暈眩：完全跳過行動與技能蓄力
+            if (!HasStatus(StatusEffect.Stun))
+            {
+                UpdateSkillCharge();
+                CombatLogic();
+            }
 
             UpdateReservationLifecycle();
         }
+    }
+
+    protected override void OnStatusApplied(StatusEffect type)
+    {
+        // 凍傷：移動速度減半
+        if (type == StatusEffect.Frostbite)
+            moveSpeed = baseMoveSpeed * 0.5f;
+    }
+
+    protected override void OnStatusRemoved(StatusEffect type)
+    {
+        // 凍傷解除：恢復移動速度
+        if (type == StatusEffect.Frostbite)
+            moveSpeed = baseMoveSpeed;
     }
 
     private void EnsureSafePositionInitialized()
@@ -56,7 +84,11 @@ public class Player : CharacterBase
     {
         if (isMoving) return;
 
-        GameObject targetEnemy = FindNearestEnemy();
+        // 被嘲諷：強制以嘲諷來源為目標，否則尋找最近敵人
+        CharacterBase tauntSource = GetTauntSource();
+        GameObject targetEnemy = (tauntSource != null && tauntSource.gameObject.activeInHierarchy)
+            ? tauntSource.gameObject
+            : FindNearestEnemy();
 
         if (targetEnemy == null)
         {
@@ -171,9 +203,14 @@ public class Player : CharacterBase
         attackTimer = attackTime;
     }
 
-    private void Attack(GameObject target)
+    protected virtual void Attack(GameObject target)
     {
         Debug.Log($"正在攻擊 {target.name}");
+
+        if (animator != null)
+        {
+            animator.SetTrigger("Attack");
+        }
 
         CharacterBase enemyStats = target.GetComponent<CharacterBase>();
 

@@ -23,37 +23,52 @@ public class Enemy : CharacterBase
     private bool hasReservedCell = false;
     private Vector3 lastSafeWorldPosition;
     private bool initializedSafePosition = false;
+    private float baseMoveSpeed;
 
     protected virtual void Awake()
     {
         if (animator == null)
-        {
             animator = GetComponent<Animator>();
-        }
+        baseMoveSpeed = moveSpeed;
     }
+
     protected virtual void Update()
     {
         if (isDying) return;
         if (GameManager.Instance == null) return;
 
         EnsureSafePositionInitialized();
+        UpdateStatusEffects();  // 計時所有狀態並觸發 DoT
 
         if (GameManager.Instance.currentState == GameState.Combat)
         {
             if (attackTimer > 0f)
-            {
                 attackTimer -= Time.deltaTime;
-            }
 
             UpdateReservationLifecycle();
 
-            CombatLogic();
+            // 暈眩：完全跳過行動
+            if (!HasStatus(StatusEffect.Stun))
+                CombatLogic();
 
             UpdateReservationLifecycle();
             UpdateFacingToTargetWhenIdle();
-
             UpdateMoveAnimation();
         }
+    }
+
+    protected override void OnStatusApplied(StatusEffect type)
+    {
+        // 凍傷：移動速度減半
+        if (type == StatusEffect.Frostbite)
+            moveSpeed = baseMoveSpeed * 0.5f;
+    }
+
+    protected override void OnStatusRemoved(StatusEffect type)
+    {
+        // 凍傷解除：恢復移動速度
+        if (type == StatusEffect.Frostbite)
+            moveSpeed = baseMoveSpeed;
     }
     protected void UpdateFacingToTargetWhenIdle()
     {
@@ -140,9 +155,12 @@ public class Enemy : CharacterBase
         GameObject targetPlayer = pathTarget;
 
         if (targetPlayer == null)
-        {
             targetPlayer = FindNearestPlayerByDistance();
-        }
+
+        // 被嘲諷：強制以嘲諷來源為目標
+        CharacterBase tauntSource = GetTauntSource();
+        if (tauntSource != null && tauntSource.gameObject.activeInHierarchy)
+            targetPlayer = tauntSource.gameObject;
 
         if (targetPlayer == null)
         {
