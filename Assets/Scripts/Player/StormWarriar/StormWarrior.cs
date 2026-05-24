@@ -29,6 +29,10 @@ public class StormWarrior : Player
     [Header("召喚物設定")]
     public GameObject windWallPrefab;
 
+    // 動畫基準速度
+    private float baseWalkSpeed;
+    private float baseAttackTime;
+
     // 被動
     private bool hasMovedThisTurn = false;
 
@@ -41,15 +45,18 @@ public class StormWarrior : Player
 
     protected override void Start()
     {
-        unitName    = "狂風戰士";
-        health      = 1000f;
-        attack      = 20f;
-        defense     = 2f;
-        attackRange = 1.5f;
-        moveSpeed   = 4f;
-        attackTime  = 1.0f;
+        unitName             = "狂風戰士";
+        health               = 1000f;
+        attack               = 20f;
+        defense              = 2f;
+        attackRange          = 1.5f;
+        moveSpeed            = 4f;
+        attackTime           = 1.0f;
+        skillChargeInterval  = 0.1f;   // 每 1 秒 +1 衝能，改這裡即可
 
         ApplyEquipment();
+        baseWalkSpeed  = moveSpeed;
+        baseAttackTime = attackTime;
         base.Start();   // → Player.Start() → CharacterBase.Start()
     }
 
@@ -66,13 +73,22 @@ public class StormWarrior : Player
     protected override void OnMoveStart()
     {
         hasMovedThisTurn = false;
-        if (animator != null) animator.SetBool("IsWalking", true);
+        if (animator != null)
+        {
+            animator.SetBool("IsWalking", true);
+            if (baseWalkSpeed > 0f)
+                animator.speed = moveSpeed / baseWalkSpeed;
+        }
     }
 
     protected override void OnMoveComplete()
     {
         hasMovedThisTurn = true;
-        if (animator != null) animator.SetBool("IsWalking", false);
+        if (animator != null)
+        {
+            animator.SetBool("IsWalking", false);
+            animator.speed = 1f;
+        }
     }
 
     // ─── 傷害系統 ─────────────────────────────────────────────
@@ -111,9 +127,14 @@ public class StormWarrior : Player
     protected override void Attack(GameObject target)
     {
         // 忍耐中：封鎖普通攻擊
-        if (isEnduring) return;
+        // if (isEnduring) return;
 
-        if (animator != null) animator.SetTrigger("Attack");
+        if (animator != null)
+        {
+            if (baseAttackTime > 0f)
+                animator.speed = baseAttackTime / attackTime;
+            animator.SetTrigger("Attack");
+        }
 
         CharacterBase enemy = target.GetComponent<CharacterBase>();
         if (enemy == null) return;
@@ -123,6 +144,13 @@ public class StormWarrior : Player
         if (isCrit) Debug.Log($"{unitName} 必殺！");
 
         enemy.TakeDamage(dmg);
+        StartCoroutine(ResetAnimatorSpeed(attackTime));
+    }
+
+    private IEnumerator ResetAnimatorSpeed(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (animator != null) animator.speed = 1f;
     }
 
     // ─── 技能決策 ─────────────────────────────────────────────

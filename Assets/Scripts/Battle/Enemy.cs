@@ -24,12 +24,14 @@ public class Enemy : CharacterBase
     private Vector3 lastSafeWorldPosition;
     private bool initializedSafePosition = false;
     private float baseMoveSpeed;
+    private float baseAttackTime;
 
     protected virtual void Awake()
     {
         if (animator == null)
             animator = GetComponent<Animator>();
-        baseMoveSpeed = moveSpeed;
+        baseMoveSpeed  = moveSpeed;
+        baseAttackTime = attackTime;
     }
 
     protected virtual void Update()
@@ -70,6 +72,19 @@ public class Enemy : CharacterBase
         if (type == StatusEffect.Frostbite)
             moveSpeed = baseMoveSpeed;
     }
+
+    protected override void OnMoveStart()
+    {
+        if (animator != null && baseMoveSpeed > 0f)
+            animator.speed = moveSpeed / baseMoveSpeed;
+    }
+
+    protected override void OnMoveComplete()
+    {
+        if (animator != null)
+            animator.speed = 1f;
+    }
+
     protected void UpdateFacingToTargetWhenIdle()
     {
         if (animator == null) return;
@@ -264,6 +279,8 @@ public class Enemy : CharacterBase
 
         if (animator != null)
         {
+            if (baseAttackTime > 0f)
+                animator.speed = baseAttackTime / attackTime;
             animator.ResetTrigger("Call");
             animator.SetTrigger("Attack");
         }
@@ -456,6 +473,7 @@ public class Enemy : CharacterBase
 
         if (animator != null)
         {
+            animator.speed = 1f;
             animator.SetBool("IsActing", false);
         }
     }

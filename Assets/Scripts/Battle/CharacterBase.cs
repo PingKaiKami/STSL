@@ -61,7 +61,8 @@ public class CharacterBase : MonoBehaviour
     private RectTransform healthFillRect;
     private RectTransform skillFillRect;
     protected float skillCharge = 0f;
-    public float skillChargeRate = 1f;
+    public float skillChargeInterval = 0.001f; // 每幾秒增加 1 點衝能
+    private float skillChargeTimer = 0f;
 
     [Header("戰鬥屬性")]
     public float moveSpeed = 3f;
@@ -74,10 +75,20 @@ public class CharacterBase : MonoBehaviour
     public float health;
     public float attack;
     public float defense;
+    [HideInInspector] public float teamDamageReduction = 0f; // 深海庇護等外部減傷
+
     protected virtual void Start()
     {
         maxHealth = health;
         CreateHealthBar();
+    }
+
+    protected void Heal(float amount)
+    {
+        if (amount <= 0f || health <= 0f) return;
+        health = Mathf.Min(health + amount, maxHealth);
+        UpdateHealthBar();
+        Debug.Log($"{unitName} 恢復 {amount:F1} HP，剩餘血量：{health}");
     }
 
     /// <summary>穿透防禦的真實傷害，不受 defense 影響。</summary>
@@ -93,6 +104,8 @@ public class CharacterBase : MonoBehaviour
 
     public virtual void TakeDamage(float damage)
     {
+        if (teamDamageReduction > 0f)
+            damage *= (1f - teamDamageReduction);
         float actualDamage = damage <= 0f ? 0f : Mathf.Max(damage - defense, 1f);
         health -= actualDamage;
 
@@ -173,15 +186,19 @@ public class CharacterBase : MonoBehaviour
     protected void UpdateSkillCharge()
     {
         if (skillCharge >= 100f) return;
-        skillCharge += skillChargeRate * Time.deltaTime;
-        UpdateSkillBar();
-        if (skillCharge >= 100f)
+        skillChargeTimer += Time.deltaTime;
+        if (skillChargeTimer >= skillChargeInterval)
         {
-            skillCharge = 100f;
+            skillChargeTimer -= skillChargeInterval;
+            skillCharge += 1f;
+            skillCharge = Mathf.Min(skillCharge, 100f);
             UpdateSkillBar();
-            UseSkill();
-            skillCharge = 0f;
-            UpdateSkillBar();
+            if (skillCharge >= 100f)
+            {
+                UseSkill();
+                skillCharge = 0f;
+                UpdateSkillBar();
+            }
         }
     }
 
