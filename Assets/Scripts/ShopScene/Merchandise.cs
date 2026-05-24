@@ -33,6 +33,7 @@ public class Merchandise : MonoBehaviour
     public float att;
     public float def;
     public float hp;
+    public float maxHp;
 
     private void Start()
     {
@@ -155,6 +156,7 @@ public class Merchandise : MonoBehaviour
         float newAtt,
         float newDef,
         float newHp,
+        float newMaxHp,
         string newCardId,
         string newUnitPrefabId
     )
@@ -165,6 +167,7 @@ public class Merchandise : MonoBehaviour
         att = newAtt;
         def = newDef;
         hp = newHp;
+        maxHp = newMaxHp;
         cardId = newCardId;
         unitPrefabId = newUnitPrefabId;
         baseLocalPosition = transform.localPosition;
@@ -211,7 +214,7 @@ public class Merchandise : MonoBehaviour
             return;
         }
 
-        targetCard.UpdateStats(att, def, hp);
+        targetCard.UpdateStats(att, def, hp, maxHp);
 
         if (HandManager.Instance != null)
         {
@@ -229,17 +232,13 @@ public class Merchandise : MonoBehaviour
             return;
         }
 
-        RunStateManager runState = RunStateManager.EnsureExists();
-        string runtimeCardId = string.IsNullOrEmpty(cardId)
-            ? "shop_card_" + obj_name.ToLower().Replace(" ", "_")
-            : cardId;
         string runtimeUnitPrefabId = string.IsNullOrEmpty(unitPrefabId) ? obj_name : unitPrefabId;
 
-        runState.AddPlayerCard(new PlayerCardRuntimeData(runtimeCardId, obj_name, runtimeUnitPrefabId));
-
-        if (HandManager.Instance != null)
+        if (HandManager.Instance == null || !HandManager.Instance.AddCardByUnitId(runtimeUnitPrefabId))
         {
-            HandManager.Instance.RebuildHandFromRunState();
+            PlayerManager.EnsureExists().ModifyMoney(price);
+            NotifyShop("Could not add card: " + obj_name + ".");
+            return;
         }
 
         NotifyShop("Bought card: " + obj_name + ".");
@@ -263,19 +262,24 @@ public class Merchandise : MonoBehaviour
 
         if (parent != null && parent.GetComponent<HandManager>() != null)
         {
-            RunStateManager.EnsureExists().RemovePlayerCardAt(cardIndex);
+            targetCard.transform.SetParent(null);
+            Destroy(targetCard.gameObject);
         }
         else
         {
-            RunStateManager.EnsureExists().RemovePlayerCardAt(0);
+            if (HandManager.Instance == null || !HandManager.Instance.RemoveCardAt(0))
+            {
+                PlayerManager.EnsureExists().ModifyMoney(price);
+                NotifyShop("No cards to remove.");
+                return;
+            }
         }
 
         string removedCardName = targetCard.cardName;
-        Destroy(targetCard.gameObject);
 
         if (HandManager.Instance != null)
         {
-            HandManager.Instance.RebuildHandFromRunState();
+            HandManager.Instance.SyncRunStateFromHand();
         }
 
         NotifyShop("Removed card: " + removedCardName + ".");
@@ -289,9 +293,7 @@ public class Merchandise : MonoBehaviour
             return true;
         }
 
-        RunStateManager runState = RunStateManager.EnsureExists();
-
-        if (runState.TrySpendPlayerGold(price))
+        if (PlayerManager.EnsureExists().TrySpendGold(price))
         {
             return true;
         }

@@ -22,7 +22,7 @@ public class ShopItemData
     public int price;
 }
 
-// ShopScene displays gold, sells cards/stat upgrades/removal, writes PlayerRunState, then returns to the map.
+// ShopScene displays gold, sells cards/stat upgrades/removal, then returns to the map.
 public class ShopSceneController : MonoBehaviour
 {
     [Header("Scene Names")]
@@ -31,7 +31,14 @@ public class ShopSceneController : MonoBehaviour
     [Header("Shop Prices")]
     public int cardPrice = 45;
     public int swordPrice = 60;
+    public int shieldPrice = 60;
+    public int armorPrice = 60;
     public int removeCardPrice = 35;
+
+    [Header("Upgrade Amounts")]
+    public float swordAttackBonus = 10f;
+    public float shieldDefenseBonus = 5f;
+    public float armorMaxHpBonus = 20f;
 
     [Header("UI References")]
     public Text goldText;
@@ -98,7 +105,7 @@ public class ShopSceneController : MonoBehaviour
             return;
         }
 
-        RunStateManager runState = RunStateManager.EnsureExists();
+        PlayerManager playerManager = PlayerManager.EnsureExists();
 
         if (item.itemType == ShopItemType.StatModifier)
         {
@@ -106,7 +113,7 @@ public class ShopSceneController : MonoBehaviour
             return;
         }
 
-        if (!runState.TrySpendPlayerGold(item.price))
+        if (!playerManager.TrySpendGold(item.price))
         {
             RefreshUI("Not enough gold for " + item.itemName + ".");
             return;
@@ -114,11 +121,11 @@ public class ShopSceneController : MonoBehaviour
 
         if (item.itemType == ShopItemType.Card)
         {
-            runState.AddPlayerCard(new PlayerCardRuntimeData(item.itemId, item.itemName, item.itemName));
-
-            if (HandManager.Instance != null)
+            if (HandManager.Instance == null || !HandManager.Instance.AddCardByUnitId(item.itemName))
             {
-                HandManager.Instance.RebuildHandFromRunState();
+                playerManager.ModifyMoney(item.price);
+                RefreshUI("Could not add card: " + item.itemName + ".");
+                return;
             }
 
             RefreshUI("Bought card: " + item.itemName + ".");
@@ -127,16 +134,11 @@ public class ShopSceneController : MonoBehaviour
 
         if (item.itemType == ShopItemType.RemoveCardService)
         {
-            if (!runState.RemovePlayerCardAt(0))
+            if (HandManager.Instance == null || !HandManager.Instance.RemoveCardAt(0))
             {
-                runState.AddPlayerGold(item.price);
+                playerManager.ModifyMoney(item.price);
                 RefreshUI("No cards to remove.");
                 return;
-            }
-
-            if (HandManager.Instance != null)
-            {
-                HandManager.Instance.RebuildHandFromRunState();
             }
 
             RefreshUI("Removed the first card in your deck.");
@@ -153,6 +155,8 @@ public class ShopSceneController : MonoBehaviour
         shopItems.Clear();
         shopItems.Add(CreateCardItem());
         shopItems.Add(CreateSwordModifierItem());
+        shopItems.Add(CreateShieldModifierItem());
+        shopItems.Add(CreateArmorModifierItem());
         shopItems.Add(CreateRemoveCardServiceItem());
     }
 
@@ -175,6 +179,28 @@ public class ShopSceneController : MonoBehaviour
         item.itemName = "Sword";
         item.description = "Drag onto a card to add attack.";
         item.price = swordPrice;
+        return item;
+    }
+
+    private ShopItemData CreateShieldModifierItem()
+    {
+        ShopItemData item = new ShopItemData();
+        item.itemType = ShopItemType.StatModifier;
+        item.itemId = "shop_modifier_training_shield";
+        item.itemName = "Shield";
+        item.description = "Drag onto a card to add defense.";
+        item.price = shieldPrice;
+        return item;
+    }
+
+    private ShopItemData CreateArmorModifierItem()
+    {
+        ShopItemData item = new ShopItemData();
+        item.itemType = ShopItemType.StatModifier;
+        item.itemId = "shop_modifier_training_armor";
+        item.itemName = "Armor";
+        item.description = "Drag onto a card to add max HP.";
+        item.price = armorPrice;
         return item;
     }
 
@@ -223,7 +249,8 @@ public class ShopSceneController : MonoBehaviour
 
     private void BuildMerchandiseShelf()
     {
-        Merchandise sword = FindExistingMerchandise("Sword");
+        string selectedUpgradeName = PickRandomUpgradeName();
+        RemoveUnselectedUpgradeMerchandise(selectedUpgradeName);
 
         CreateOrConfigureMerchandise(
             FindExistingMerchandise("Warrior"),
@@ -234,22 +261,12 @@ public class ShopSceneController : MonoBehaviour
             0f,
             0f,
             0f,
+            0f,
             "shop_card_warrior",
             "Warrior"
         );
 
-        CreateOrConfigureMerchandise(
-            sword,
-            1,
-            MerchandiseActionType.StatModifier,
-            "Sword",
-            swordPrice,
-            10f,
-            0f,
-            0f,
-            "",
-            ""
-        );
+        CreateUpgradeMerchandise(selectedUpgradeName, 1);
 
         CreateOrConfigureMerchandise(
             FindExistingMerchandise("Remove Card"),
@@ -260,9 +277,102 @@ public class ShopSceneController : MonoBehaviour
             0f,
             0f,
             0f,
+            0f,
             "",
             ""
         );
+    }
+
+    private string PickRandomUpgradeName()
+    {
+        int roll = UnityEngine.Random.Range(0, 3);
+
+        if (roll == 0)
+        {
+            return "Sword";
+        }
+
+        if (roll == 1)
+        {
+            return "Shield";
+        }
+
+        return "Armor";
+    }
+
+    private void CreateUpgradeMerchandise(string upgradeName, int index)
+    {
+        if (upgradeName == "Shield")
+        {
+            CreateOrConfigureMerchandise(
+                FindExistingMerchandise("Shield"),
+                index,
+                MerchandiseActionType.StatModifier,
+                "Shield",
+                shieldPrice,
+                0f,
+                shieldDefenseBonus,
+                0f,
+                0f,
+                "",
+                ""
+            );
+            return;
+        }
+
+        if (upgradeName == "Armor")
+        {
+            CreateOrConfigureMerchandise(
+                FindExistingMerchandise("Armor"),
+                index,
+                MerchandiseActionType.StatModifier,
+                "Armor",
+                armorPrice,
+                0f,
+                0f,
+                0f,
+                armorMaxHpBonus,
+                "",
+                ""
+            );
+            return;
+        }
+
+        CreateOrConfigureMerchandise(
+            FindExistingMerchandise("Sword"),
+            index,
+            MerchandiseActionType.StatModifier,
+            "Sword",
+            swordPrice,
+            swordAttackBonus,
+            0f,
+            0f,
+            0f,
+            "",
+            ""
+        );
+    }
+
+    private void RemoveUnselectedUpgradeMerchandise(string selectedUpgradeName)
+    {
+        Merchandise[] merchandises = FindObjectsOfType<Merchandise>();
+
+        for (int i = 0; i < merchandises.Length; i++)
+        {
+            Merchandise merchandise = merchandises[i];
+
+            if (merchandise == null || merchandise.obj_name == selectedUpgradeName)
+            {
+                continue;
+            }
+
+            if (merchandise.obj_name == "Sword"
+                || merchandise.obj_name == "Shield"
+                || merchandise.obj_name == "Armor")
+            {
+                Destroy(merchandise.gameObject);
+            }
+        }
     }
 
     private Merchandise FindExistingMerchandise(string itemName)
@@ -289,6 +399,7 @@ public class ShopSceneController : MonoBehaviour
         float att,
         float def,
         float hp,
+        float maxHp,
         string cardId,
         string unitPrefabId
     )
@@ -301,7 +412,7 @@ public class ShopSceneController : MonoBehaviour
         Vector3 position = merchandiseStartPosition + new Vector3(index * merchandiseSpacing, 0f, 0f);
         merchandise.transform.position = position;
         merchandise.transform.localPosition = position;
-        merchandise.Configure(actionType, itemName, itemPrice, att, def, hp, cardId, unitPrefabId);
+        merchandise.Configure(actionType, itemName, itemPrice, att, def, hp, maxHp, cardId, unitPrefabId);
     }
 
     private Merchandise CreateMerchandiseObject(string itemName)
@@ -372,17 +483,17 @@ public class ShopSceneController : MonoBehaviour
 
     private void RefreshUI(string message)
     {
-        RunStateManager runState = RunStateManager.EnsureExists();
-        PlayerRunState state = runState.GetPlayerState();
+        PlayerManager playerManager = PlayerManager.EnsureExists();
+        int cardCount = HandManager.Instance != null ? HandManager.Instance.CardCount : 0;
 
         if (goldText != null)
         {
-            goldText.text = "Gold: " + state.gold;
+            goldText.text = "Gold: " + playerManager.money;
         }
 
         if (deckText != null)
         {
-            deckText.text = "Cards: " + state.cards.Count;
+            deckText.text = "Cards: " + cardCount;
         }
 
         if (statusText != null)

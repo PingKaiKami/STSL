@@ -1,5 +1,8 @@
 using UnityEngine;
-using System.Collections.Generic;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class HandManager : MonoBehaviour
 {
@@ -9,12 +12,31 @@ public class HandManager : MonoBehaviour
     public GameObject warriorPrefab;
     private bool handBuiltForCurrentPreparation;
 
-    void Awake()
+    public int CardCount
+    {
+        get
+        {
+            int count = 0;
+
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                if (transform.GetChild(i).GetComponent<Card>() != null)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+    }
+
+    private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            EnsurePrefabReferences();
         }
         else
         {
@@ -22,7 +44,14 @@ public class HandManager : MonoBehaviour
         }
     }
 
-    void Update()
+    private void Start()
+    {
+        EnsurePrefabReferences();
+        EnsureCardsReady();
+        ArrangeCards();
+    }
+
+    private void Update()
     {
         if (GameManager.Instance == null)
         {
@@ -31,7 +60,8 @@ public class HandManager : MonoBehaviour
 
         if (GameManager.Instance.currentState == GameState.Preparation && !handBuiltForCurrentPreparation)
         {
-            RebuildHandFromRunState();
+            EnsureCardsReady();
+            ArrangeCards();
             handBuiltForCurrentPreparation = true;
         }
 
@@ -53,56 +83,78 @@ public class HandManager : MonoBehaviour
 
     public void RebuildHandFromRunState()
     {
-        RunStateManager runState = RunStateManager.EnsureExists();
-        List<PlayerCardRuntimeData> cardData = runState.GetPlayerCards();
-        GameObject templateCard = GetCardTemplate();
-
-        if (templateCard == null)
-        {
-            Debug.LogError("HandManager: no card template is available.");
-            return;
-        }
-
-        List<GameObject> oldCards = new List<GameObject>();
-
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            oldCards.Add(transform.GetChild(i).gameObject);
-        }
-
-        for (int i = 0; i < cardData.Count; i++)
-        {
-            GameObject newCardObject = Instantiate(templateCard, transform);
-            newCardObject.SetActive(true);
-
-            Card card = newCardObject.GetComponent<Card>();
-
-            if (card != null)
-            {
-                ApplyRuntimeCardData(card, cardData[i]);
-            }
-        }
-
-        for (int i = 0; i < oldCards.Count; i++)
-        {
-            Destroy(oldCards[i]);
-        }
-
+        EnsureCardsReady();
         ArrangeCards();
+        RefreshAllCardText();
     }
 
     public void ResetHandAfterBattle()
     {
-        DestroyPlayersOnField();
-        RebuildHandFromRunState();
+        RecallAllPlayersToHand();
         handBuiltForCurrentPreparation = false;
     }
 
     public void SyncRunStateFromHand()
     {
-        RunStateManager runState = RunStateManager.EnsureExists();
-        List<PlayerCardRuntimeData> cards = new List<PlayerCardRuntimeData>();
+        EnsureCardsReady();
+        ArrangeCards();
+        RefreshAllCardText();
+    }
 
+    public bool AddCardByUnitId(string unitPrefabId)
+    {
+        EnsurePrefabReferences();
+        GameObject unitPrefab = ResolveUnitPrefab(unitPrefabId);
+
+        if (unitPrefab == null)
+        {
+            Debug.LogError("HandManager: no unit prefab found for " + unitPrefabId);
+            return false;
+        }
+
+        GameObject templateCard = GetCardTemplate();
+
+        if (templateCard == null)
+        {
+            Debug.LogError("HandManager: no card template is available.");
+            return false;
+        }
+
+        GameObject newCardObject = Instantiate(templateCard, transform);
+        newCardObject.SetActive(true);
+
+        Card card = newCardObject.GetComponent<Card>();
+
+        if (card != null)
+        {
+            ApplyUnitPrefabToCard(card, unitPrefab);
+        }
+
+        ArrangeCards();
+        return true;
+    }
+
+    public bool RemoveCardAt(int index)
+    {
+        if (index < 0 || index >= transform.childCount)
+        {
+            return false;
+        }
+
+        Card card = transform.GetChild(index).GetComponent<Card>();
+
+        if (card == null)
+        {
+            return false;
+        }
+
+        Destroy(card.gameObject);
+        ArrangeCards();
+        return true;
+    }
+
+    public void RestoreAllCardsToFullHealth()
+    {
         for (int i = 0; i < transform.childCount; i++)
         {
             Card card = transform.GetChild(i).GetComponent<Card>();
@@ -112,14 +164,19 @@ public class HandManager : MonoBehaviour
                 continue;
             }
 
-            cards.Add(CreateRuntimeCardData(card, i));
+            if (card.maxHp > 0f)
+            {
+                card.UpdateStats(0f, 0f, card.maxHp - card.hp);
+            }
         }
 
-        runState.SetPlayerCards(cards);
+        RefreshAllCardText();
     }
 
     private GameObject GetCardTemplate()
     {
+        EnsurePrefabReferences();
+
         if (basicCard != null)
         {
             return basicCard;
@@ -138,38 +195,66 @@ public class HandManager : MonoBehaviour
         return null;
     }
 
-    private void ApplyRuntimeCardData(Card card, PlayerCardRuntimeData data)
+    private void EnsureCardsReady()
     {
-        if (data == null)
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Card card = transform.GetChild(i).GetComponent<Card>();
+
+            if (card == null)
+            {
+                continue;
+            }
+
+            GameObject unitPrefab = card.sourceCardPrefab != null
+                ? card.sourceCardPrefab
+                : card.prefab != null
+                    ? card.prefab
+                    : ResolveUnitPrefab(card.cardName);
+
+            if (unitPrefab == null)
+            {
+                continue;
+            }
+
+            if (card.prefab == null)
+            {
+                card.prefab = unitPrefab;
+            }
+
+            if (card.sourceCardPrefab == null)
+            {
+                card.sourceCardPrefab = unitPrefab;
+            }
+
+            bool hasNoStats = card.att == 0f && card.def == 0f && card.hp == 0f && card.maxHp == 0f;
+
+            if (hasNoStats || string.IsNullOrEmpty(card.cardName))
+            {
+                ApplyUnitPrefabToCard(card, unitPrefab);
+            }
+        }
+    }
+
+    private void ApplyUnitPrefabToCard(Card card, GameObject unitPrefab)
+    {
+        if (card == null || unitPrefab == null)
         {
             return;
         }
 
-        card.cardName = data.cardName;
-        GameObject unitPrefab = ResolveUnitPrefab(data.unitPrefabId);
+        card.prefab = unitPrefab;
+        card.sourceCardPrefab = unitPrefab;
 
-        if (unitPrefab != null)
+        CharacterBase character = unitPrefab.GetComponent<CharacterBase>();
+
+        if (character != null)
         {
-            card.prefab = unitPrefab;
-            card.sourceCardPrefab = unitPrefab;
-
-            CharacterBase character = unitPrefab.GetComponent<CharacterBase>();
-
-            if (character != null)
-            {
-                card.att = Mathf.RoundToInt(character.attack);
-                card.def = Mathf.RoundToInt(character.defense);
-                card.hp = Mathf.RoundToInt(character.health);
-                card.maxHp = Mathf.RoundToInt(character.maxHealth);
-            }
-        }
-
-        if (data.att != 0f || data.def != 0f || data.hp != 0f || data.maxHp != 0f)
-        {
-            card.att = data.att;
-            card.def = data.def;
-            card.hp = data.hp;
-            card.maxHp = data.maxHp;
+            card.cardName = character.unitName;
+            card.att = Mathf.RoundToInt(character.attack);
+            card.def = Mathf.RoundToInt(character.defense);
+            card.hp = Mathf.RoundToInt(character.health);
+            card.maxHp = Mathf.RoundToInt(character.maxHealth > 0f ? character.maxHealth : character.health);
         }
 
         Card_text cardText = card.GetComponentInChildren<Card_text>();
@@ -182,6 +267,13 @@ public class HandManager : MonoBehaviour
 
     private GameObject ResolveUnitPrefab(string unitPrefabId)
     {
+        EnsurePrefabReferences();
+
+        if (string.IsNullOrEmpty(unitPrefabId) && warriorPrefab != null)
+        {
+            return warriorPrefab;
+        }
+
         if (unitPrefabId == "Warrior" && warriorPrefab != null)
         {
             return warriorPrefab;
@@ -222,31 +314,28 @@ public class HandManager : MonoBehaviour
         return null;
     }
 
-    private PlayerCardRuntimeData CreateRuntimeCardData(Card card, int index)
+    private void EnsurePrefabReferences()
     {
-        string runtimeCardId = string.IsNullOrEmpty(card.cardName)
-            ? "card_" + index
-            : card.cardName.ToLower().Replace(" ", "_") + "_" + index;
-        string unitPrefabId = card.sourceCardPrefab != null
-            ? card.sourceCardPrefab.name
-            : card.prefab != null
-                ? card.prefab.name
-                : card.cardName;
+#if UNITY_EDITOR
+        if (basicCard == null)
+        {
+            basicCard = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Card.prefab");
+        }
 
-        return new PlayerCardRuntimeData(
-            runtimeCardId,
-            card.cardName,
-            unitPrefabId,
-            card.att,
-            card.def,
-            card.hp,
-            card.maxHp
-        );
+        if (warriorPrefab == null)
+        {
+            warriorPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Warrior.prefab");
+        }
+#endif
     }
 
-    void ArrangeCards()
+    public GameObject ResolveUnitPrefabForCard(string unitPrefabId)
     {
-        // 取得所有子物件 (假設卡片都在 Panel 下)
+        return ResolveUnitPrefab(unitPrefabId);
+    }
+
+    private void ArrangeCards()
+    {
         int count = transform.childCount;
         if (count == 0) return;
 
@@ -260,18 +349,13 @@ public class HandManager : MonoBehaviour
 
             if (cardScript != null)
             {
-                // 計算目標位置
-                Vector3 pos = new Vector3(startX + (i * spacing), -3.2f, 0);
-                
-                // 【核心修改】：直接把位置寫入卡片的變數裡
-                cardScript.baseLocalPosition = pos;
+                cardScript.baseLocalPosition = new Vector3(startX + (i * spacing), -3.2f, 0);
             }
         }
     }
 
-    void SetCardsActive(bool isActive)
+    private void SetCardsActive(bool isActive)
     {
-        // 遍歷所有子物件
         for (int i = 0; i < transform.childCount; i++)
         {
             GameObject child = transform.GetChild(i).gameObject;
@@ -282,126 +366,111 @@ public class HandManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 由外部呼叫，傳入卡片 Prefab 並生成為 HandManager 的子物件
-    /// </summary>
-    /// <param name="cardPrefab">想要新增的卡片 Prefab</param>
-    public void AddCard(GameObject cardPrefab)
+    private void RefreshAllCardText()
     {
-        if (cardPrefab == null)
+        for (int i = 0; i < transform.childCount; i++)
         {
-            Debug.LogError("HandManager: 傳入的卡片 Prefab 是空的 (null)！");
-            return;
-        }
+            Card_text cardText = transform.GetChild(i).GetComponentInChildren<Card_text>();
 
-        // 生成卡片，並直接指定父物件 (transform) 為當前的 HandManager
-        GameObject newCardObj = Instantiate(cardPrefab, transform);
-
-        // 取得卡片元件進行基礎位置初始化，避免生成瞬間在畫面上亂閃
-        Card cardScript = newCardObj.GetComponent<Card>();
-        if (cardScript != null)
-        {
-            // 先給一個預設的局部位置
-            cardScript.baseLocalPosition = new Vector3(0, -3.2f, 0);
-        }
-
-        // 效能優化小提示：因為新增了卡片，可以在這裡手動呼叫一次 ArrangeCards()
-        // ArrangeCards(); 
-    }
-
-    /// <summary>
-    /// 按百分比恢復目前手牌中所有卡片的 HP (會自動防溢補)
-    /// </summary>
-    /// <param name="percentage">恢復比例 (例如 0.5 代表 50%)</param>
-    public void HealAllCardsPercentage(float percentage)
-    {
-        // 遍歷 HandManager 底下的所有卡片
-        foreach (Transform child in transform)
-        {
-            Card cardScript = child.GetComponent<Card>();
-            
-            if (cardScript != null)
+            if (cardText != null)
             {
-                // 1. 根據這張卡片原本的最大血量，計算 50% 是多少補量 (四捨五入成 int)
-                int healAmount = Mathf.RoundToInt(cardScript.maxHp * percentage);
-
-                // 2. 計算補血後的理想血量
-                float targetHp = cardScript.hp + healAmount;
-
-                // 3. 確保補血後的血量不會超過上限 (maxHp)
-                if (targetHp > cardScript.maxHp)
-                {
-                    targetHp = cardScript.maxHp;
-                }
-
-                // 4. 計算出「實際上真正補了多少血」
-                float actualHeal = targetHp - cardScript.hp;
-
-                // 5. 呼叫原本的 UpdateStats 灌入真正增加的血量
-                // 註：因為是加血，actualHeal 會是正數 (例如 0, 0, 3)
-                cardScript.UpdateStats(0, 0, actualHeal);
+                cardText.UpdateText();
             }
         }
     }
 
-    /// <summary>
-    /// 回收場上所有的 Player 並將對應的卡片加回手牌
-    /// </summary>
+    public void AddCard(GameObject cardPrefab)
+    {
+        if (cardPrefab == null)
+        {
+            Debug.LogError("HandManager: card prefab is null.");
+            return;
+        }
+
+        GameObject newCardObject = Instantiate(cardPrefab, transform);
+        newCardObject.SetActive(true);
+
+        Card card = newCardObject.GetComponent<Card>();
+
+        if (card != null)
+        {
+            card.baseLocalPosition = new Vector3(0f, -3.2f, 0f);
+        }
+
+        EnsureCardsReady();
+        ArrangeCards();
+    }
+
+    public void HealAllCardsPercentage(float percentage)
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Card card = transform.GetChild(i).GetComponent<Card>();
+
+            if (card == null)
+            {
+                continue;
+            }
+
+            int healAmount = Mathf.RoundToInt(card.maxHp * percentage);
+            float targetHp = Mathf.Min(card.hp + healAmount, card.maxHp);
+            card.UpdateStats(0f, 0f, targetHp - card.hp);
+        }
+
+        RefreshAllCardText();
+    }
+
     public void RecallAllPlayersToHand()
     {
         GameObject[] playersOnField = GameObject.FindGameObjectsWithTag("Player");
+        GameObject templateCard = GetCardTemplate();
+
+        if (templateCard == null)
+        {
+            Debug.LogError("HandManager: no card template is available.");
+            return;
+        }
 
         foreach (GameObject playerObj in playersOnField)
         {
-            CharacterBase cb = playerObj.GetComponent<CharacterBase>();
-            Player p = playerObj.GetComponent<Player>();
+            CharacterBase character = playerObj.GetComponent<CharacterBase>();
+            Player player = playerObj.GetComponent<Player>();
 
-            if (cb != null && p != null && p.sourceCardPrefab != null)
+            if (character != null && player != null && player.sourceCardPrefab != null)
             {
-                // 如果死掉了，直接清除，不回收
-                if (cb.health <= 0)
+                if (character.health <= 0f)
                 {
                     Destroy(playerObj);
                     continue;
                 }
 
-                // 1. 生成空白的基礎卡牌
-                GameObject newCardObj = Instantiate(basicCard);
-                Card newCardScript = newCardObj.GetComponent<Card>();
+                GameObject newCardObject = Instantiate(templateCard, transform);
+                newCardObject.SetActive(true);
 
-                if (newCardScript != null)
+                Card card = newCardObject.GetComponent<Card>();
+
+                if (card != null)
                 {
-                    // 2. 透過 CharacterBase 的數值，直接賦值給新卡片的變數
-                    newCardScript.cardName = cb.unitName;
-                    newCardScript.att = Mathf.RoundToInt(cb.attack);
-                    newCardScript.def = Mathf.RoundToInt(cb.defense);
-                    newCardScript.hp = Mathf.RoundToInt(cb.health);       // 場上剩多少，卡片就記多少
-                    newCardScript.maxHp = Mathf.RoundToInt(cb.maxHealth); // 帶回原本的最大血量上限
-                    
-                    // 3. 傳遞原始檔案指標，確保這張殘血卡下次還能再次被正確打出場
-                    newCardScript.sourceCardPrefab = p.sourceCardPrefab; 
-                }
+                    card.cardName = character.unitName;
+                    card.att = Mathf.RoundToInt(character.attack);
+                    card.def = Mathf.RoundToInt(character.defense);
+                    card.hp = Mathf.RoundToInt(character.health);
+                    card.maxHp = Mathf.RoundToInt(character.maxHealth);
+                    card.prefab = player.sourceCardPrefab;
+                    card.sourceCardPrefab = player.sourceCardPrefab;
 
-                // 4. 丟進手牌面板
-                AddCard(newCardObj);
-                Destroy(newCardObj);
+                    Card_text cardText = card.GetComponentInChildren<Card_text>();
+
+                    if (cardText != null)
+                    {
+                        cardText.UpdateText();
+                    }
+                }
             }
 
-            // 5. 順利轉移，刪除場上實體角色
             Destroy(playerObj);
         }
 
         ArrangeCards();
-        SyncRunStateFromHand();
-    }
-
-    private void DestroyPlayersOnField()
-    {
-        GameObject[] playersOnField = GameObject.FindGameObjectsWithTag("Player");
-
-        for (int i = 0; i < playersOnField.Length; i++)
-        {
-            Destroy(playersOnField[i]);
-        }
     }
 }

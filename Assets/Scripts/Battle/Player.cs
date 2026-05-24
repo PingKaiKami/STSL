@@ -40,6 +40,7 @@ public class Player : CharacterBase
         GridReservationManager.ReleaseReservation(gameObject);
 
         base.Die();
+        Destroy(gameObject);
         Debug.Log("遊戲結束，請重新開始");
     }
 

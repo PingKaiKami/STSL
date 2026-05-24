@@ -19,7 +19,7 @@ public class ChestRewardData
     public int goldAmount;
 }
 
-// ChestScene gives one random reward, writes it into PlayerRunState, then returns to the map.
+// ChestScene gives one random reward, then returns to the map.
 public class ChestSceneController : MonoBehaviour
 {
     [Header("Scene Names")]
@@ -49,19 +49,18 @@ public class ChestSceneController : MonoBehaviour
             return;
         }
 
-        RunStateManager runState = RunStateManager.EnsureExists();
+        PlayerManager playerManager = PlayerManager.EnsureExists();
 
         if (currentReward.rewardType == ChestRewardType.Gold)
         {
-            runState.AddPlayerGold(currentReward.goldAmount);
+            playerManager.ModifyMoney(currentReward.goldAmount);
         }
         else
         {
-            runState.AddPlayerCard(new PlayerCardRuntimeData(
-                currentReward.rewardId,
-                currentReward.rewardName,
-                currentReward.rewardName
-            ));
+            if (HandManager.Instance != null)
+            {
+                HandManager.Instance.AddCardByUnitId(currentReward.rewardName);
+            }
         }
 
         rewardClaimed = true;

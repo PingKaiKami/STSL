@@ -53,6 +53,11 @@ public class Merchandise_text : MonoBehaviour
             lines.Add($"hp {input_merchandise.hp.ToString("+0;-0")}");
         }
 
+        if (input_merchandise.maxHp != 0)
+        {
+            lines.Add($"max hp {input_merchandise.maxHp.ToString("+0;-0")}");
+        }
+
         return string.Join("\n", lines);
     }
 }

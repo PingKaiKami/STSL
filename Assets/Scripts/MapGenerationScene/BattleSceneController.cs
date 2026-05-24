@@ -13,17 +13,20 @@ public class BattleSceneController : MonoBehaviour
 
     [Header("Rewards")]
     public int victoryGoldReward = 20;
-    public int lossHPPenalty = 30;
 
     public void WinBattleForTest()
     {
         RunStateManager runState = RunStateManager.EnsureExists();
         bool isFinalBoss = runState.IsPendingBossRoom();
 
-        runState.AddPlayerGold(victoryGoldReward);
+        if (HandManager.Instance != null)
+        {
+            HandManager.Instance.RecallAllPlayersToHand();
+        }
+
+        PlayerManager.EnsureExists().ModifyMoney(victoryGoldReward);
         runState.CompletePendingRoom();
         GameManager.Instance.currentState = GameState.MapSelection;
-        PlayerManager.Instance.ModifyMoney(10);
 
         if (isFinalBoss)
         {
@@ -37,8 +40,15 @@ public class BattleSceneController : MonoBehaviour
     public void LoseBattleForTest()
     {
         RunStateManager runState = RunStateManager.EnsureExists();
+        PlayerManager playerManager = PlayerManager.EnsureExists();
+        bool hasLivesLeft = playerManager.LoseLife();
 
-        if (runState.IsPendingBossRoom())
+        if (HandManager.Instance != null)
+        {
+            HandManager.Instance.RecallAllPlayersToHand();
+        }
+
+        if (!hasLivesLeft)
         {
             GameManager.Instance.currentState = GameState.Menu;
             SceneManager.LoadScene(failSceneName);
@@ -46,26 +56,17 @@ public class BattleSceneController : MonoBehaviour
             return;
         }
 
-        PlayerRunState playerState = runState.GetPlayerState();
-        int hpAfterLoss = Mathf.Max(0, playerState.currentHP - lossHPPenalty);
-        runState.SetPlayerCurrentHP(hpAfterLoss);
-
-        if (hpAfterLoss <= 0)
+        if (runState.IsPendingBossRoom())
         {
-            GameManager.Instance.currentState = GameState.Menu;
-            SceneManager.LoadScene(failSceneName);
-            Debug.Log("Game Over");
+            Debug.Log("Player lives after loss: " + playerManager.health);
+            GameManager.Instance.currentState = GameState.MapSelection;
+            SceneManager.LoadScene(mapSceneName);
             return;
         }
 
         runState.CompletePendingRoom();
 
-        if (HandManager.Instance != null)
-        {
-            HandManager.Instance.ResetHandAfterBattle();
-        }
-
-        Debug.Log("Current run HP after loss: " + hpAfterLoss);
+        Debug.Log("Player lives after loss: " + playerManager.health);
         GameManager.Instance.currentState = GameState.MapSelection;
         SceneManager.LoadScene(mapSceneName);
     }

@@ -2,14 +2,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-// RestScene shows current HP, heals the player, writes PlayerRunState, then returns to the map.
+// RestScene restores all surviving hand cards, then returns to the map.
 public class RestSceneController : MonoBehaviour
 {
     [Header("Scene Names")]
     public string mapSceneName = "MapGenerationScene";
-
-    [Header("Rest Settings")]
-    public int flatHealAmount = 30;
 
     [Header("UI References")]
     public Text hpText;
@@ -25,13 +22,12 @@ public class RestSceneController : MonoBehaviour
 
     public void RestAndReturnToMap()
     {
-        RunStateManager runState = RunStateManager.EnsureExists();
-        PlayerRunState state = runState.GetPlayerState();
-        int beforeHP = state.currentHP;
-        int healedHP = Mathf.Min(state.currentHP + flatHealAmount, state.maxHP);
+        if (HandManager.Instance != null)
+        {
+            HandManager.Instance.RestoreAllCardsToFullHealth();
+        }
 
-        runState.SetPlayerCurrentHP(healedHP);
-        SetStatus("Rested: " + beforeHP + " -> " + healedHP + " HP");
+        SetStatus("All pieces restored to full HP.");
         ReturnToMap();
     }
 
@@ -45,12 +41,17 @@ public class RestSceneController : MonoBehaviour
 
     private void RefreshUI()
     {
-        RunStateManager runState = RunStateManager.EnsureExists();
-        PlayerRunState state = runState.GetPlayerState();
+        PlayerManager playerManager = PlayerManager.EnsureExists();
+        int cardCount = HandManager.Instance != null ? HandManager.Instance.CardCount : 0;
 
         if (hpText != null)
         {
-            hpText.text = "HP: " + state.currentHP + " / " + state.maxHP;
+            hpText.text = "Lives: "
+                + playerManager.health
+                + " / "
+                + PlayerManager.DefaultLives
+                + "\nCards: "
+                + cardCount;
         }
 
         if (restButton != null)
@@ -59,11 +60,11 @@ public class RestSceneController : MonoBehaviour
 
             if (buttonText != null)
             {
-                buttonText.text = "Rest +" + flatHealAmount + " HP";
+                buttonText.text = "Restore Pieces";
             }
         }
 
-        SetStatus("Recover HP and return to the map.");
+        SetStatus("Restore all surviving piece cards to full HP.");
     }
 
     private void SetStatus(string message)

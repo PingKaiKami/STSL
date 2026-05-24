@@ -755,16 +755,16 @@ public class MapUIRenderer : MonoBehaviour
             return;
         }
 
-        RunStateManager runState = RunStateManager.EnsureExists();
-        PlayerRunState state = runState.GetPlayerState();
+        PlayerManager playerManager = PlayerManager.EnsureExists();
+        int cardCount = HandManager.Instance != null ? HandManager.Instance.CardCount : 0;
 
-        playerInfoText.text = "HP: "
-            + state.currentHP
+        playerInfoText.text = "Lives: "
+            + playerManager.health
             + " / "
-            + state.maxHP
+            + PlayerManager.DefaultLives
             + "\nGold: "
-            + state.gold
+            + playerManager.money
             + "\nCards: "
-            + state.cards.Count;
+            + cardCount;
     }
 }

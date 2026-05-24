@@ -7,9 +7,6 @@ public class RunStateManager : MonoBehaviour
 {
     public static RunStateManager Instance { get; private set; }
 
-    [Header("Runtime Player State")]
-    [SerializeField] private PlayerRunState playerState = new PlayerRunState();
-
     [Header("Runtime Map State")]
     [System.NonSerialized]
     public MapData currentMap;
@@ -44,7 +41,6 @@ public class RunStateManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        EnsurePlayerStateInitialized();
     }
 
     public static RunStateManager EnsureExists()
@@ -74,7 +70,7 @@ public class RunStateManager : MonoBehaviour
 
     public void StartNewRun(MapGenerationConfig config)
     {
-        playerState.InitializeNewRun();
+        PlayerManager.EnsureExists().InitializeNewRun();
         currentMap = SlayLikeMapGenerator.Generate(config);
         currentSelectedNode = null;
         pendingSelectedNode = null;
@@ -94,7 +90,7 @@ public class RunStateManager : MonoBehaviour
 
     public void ClearRun()
     {
-        playerState = new PlayerRunState();
+        PlayerManager.EnsureExists().ClearRunState();
         currentMap = null;
         currentSelectedNode = null;
         pendingSelectedNode = null;
@@ -167,121 +163,5 @@ public class RunStateManager : MonoBehaviour
     public bool IsPendingRoomType(RoomType roomType)
     {
         return pendingSelectedNode != null && pendingSelectedNode.Type == roomType;
-    }
-
-    public PlayerRunState GetPlayerState()
-    {
-        EnsurePlayerStateInitialized();
-        return playerState;
-    }
-
-    public PlayerBattleStartData GetPlayerBattleStartData()
-    {
-        return GetPlayerState().CreateBattleStartData();
-    }
-
-    public List<PlayerCardRuntimeData> GetPlayerCards()
-    {
-        return GetPlayerState().GetCardsSnapshot();
-    }
-
-    public void SetPlayerState(PlayerRunState newPlayerState)
-    {
-        playerState = newPlayerState;
-        EnsurePlayerStateInitialized();
-        playerState.Normalize();
-    }
-
-    public void SetPlayerBattleResult(int remainingHP)
-    {
-        GetPlayerState().SetCurrentHP(remainingHP);
-    }
-
-    public void SetPlayerBattleResult(int remainingHP, int goldReward)
-    {
-        PlayerRunState state = GetPlayerState();
-        state.SetCurrentHP(remainingHP);
-        state.AddGold(goldReward);
-    }
-
-    public void SetPlayerBattleResult(int remainingHP, IEnumerable<PlayerCardRuntimeData> updatedCards)
-    {
-        PlayerRunState state = GetPlayerState();
-        state.SetCurrentHP(remainingHP);
-        state.SetCards(updatedCards);
-    }
-
-    public void SetPlayerBattleResult(int remainingHP, int goldReward, IEnumerable<PlayerCardRuntimeData> updatedCards)
-    {
-        PlayerRunState state = GetPlayerState();
-        state.SetCurrentHP(remainingHP);
-        state.AddGold(goldReward);
-        state.SetCards(updatedCards);
-    }
-
-    public void SetPlayerCurrentHP(int currentHP)
-    {
-        GetPlayerState().SetCurrentHP(currentHP);
-    }
-
-    public void SetPlayerMaxHP(int maxHP)
-    {
-        GetPlayerState().SetMaxHP(maxHP);
-    }
-
-    public int GetPlayerGold()
-    {
-        return GetPlayerState().gold;
-    }
-
-    public void SetPlayerGold(int gold)
-    {
-        GetPlayerState().SetGold(gold);
-    }
-
-    public void AddPlayerGold(int amount)
-    {
-        GetPlayerState().AddGold(amount);
-    }
-
-    public bool TrySpendPlayerGold(int amount)
-    {
-        return GetPlayerState().TrySpendGold(amount);
-    }
-
-    public void SetPlayerCards(IEnumerable<PlayerCardRuntimeData> cards)
-    {
-        GetPlayerState().SetCards(cards);
-    }
-
-    public void AddPlayerCard(PlayerCardRuntimeData card)
-    {
-        GetPlayerState().AddCard(card);
-    }
-
-    public bool RemovePlayerCardById(string cardId)
-    {
-        return GetPlayerState().RemoveCardById(cardId);
-    }
-
-    public bool RemovePlayerCardAt(int index)
-    {
-        return GetPlayerState().RemoveCardAt(index);
-    }
-
-    private void EnsurePlayerStateInitialized()
-    {
-        if (playerState == null)
-        {
-            playerState = new PlayerRunState();
-        }
-
-        if (!playerState.IsInitialized())
-        {
-            playerState.InitializeNewRun();
-            return;
-        }
-
-        playerState.Normalize();
     }
 }

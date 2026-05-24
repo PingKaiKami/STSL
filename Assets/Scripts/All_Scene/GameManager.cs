@@ -51,8 +51,6 @@ public class GameManager : MonoBehaviour
 
     [Header("Battle Rewards")]
     [SerializeField] private int victoryGoldReward = 20;
-    [SerializeField] private int victoryMoneyReward = 10;
-    [SerializeField] private int lossHPPenalty = 30;
 
     [Header("Enemy Registration Rules")]
     [SerializeField] private List<EnemyRegistrationRule> enemyRegistrationRules =
@@ -416,17 +414,16 @@ public class GameManager : MonoBehaviour
         {
             if (HandManager.Instance != null)
             {
-                HandManager.Instance.ResetHandAfterBattle();
+                HandManager.Instance.RecallAllPlayersToHand();
             }
 
-            PlayerManager.Instance.ModifyMoney(victoryMoneyReward);
+            PlayerManager.EnsureExists().ModifyMoney(victoryGoldReward);
 
             if (!isDebug)
             {
                 RunStateManager runState = RunStateManager.EnsureExists();
                 bool isFinalBoss = runState.IsPendingBossRoom();
 
-                runState.AddPlayerGold(victoryGoldReward);
                 runState.CompletePendingRoom();
 
                 if (isFinalBoss)
@@ -443,37 +440,31 @@ public class GameManager : MonoBehaviour
         else
         {
             RunStateManager runState = RunStateManager.EnsureExists();
+            PlayerManager playerManager = PlayerManager.EnsureExists();
+            bool hasLivesLeft = playerManager.LoseLife();
 
-            if (runState.IsPendingBossRoom())
+            if (HandManager.Instance != null)
             {
-                if (!isDebug)
-                {
-                    currentState = GameState.Menu;
-                    SceneManager.LoadScene(failSceneName);
-                    Debug.Log("Game Over");
-                }
+                HandManager.Instance.RecallAllPlayersToHand();
+            }
 
+            Debug.Log("Player lives after loss: " + playerManager.health);
+
+            if (!isDebug && !hasLivesLeft)
+            {
+                currentState = GameState.Menu;
+                SceneManager.LoadScene(failSceneName);
+                Debug.Log("Game Over");
                 return;
             }
 
-            PlayerRunState playerState = runState.GetPlayerState();
-            int hpAfterLoss = Mathf.Max(0, playerState.currentHP - lossHPPenalty);
-            runState.SetPlayerCurrentHP(hpAfterLoss);
-            Debug.Log("Current run HP after loss: " + hpAfterLoss);
-
             if (!isDebug)
             {
-                if (hpAfterLoss <= 0)
+                if (runState.IsPendingBossRoom())
                 {
-                    currentState = GameState.Menu;
-                    SceneManager.LoadScene(failSceneName);
-                    Debug.Log("Game Over");
+                    currentState = GameState.MapSelection;
+                    SceneManager.LoadScene(mapSceneName);
                     return;
-                }
-
-                if (HandManager.Instance != null)
-                {
-                    HandManager.Instance.ResetHandAfterBattle();
                 }
 
                 runState.CompletePendingRoom();
