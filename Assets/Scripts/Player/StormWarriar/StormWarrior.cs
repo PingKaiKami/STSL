@@ -12,8 +12,8 @@ using UnityEngine;
 /// </summary>
 public class StormWarrior : Player
 {
-    [Header("Animation")]
-    public new Animator animator;
+    // [Header("Animation")]
+    // public new Animator animator;
 
     [Header("狂風戰士屬性")]
     public float dodgeRate = 0f;
@@ -124,6 +124,7 @@ public class StormWarrior : Player
 
     // ─── 普通攻擊（覆寫）─────────────────────────────────────
 
+
     protected override void Attack(GameObject target)
     {
         // 忍耐中：封鎖普通攻擊
@@ -131,8 +132,10 @@ public class StormWarrior : Player
 
         if (animator != null)
         {
+            FaceTarget(target);
             if (baseAttackTime > 0f)
                 animator.speed = baseAttackTime / attackTime;
+            Debug.Log($"Set Trigger Attack, animation speed: {animator.speed}");
             animator.SetTrigger("Attack");
         }
 
@@ -143,6 +146,7 @@ public class StormWarrior : Player
         float dmg   = isCrit ? attack * 2f : attack;
         if (isCrit) Debug.Log($"{unitName} 必殺！");
 
+        Debug.Log($"{unitName} 攻擊 {enemy.unitName}，造成 {dmg} 傷害");
         enemy.TakeDamage(dmg);
         StartCoroutine(ResetAnimatorSpeed(attackTime));
     }

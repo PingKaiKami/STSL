@@ -209,6 +209,7 @@ public class Player : CharacterBase
 
         if (animator != null)
         {
+            FaceTarget(target);
             animator.SetTrigger("Attack");
         }
 
@@ -218,6 +219,21 @@ public class Player : CharacterBase
         {
             enemyStats.TakeDamage(attack);
         }
+    }
+
+    protected void FaceTarget(GameObject target)
+    {
+        if (target == null || animator == null) return;
+
+        Vector2 diff = (Vector2)target.transform.position - (Vector2)transform.position;
+
+        int dirVal;
+        if (Mathf.Abs(diff.x) >= Mathf.Abs(diff.y))
+            dirVal = diff.x > 0 ? 3 : 2; // Right=3, Left=2
+        else
+            dirVal = diff.y > 0 ? 1 : 0; // Up=1, Down=0
+
+        animator.SetInteger("Direction", dirVal);
     }
 
     private Vector2Int DirectionToCellOffset(MoveDirection dir)

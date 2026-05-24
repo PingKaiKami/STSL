@@ -97,6 +97,7 @@ public class TideTitan : Player
 
         if (animator != null)
         {
+            FaceTarget(target);
             if (baseAttackTime > 0f)
                 animator.speed = baseAttackTime / attackTime;
             animator.SetTrigger("Attack");
