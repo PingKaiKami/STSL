@@ -71,6 +71,12 @@ public class RunStateManager : MonoBehaviour
     public void StartNewRun(MapGenerationConfig config)
     {
         PlayerManager.EnsureExists().InitializeNewRun();
+
+        if (HandManager.Instance != null)
+        {
+            HandManager.Instance.ResetToStarterDeck();
+        }
+
         currentMap = SlayLikeMapGenerator.Generate(config);
         currentSelectedNode = null;
         pendingSelectedNode = null;

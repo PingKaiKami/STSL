@@ -94,6 +94,18 @@ public class HandManager : MonoBehaviour
         handBuiltForCurrentPreparation = false;
     }
 
+    public void ResetToStarterDeck()
+    {
+        EnsurePrefabReferences();
+        ClearHandCards();
+        AddCardByUnitId("Warrior");
+        AddCardByUnitId("Warrior");
+        AddCardByUnitId("Warrior");
+        handBuiltForCurrentPreparation = false;
+        RefreshAllCardText();
+        ArrangeCards();
+    }
+
     public void SyncRunStateFromHand()
     {
         EnsureCardsReady();
@@ -232,6 +244,30 @@ public class HandManager : MonoBehaviour
             if (hasNoStats || string.IsNullOrEmpty(card.cardName))
             {
                 ApplyUnitPrefabToCard(card, unitPrefab);
+            }
+        }
+    }
+
+    private void ClearHandCards()
+    {
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            Transform child = transform.GetChild(i);
+
+            if (child.GetComponent<Card>() == null)
+            {
+                continue;
+            }
+
+            child.SetParent(null);
+
+            if (Application.isPlaying)
+            {
+                Destroy(child.gameObject);
+            }
+            else
+            {
+                DestroyImmediate(child.gameObject);
             }
         }
     }
