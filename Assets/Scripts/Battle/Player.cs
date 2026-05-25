@@ -42,16 +42,20 @@ public class Player : CharacterBase
 
     protected override void OnStatusApplied(StatusEffect type)
     {
-        // 凍傷：移動速度減半
         if (type == StatusEffect.Frostbite)
             moveSpeed = baseMoveSpeed * 0.5f;
     }
 
     protected override void OnStatusRemoved(StatusEffect type)
     {
-        // 凍傷解除：恢復移動速度
         if (type == StatusEffect.Frostbite)
             moveSpeed = baseMoveSpeed;
+    }
+
+    protected override void OnKnockBackComplete(Vector2 newPosition)
+    {
+        lastSafeWorldPosition = newPosition;
+        hasReservedCell = false;
     }
 
     private void EnsureSafePositionInitialized()
@@ -83,6 +87,7 @@ public class Player : CharacterBase
     public void CombatLogic()
     {
         if (isMoving) return;
+        SnapToGrid();
 
         // 被嘲諷：強制以嘲諷來源為目標，否則尋找最近敵人
         CharacterBase tauntSource = GetTauntSource();

@@ -47,12 +47,12 @@ public class StormWarrior : Player
     {
         unitName             = "狂風戰士";
         health               = 1000f;
-        attack               = 20f;
+        attack               = 3f;
         defense              = 2f;
         attackRange          = 1.5f;
         moveSpeed            = 4f;
         attackTime           = 1.0f;
-        skillChargeInterval  = 0.1f;   // 每 1 秒 +1 衝能，改這裡即可
+        skillChargeInterval  = 0.05f;   // 每 1 秒 +1 衝能，改這裡即可
 
         ApplyEquipment();
         baseWalkSpeed  = moveSpeed;
@@ -241,9 +241,8 @@ public class StormWarrior : Player
             wall.AddComponent<BoxCollider2D>().size = Vector2.one * 0.9f;
             walls.Add(wall);
 
-            // 與 VoodooFaithful 相同：用 GridAStarPathfinder.WorldToGrid 取格子座標
             Vector2Int wallCell = GridAStarPathfinder.WorldToGrid(wallWorldPos);
-            GridReservationManager.TryReserveCell(wall, wallCell);
+            GridReservationManager.ForceReserveCell(wall, wallCell);
         }
 
         Debug.Log($"{unitName} 生成風牆！封鎖三側，{windWallDuration} 秒後消散");

@@ -40,6 +40,27 @@ public static class GridReservationManager
         return true;
     }
 
+    /// <summary>
+    /// 強制預約格子（忽略 targetCell == currentCell 限制），並踢走原本預約者。
+    /// 用於靜態障礙物（風牆、圖騰）放置在自身所在格時。
+    /// </summary>
+    public static void ForceReserveCell(GameObject owner, Vector2Int cell)
+    {
+        if (owner == null) return;
+        CleanupDeadReservations();
+
+        // 踢走原本預約此格的人，避免他們還以為可以走進來
+        if (cellOwners.TryGetValue(cell, out GameObject previousOwner)
+            && previousOwner != null && previousOwner != owner)
+        {
+            ownerCells.Remove(previousOwner);
+        }
+
+        ReleaseReservation(owner);
+        cellOwners[cell] = owner;
+        ownerCells[owner] = cell;
+    }
+
     public static void ReleaseReservation(GameObject owner)
     {
         if (owner == null) return;

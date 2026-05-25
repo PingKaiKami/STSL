@@ -217,6 +217,8 @@ public class CharacterBase : MonoBehaviour
         GameManager.Instance.OnCharacterDied(this);
     }
 
+    private Coroutine moveCoroutine;
+
     protected void Move(MoveDirection dir)
     {
         if (isMoving)
@@ -246,12 +248,28 @@ public class CharacterBase : MonoBehaviour
         }
 
         OnMoveStart();
-        StartCoroutine(MoveRoutine(target));
+        moveCoroutine = StartCoroutine(MoveRoutine(target));
     }
 
     protected virtual void OnMoveStart() { }
 
     protected virtual void OnMoveComplete() { }
+
+    /// <summary>
+    /// 若角色不在格子中心（誤差 > 0.05），立刻對齊。
+    /// 在 CombatLogic 開頭呼叫，確保所有動作從正確格子出發。
+    /// </summary>
+    protected void SnapToGrid()
+    {
+        Vector2Int cell = GridReservationManager.WorldToGrid(transform.position);
+        float cx = cell.x + 0.5f;
+        float cy = cell.y + 0.5f;
+        if (Mathf.Abs(transform.position.x - cx) > 0.0f ||
+            Mathf.Abs(transform.position.y - cy) > 0.0f)
+        {
+            transform.position = new Vector3(cx, cy, transform.position.z);
+        }
+    }
 
     protected bool IsCellFree(Vector2 pos)
     {
@@ -409,12 +427,24 @@ public class CharacterBase : MonoBehaviour
 
     private IEnumerator KnockBackRoutine(Vector2 dir, float dist)
     {
-        Vector2 start = transform.position;
+        // 中斷進行中的普通移動，對齊到最近格子中心（n + 0.5）
+        if (moveCoroutine != null)
+        {
+            StopCoroutine(moveCoroutine);
+            moveCoroutine = null;
+        }
+        isMoving = false;
+        Vector2Int snapCell = GridReservationManager.WorldToGrid(transform.position);
+        transform.position = new Vector3(snapCell.x + 0.5f, snapCell.y + 0.5f, transform.position.z);
 
-        // 對齊到最近的格子中心，避免非整數位置導致跑出格子
-        Vector2 snappedEnd = new Vector2(
-            Mathf.Round(start.x + dir.x * dist),
-            Mathf.Round(start.y + dir.y * dist));
+        GridReservationManager.ReleaseReservation(gameObject);
+
+        Vector2 start = transform.position;
+        Vector2Int startCell = GridReservationManager.WorldToGrid(start);
+        Vector2Int endCell = new Vector2Int(
+            startCell.x + Mathf.RoundToInt(dir.x * dist),
+            startCell.y + Mathf.RoundToInt(dir.y * dist));
+        Vector2 snappedEnd = new Vector2(endCell.x + 0.5f, endCell.y + 0.5f);
 
         // 目標格被佔用（牆、其他角色）時取消擊退
         if (!IsCellFree(snappedEnd))
@@ -436,8 +466,11 @@ public class CharacterBase : MonoBehaviour
         }
         transform.position = snappedEnd;
         isMoving = false;
+        OnKnockBackComplete(snappedEnd);
         OnStatusRemoved(StatusEffect.KnockBack);
     }
+
+    protected virtual void OnKnockBackComplete(Vector2 newPosition) { }
 
     /// <summary>狀態生效時的 hook，子類可 override 播動畫或特效。</summary>
     protected virtual void OnStatusApplied(StatusEffect type) { }

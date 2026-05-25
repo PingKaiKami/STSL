@@ -61,16 +61,20 @@ public class Enemy : CharacterBase
 
     protected override void OnStatusApplied(StatusEffect type)
     {
-        // 凍傷：移動速度減半
         if (type == StatusEffect.Frostbite)
             moveSpeed = baseMoveSpeed * 0.5f;
     }
 
     protected override void OnStatusRemoved(StatusEffect type)
     {
-        // 凍傷解除：恢復移動速度
         if (type == StatusEffect.Frostbite)
             moveSpeed = baseMoveSpeed;
+    }
+
+    protected override void OnKnockBackComplete(Vector2 newPosition)
+    {
+        lastSafeWorldPosition = newPosition;
+        hasReservedCell = false;
     }
 
     protected override void OnMoveStart()
@@ -153,6 +157,7 @@ public class Enemy : CharacterBase
     protected virtual void CombatLogic()
     {
         if (isMoving) return;
+        SnapToGrid();
 
         Vector2Int currentCell = WorldToGrid(transform.position);
 
