@@ -867,12 +867,12 @@ GameObject:
   - component: {fileID: 1744183663}
   - component: {fileID: 1744183662}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: LegacySkipCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1744183662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1503,7 +1503,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76b15d7ae70acfe4f978cf115635f3fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actionType: 0
   obj_name: Sword
+  price: 60
+  cardId: 
+  unitPrefabId: 
   smoothSpeed: 10
   baseLocalPosition: {x: 0, y: 0, z: 0}
   moveUpOffset: 1

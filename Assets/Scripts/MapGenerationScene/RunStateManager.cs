@@ -70,6 +70,13 @@ public class RunStateManager : MonoBehaviour
 
     public void StartNewRun(MapGenerationConfig config)
     {
+        PlayerManager.EnsureExists().InitializeNewRun();
+
+        if (HandManager.Instance != null)
+        {
+            HandManager.Instance.ResetToStarterDeck();
+        }
+
         currentMap = SlayLikeMapGenerator.Generate(config);
         currentSelectedNode = null;
         pendingSelectedNode = null;
@@ -89,6 +96,7 @@ public class RunStateManager : MonoBehaviour
 
     public void ClearRun()
     {
+        PlayerManager.EnsureExists().ClearRunState();
         currentMap = null;
         currentSelectedNode = null;
         pendingSelectedNode = null;
@@ -151,5 +159,15 @@ public class RunStateManager : MonoBehaviour
     public bool IsNodeAvailable(string nodeId)
     {
         return availableNextNodeIds.Contains(nodeId) && !clearedNodeIds.Contains(nodeId);
+    }
+
+    public bool IsPendingBossRoom()
+    {
+        return IsPendingRoomType(RoomType.Boss);
+    }
+
+    public bool IsPendingRoomType(RoomType roomType)
+    {
+        return pendingSelectedNode != null && pendingSelectedNode.Type == roomType;
     }
 }
