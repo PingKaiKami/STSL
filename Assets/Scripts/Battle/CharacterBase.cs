@@ -57,7 +57,6 @@ public class CharacterBase : MonoBehaviour
 
     protected bool isMoving = false;
 
-    protected float maxHealth;
     private RectTransform healthFillRect;
     private RectTransform skillFillRect;
     protected float skillCharge = 0f;
@@ -72,6 +71,7 @@ public class CharacterBase : MonoBehaviour
 
     [Header("基礎屬性")]
     public string unitName;
+    public float maxHealth;
     public float health;
     public float attack;
     public float defense;

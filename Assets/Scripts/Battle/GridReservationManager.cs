@@ -9,6 +9,14 @@ public static class GridReservationManager
     private static readonly Dictionary<GameObject, Vector2Int> ownerCells =
         new Dictionary<GameObject, Vector2Int>();
 
+    public static void ForceReserveCell(GameObject owner, Vector2Int targetCell)
+    {
+        if (owner == null) return;
+        ReleaseReservation(owner);
+        cellOwners[targetCell] = owner;
+        ownerCells[owner] = targetCell;
+    }
+
     public static bool TryReserveCell(GameObject owner, Vector2Int targetCell)
     {
         if (owner == null) return false;
@@ -38,27 +46,6 @@ public static class GridReservationManager
         ownerCells[owner] = targetCell;
 
         return true;
-    }
-
-    /// <summary>
-    /// 強制預約格子（忽略 targetCell == currentCell 限制），並踢走原本預約者。
-    /// 用於靜態障礙物（風牆、圖騰）放置在自身所在格時。
-    /// </summary>
-    public static void ForceReserveCell(GameObject owner, Vector2Int cell)
-    {
-        if (owner == null) return;
-        CleanupDeadReservations();
-
-        // 踢走原本預約此格的人，避免他們還以為可以走進來
-        if (cellOwners.TryGetValue(cell, out GameObject previousOwner)
-            && previousOwner != null && previousOwner != owner)
-        {
-            ownerCells.Remove(previousOwner);
-        }
-
-        ReleaseReservation(owner);
-        cellOwners[cell] = owner;
-        ownerCells[owner] = cell;
     }
 
     public static void ReleaseReservation(GameObject owner)

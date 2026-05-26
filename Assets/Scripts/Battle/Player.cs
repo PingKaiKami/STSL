@@ -6,6 +6,8 @@ public class Player : CharacterBase
     private Vector3 lastSafeWorldPosition;
     private float baseMoveSpeed;
 
+    [HideInInspector] public GameObject sourceCardPrefab;
+
     [Header("Animation")]
     [SerializeField] protected Animator animator;
 
@@ -69,7 +71,6 @@ public class Player : CharacterBase
     protected override void Die()
     {
         GridReservationManager.ReleaseReservation(gameObject);
-
         base.Die();
         Debug.Log("遊戲結束，請重新開始");
     }
@@ -83,6 +84,7 @@ public class Player : CharacterBase
     {
         GridReservationManager.ReleaseReservation(gameObject);
     }
+
 
     public void CombatLogic()
     {
@@ -178,6 +180,7 @@ public class Player : CharacterBase
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
+
         GameObject nearest = null;
         float minDistance = Mathf.Infinity;
         Vector2 currentPos = transform.position;
@@ -189,12 +192,14 @@ public class Player : CharacterBase
 
             float dist = Vector2.Distance(enemy.transform.position, currentPos);
 
+
             if (dist < minDistance)
             {
                 nearest = enemy;
                 minDistance = dist;
             }
         }
+
 
         return nearest;
     }
@@ -219,6 +224,7 @@ public class Player : CharacterBase
         }
 
         CharacterBase enemyStats = target.GetComponent<CharacterBase>();
+
 
         if (enemyStats != null)
         {

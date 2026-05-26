@@ -131,3 +131,58 @@ public class Slime : Enemy
 3.  **對齊網格位置**
     *   ⚠️ **精準定位**：請確保敵人放置在地圖格子的**正中心**。
     *   由於地圖每格的邊長為 `1`，因此敵人在 Transform 面板中的 Position 座標數值，理論上應該要是**整數**（例如：`1`, `2`）或是 **0.5 的倍數**（例如：`1.5`, `2.5`）。請務必手動檢查數值，避免角色卡在格子邊緣。
+
+---
+## 5. 新功能補充 (動態殘血回收與恢復系統)
+
+### 5.1 `Card.UpdateStats`
+* **功能**：動態修改卡牌數值（Att/Def/HP）並即時重新渲染 UI。
+* **簽章**：`public void UpdateStats(int att_amount, int def_amount, int hp_amount)`
+* **流程**：累加數值 ➡️ 觸發 `RefreshUI()` ➡️ 驅動 `Card_text` 顯示最新數值與戰損。
+* **外部呼叫方式**：
+    通常是透過拿到某張卡片的引用（例如在卡片互動、裝備附加時）來直接呼叫。
+* **呼叫範例**：
+    ```csharp
+    // 範例：某個裝備或效果讓「這張卡片」增加 2 點攻擊力與 5 點血量
+    targetCard.UpdateStats(2, 0, 5);
+    ```
+
+---
+
+### 5.2 `HandManager.AddCard`
+* **功能**：將配置好資料的新卡片納入手牌管理系統。
+* **簽章**：`public void AddCard(GameObject cardObj)`
+* **流程**：設為 HandManager 子物件 (`SetParent`) ➡️ 給予基礎區域座標 ➡️ 執行 `ArrangeCards()` 線性排開。
+* **外部呼叫方式**：
+    透過 `HandManager` 的全域單例（Instance），在任何腳本（如抽卡系統、戰後回收系統）中直接塞入一張卡片物件。
+* **呼叫範例**：
+    ```csharp
+    // 範例：將畫面上剛生成好數據的新卡片「newCardObj」直接塞進手牌系統
+    HandManager.Instance.AddCard(newCardObj);
+    ```
+---
+
+### 5.3 `GameManager` 核心流程
+#### 1. 戰鬥結束階段 (RecallAllPlayersToHand)
+1. **掃描過濾**：撈取場上所有 `"Player"` 物件，`health <= 0` 的直接 `Destroy` 剔除。
+2. **生殼複製**：用 `basicCard` 生成新手牌，將場上 `CharacterBase` 的當前數值與 `maxHealth` 強灌給卡片。
+3. **基因繼承**：將角色的 `sourceCardPrefab` 傳給新卡片（確保下次能重新生成該角色）。
+4. **清理戰場**：卡片加回手牌後，徹底 `Destroy(playerObj)`。
+
+#### 2. 營地休息階段 (HealAllCardsPercentage)
+1. **無實體維護**：場上無角色，純透過 `HandManager` 遍歷手牌。
+2. **動態計算**：讀取卡片 `maxHp` 乘以係數（如 `0.5f`），四捨五入算出補量。
+3. **防溢補校正**：若 `當前血量 + 補量 > maxHp`，強制截斷至 `maxHp`。
+4. **刷新**：將淨補量傳入 `UpdateStats` 更新卡片。
+
+---
+
+### 5.4 新增欄位 (未來會衝突的地方)
+
+1. **`CharacterBase.maxHealth` (float)**
+    * **位置**：`CharacterBase.cs`
+    * **用途**：計算殘血量與休息區補血基數。
+
+2. **`Player.sourceCardPrefab` (GameObject)**
+    * **位置**：`Player.cs`
+    * **用途**：指向 Project 資料夾的原始 Prefab 檔案，作為卡片再生成的設計圖。

@@ -8,17 +8,30 @@ public class BattleSceneController : MonoBehaviour
 {
     [Header("Scene Names")]
     public string mapSceneName = "MapGenerationScene";
-    public string failSceneName = "FailScene";
 
     public void WinBattleForTest()
     {
         RunStateManager runState = RunStateManager.EnsureExists();
         runState.CompletePendingRoom();
+        GameManager.Instance.currentState = GameState.MapSelection;
+        PlayerManager.Instance.ModifyMoney(10);
         SceneManager.LoadScene(mapSceneName);
     }
 
     public void LoseBattleForTest()
     {
-        SceneManager.LoadScene(failSceneName);
+        if (PlayerManager.Instance.ModifyHealth(-1))
+        {
+            Debug.Log($"Current health: {PlayerManager.Instance.health}");
+            GameManager.Instance.currentState = GameState.MapSelection;
+            SceneManager.LoadScene("MapGenerationScene");
+        }
+        else
+        {
+            GameManager.Instance.currentState = GameState.Menu;
+            SceneManager.LoadScene("MenuScene");
+            Debug.Log("Game Over");
+        }
+        SceneManager.LoadScene(mapSceneName);
     }
 }
