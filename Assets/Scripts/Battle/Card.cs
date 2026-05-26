@@ -33,6 +33,11 @@ public class Card : MonoBehaviour
     {
         cardTextComponent = GetComponentInChildren<Card_text>();
 
+        if (sourceCardPrefab == null && prefab != null)
+        {
+            sourceCardPrefab = prefab;
+        }
+
         // 如果是全新抽到的卡，直接去讀取 prefab 檔案的 CharacterBase 初始化
         if (string.IsNullOrEmpty(cardName) && prefab != null)
         {
@@ -43,7 +48,7 @@ public class Card : MonoBehaviour
                 att = Mathf.RoundToInt(cb.attack);
                 def = Mathf.RoundToInt(cb.defense);
                 hp = Mathf.RoundToInt(cb.health);
-                maxHp = Mathf.RoundToInt(cb.health);
+                maxHp = Mathf.RoundToInt(cb.maxHealth > 0f ? cb.maxHealth : cb.health);
                 sourceCardPrefab = prefab;
             }
         }
@@ -169,7 +174,20 @@ public class Card : MonoBehaviour
             if (hit.gameObject.name.Contains("PlayerArea") && slot != null && !slot.isOccupied)
             {
                 // 1. 生成場上角色 (使用卡片紀錄的原始 prefab)
-                GameObject playerObj = Instantiate(sourceCardPrefab, hit.gameObject.transform.position, Quaternion.identity);
+                GameObject unitPrefab = sourceCardPrefab != null ? sourceCardPrefab : prefab;
+
+                if (unitPrefab == null && HandManager.Instance != null)
+                {
+                    unitPrefab = HandManager.Instance.ResolveUnitPrefabForCard(cardName);
+                }
+
+                if (unitPrefab == null)
+                {
+                    Debug.LogError("Card has no unit prefab assigned: " + gameObject.name);
+                    return;
+                }
+
+                GameObject playerObj = Instantiate(unitPrefab, hit.gameObject.transform.position, Quaternion.identity);
                 
                 // 2. 將這張卡片的「當前數據」（可能是殘血）同步給場上角色的 CharacterBase
                 CharacterBase cb = playerObj.GetComponent<CharacterBase>();
@@ -183,7 +201,7 @@ public class Card : MonoBehaviour
                     
                     // 讓場上的 Player 腳本（如果有繼承 CharacterBase）記住原始 Prefab 檔案
                     Player p = playerObj.GetComponent<Player>();
-                    if (p != null) p.sourceCardPrefab = this.sourceCardPrefab;
+                    if (p != null) p.sourceCardPrefab = unitPrefab;
                 }
                 
                 slot.isOccupied = true;
@@ -196,11 +214,28 @@ public class Card : MonoBehaviour
         }
     }
 
-    public void UpdateStats(float att_amount, float def_amount, float hp_amount)
+    public void UpdateStats(float att_amount, float def_amount, float hp_amount, float maxHp_amount = 0f)
     {
         att += att_amount;
         def += def_amount;
+        maxHp += maxHp_amount;
+
+        if (maxHp < 1f)
+        {
+            maxHp = 1f;
+        }
+
         hp += hp_amount;
+
+        if (hp > maxHp)
+        {
+            hp = maxHp;
+        }
+
+        if (hp < 0f)
+        {
+            hp = 0f;
+        }
 
         RefreshUI();
     }

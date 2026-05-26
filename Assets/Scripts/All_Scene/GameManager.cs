@@ -44,6 +44,14 @@ public class GameManager : MonoBehaviour
     [Header("開發參數")]
     public bool isDebug;
 
+    [Header("Scene Names")]
+    [SerializeField] private string mapSceneName = "MapGenerationScene";
+    [SerializeField] private string failSceneName = "FailScene";
+    [SerializeField] private string finalWinSceneName = "FinalWinScene";
+
+    [Header("Battle Rewards")]
+    [SerializeField] private int victoryGoldReward = 20;
+
     [Header("Enemy Registration Rules")]
     [SerializeField] private List<EnemyRegistrationRule> enemyRegistrationRules =
         new List<EnemyRegistrationRule>();
@@ -404,39 +412,64 @@ public class GameManager : MonoBehaviour
 
         if (isWin)
         {
-            HandManager.Instance.RecallAllPlayersToHand();
-            PlayerManager.Instance.ModifyMoney(10);
+            if (HandManager.Instance != null)
+            {
+                HandManager.Instance.RecallAllPlayersToHand();
+            }
+
+            PlayerManager.EnsureExists().ModifyMoney(victoryGoldReward);
 
             if (!isDebug)
             {
                 RunStateManager runState = RunStateManager.EnsureExists();
+                bool isFinalBoss = runState.IsPendingBossRoom();
+
                 runState.CompletePendingRoom();
+
+                if (isFinalBoss)
+                {
+                    currentState = GameState.Menu;
+                    SceneManager.LoadScene(finalWinSceneName);
+                    return;
+                }
+
                 currentState = GameState.MapSelection;
-                SceneManager.LoadScene("MapGenerationScene");
+                SceneManager.LoadScene(mapSceneName);
             }
         }
         else
         {
-            if (PlayerManager.Instance.ModifyHealth(-1))
-            {
-                Debug.Log($"Current health: {PlayerManager.Instance.health}");
+            RunStateManager runState = RunStateManager.EnsureExists();
+            PlayerManager playerManager = PlayerManager.EnsureExists();
+            bool hasLivesLeft = playerManager.LoseLife();
 
-                if (!isDebug)
-                {
-                    RunStateManager runState = RunStateManager.EnsureExists();
-                    runState.CompletePendingRoom();
-                    currentState = GameState.MapSelection;
-                    SceneManager.LoadScene("MapGenerationScene");
-                }
-            }
-            else
+            if (HandManager.Instance != null)
             {
-                if (!isDebug)
+                HandManager.Instance.RecallAllPlayersToHand();
+            }
+
+            Debug.Log("Player lives after loss: " + playerManager.health);
+
+            if (!isDebug && !hasLivesLeft)
+            {
+                currentState = GameState.Menu;
+                SceneManager.LoadScene(failSceneName);
+                Debug.Log("Game Over");
+                return;
+            }
+
+            if (!isDebug)
+            {
+                if (runState.IsPendingBossRoom())
                 {
-                    currentState = GameState.Menu;
-                    SceneManager.LoadScene("MenuScene");
-                    Debug.Log("Game Over");
+                    currentState = GameState.MapSelection;
+                    SceneManager.LoadScene(mapSceneName);
+                    return;
                 }
+
+                runState.CompletePendingRoom();
+                currentState = GameState.MapSelection;
+                SceneManager.LoadScene(mapSceneName);
             }
         }
     }

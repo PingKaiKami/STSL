@@ -38,22 +38,39 @@ public class MapGenerationSceneBootstrap : MonoBehaviour
 
         RectTransform canvasRect = canvasObject.GetComponent<RectTransform>();
 
+        Text playerInfoText = CreatePlayerInfoPanel(canvasRect);
         Text statusText = CreateText(canvasRect, "StatusText", "Map Generation", new Vector2(0.5f, 1f), new Vector2(0f, -28f), new Vector2(640f, 40f), 20);
         Button newRunButton = CreateButton(canvasRect, "NewRunButton", "New Run", new Vector2(1f, 1f), new Vector2(-90f, -32f), new Vector2(140f, 44f));
 
+        GameObject viewportObject = new GameObject("MapViewport", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(RectMask2D));
+        viewportObject.transform.SetParent(canvasObject.transform, false);
+
+        RectTransform viewportRect = viewportObject.GetComponent<RectTransform>();
+        viewportRect.anchorMin = new Vector2(0.5f, 0.5f);
+        viewportRect.anchorMax = new Vector2(0.5f, 0.5f);
+        viewportRect.pivot = new Vector2(0.5f, 0.5f);
+        viewportRect.anchoredPosition = new Vector2(0f, -20f);
+        viewportRect.sizeDelta = new Vector2(1100f, 560f);
+
+        Image viewportImage = viewportObject.GetComponent<Image>();
+        viewportImage.color = new Color(0.03f, 0.04f, 0.05f, 0.35f);
+        viewportImage.raycastTarget = false;
+
         GameObject mapRootObject = new GameObject("MapRoot", typeof(RectTransform));
-        mapRootObject.transform.SetParent(canvasObject.transform, false);
+        mapRootObject.transform.SetParent(viewportObject.transform, false);
 
         RectTransform mapRoot = mapRootObject.GetComponent<RectTransform>();
         mapRoot.anchorMin = new Vector2(0.5f, 0.5f);
         mapRoot.anchorMax = new Vector2(0.5f, 0.5f);
         mapRoot.pivot = new Vector2(0.5f, 0.5f);
-        mapRoot.anchoredPosition = new Vector2(0f, -20f);
-        mapRoot.sizeDelta = new Vector2(1100f, 620f);
+        mapRoot.anchoredPosition = Vector2.zero;
+        mapRoot.sizeDelta = new Vector2(1100f, 980f);
 
         MapUIRenderer renderer = mapRootObject.AddComponent<MapUIRenderer>();
         renderer.mapRoot = mapRoot;
+        renderer.viewport = viewportRect;
         renderer.statusText = statusText;
+        renderer.playerInfoText = playerInfoText;
         renderer.generateButton = newRunButton;
         renderer.battleSceneName = "BattleScene";
         renderer.shopSceneName = "ShopScene";
@@ -62,6 +79,31 @@ public class MapGenerationSceneBootstrap : MonoBehaviour
         renderer.generateOnStart = true;
 
         newRunButton.onClick.AddListener(renderer.GenerateAndRenderMap);
+    }
+
+    private Text CreatePlayerInfoPanel(Transform parent)
+    {
+        GameObject panelObject = new GameObject("PlayerInfoPanel", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        panelObject.transform.SetParent(parent, false);
+
+        RectTransform panelRect = panelObject.GetComponent<RectTransform>();
+        panelRect.anchorMin = new Vector2(0f, 1f);
+        panelRect.anchorMax = new Vector2(0f, 1f);
+        panelRect.pivot = new Vector2(0f, 1f);
+        panelRect.anchoredPosition = new Vector2(12f, -12f);
+        panelRect.sizeDelta = new Vector2(230f, 118f);
+
+        Image panelImage = panelObject.GetComponent<Image>();
+        panelImage.color = new Color(0.05f, 0.08f, 0.1f, 0.82f);
+
+        Text text = CreateText(panelObject.transform, "PlayerInfoText", "", new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(206f, 94f), 18);
+        text.alignment = TextAnchor.MiddleLeft;
+        text.color = Color.white;
+        text.resizeTextForBestFit = true;
+        text.resizeTextMinSize = 12;
+        text.resizeTextMaxSize = 18;
+
+        return text;
     }
 
     private Text CreateText(

@@ -24,11 +24,18 @@ public class MapUIRenderer : MonoBehaviour
     public float eliteWeightAct1 = 8f;
     public float eliteWeightAfterAct1 = 12f;
 
+    [Header("Required Room Counts")]
+    public int minimumShopCount = 2;
+    public int minimumRestCount = 2;
+    public int minimumChestCount = 2;
+
     [Header("UI References")]
     public RectTransform mapRoot;
+    public RectTransform viewport;
     public Button generateButton;
     public Button nodeButtonPrefab;
     public Text statusText;
+    public Text playerInfoText;
 
     [Header("UI Layout")]
     public Vector2 cellSpacing = new Vector2(120f, 58f);
@@ -39,6 +46,12 @@ public class MapUIRenderer : MonoBehaviour
 
     [Header("Generate Behavior")]
     public bool generateOnStart = true;
+
+    [Header("Map Scroll")]
+    public bool enableMouseWheelScroll = true;
+    public float mouseWheelScrollSpeed = 180f;
+    public float scrollPadding = 70f;
+    public float currentLayerViewportY = -190f;
 
     [Header("Scene Loading")]
     public string battleSceneName = "BattleScene";
@@ -63,6 +76,10 @@ public class MapUIRenderer : MonoBehaviour
 
     private readonly List<GameObject> spawnedObjects = new List<GameObject>();
     private MapData currentMap;
+    private Vector2 mapRootBasePosition;
+    private float scrollOffsetY;
+    private float minScrollOffsetY;
+    private float maxScrollOffsetY;
 
     private void Awake()
     {
@@ -79,6 +96,16 @@ public class MapUIRenderer : MonoBehaviour
             mapRoot = transform as RectTransform;
         }
 
+        if (viewport == null && mapRoot != null)
+        {
+            viewport = mapRoot.parent as RectTransform;
+        }
+
+        if (mapRoot != null)
+        {
+            mapRootBasePosition = mapRoot.anchoredPosition;
+        }
+
         if (generateOnStart)
         {
             RenderExistingRunOrCreateNewRun();
@@ -87,10 +114,14 @@ public class MapUIRenderer : MonoBehaviour
 
     private void Update()
     {
+        RefreshPlayerInfo();
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             GenerateAndRenderMap();
         }
+
+        HandleMapScroll();
     }
 
     public void GenerateAndRenderMap()
@@ -127,6 +158,9 @@ public class MapUIRenderer : MonoBehaviour
         config.eventWeight = eventWeight;
         config.eliteWeightAct1 = eliteWeightAct1;
         config.eliteWeightAfterAct1 = eliteWeightAfterAct1;
+        config.minimumShopCount = minimumShopCount;
+        config.minimumRestCount = minimumRestCount;
+        config.minimumChestCount = minimumChestCount;
         return config;
     }
 
@@ -149,6 +183,8 @@ public class MapUIRenderer : MonoBehaviour
         ClearMap();
         currentMap = runState.currentMap;
         RenderMap(currentMap);
+        RefreshScrollBounds();
+        FocusCurrentLayer();
 
         if (statusText != null)
         {
@@ -158,6 +194,8 @@ public class MapUIRenderer : MonoBehaviour
                 + ", Edges: "
                 + currentMap.Edges.Count;
         }
+
+        RefreshPlayerInfo();
     }
 
     private void ClearMap()
@@ -171,6 +209,88 @@ public class MapUIRenderer : MonoBehaviour
         }
 
         spawnedObjects.Clear();
+    }
+
+    private void HandleMapScroll()
+    {
+        if (!enableMouseWheelScroll || currentMap == null || mapRoot == null)
+        {
+            return;
+        }
+
+        float wheelDelta = Input.mouseScrollDelta.y;
+
+        if (Mathf.Approximately(wheelDelta, 0f))
+        {
+            return;
+        }
+
+        scrollOffsetY -= wheelDelta * mouseWheelScrollSpeed;
+        ApplyScrollOffset();
+    }
+
+    private void RefreshScrollBounds()
+    {
+        if (currentMap == null || mapRoot == null)
+        {
+            minScrollOffsetY = 0f;
+            maxScrollOffsetY = 0f;
+            return;
+        }
+
+        RectTransform effectiveViewport = GetViewport();
+        float viewportHeight = effectiveViewport != null ? effectiveViewport.rect.height : mapRoot.rect.height;
+        float topLayerY = GetLayerPositionY(currentMap.Height);
+        float bottomLayerY = GetLayerPositionY(0);
+
+        float topViewportY = viewportHeight * 0.5f - scrollPadding;
+        float bottomViewportY = -viewportHeight * 0.5f + scrollPadding;
+        minScrollOffsetY = topViewportY - topLayerY;
+        maxScrollOffsetY = bottomViewportY - bottomLayerY;
+
+        if (minScrollOffsetY > maxScrollOffsetY)
+        {
+            float midpoint = (minScrollOffsetY + maxScrollOffsetY) * 0.5f;
+            minScrollOffsetY = midpoint;
+            maxScrollOffsetY = midpoint;
+        }
+    }
+
+    private void FocusCurrentLayer()
+    {
+        if (currentMap == null)
+        {
+            return;
+        }
+
+        scrollOffsetY = currentLayerViewportY - GetLayerPositionY(GetCurrentVisibleLayer());
+        ApplyScrollOffset();
+    }
+
+    private void ApplyScrollOffset()
+    {
+        if (mapRoot == null)
+        {
+            return;
+        }
+
+        scrollOffsetY = Mathf.Clamp(scrollOffsetY, minScrollOffsetY, maxScrollOffsetY);
+        mapRoot.anchoredPosition = mapRootBasePosition + new Vector2(0f, scrollOffsetY);
+    }
+
+    private RectTransform GetViewport()
+    {
+        if (viewport != null)
+        {
+            return viewport;
+        }
+
+        if (mapRoot != null)
+        {
+            return mapRoot.parent as RectTransform;
+        }
+
+        return null;
     }
 
     private void RenderMap(MapData map)
@@ -363,9 +483,57 @@ public class MapUIRenderer : MonoBehaviour
     private Vector2 GetNodePosition(MapNode node, MapData map)
     {
         float x = (node.Column - (map.Width - 1) / 2f) * cellSpacing.x;
-        float y = (node.Layer - map.Height / 2f) * cellSpacing.y;
+        float y = GetLayerPositionY(node.Layer);
 
         return new Vector2(x, y);
+    }
+
+    private float GetLayerPositionY(int layer)
+    {
+        int mapHeight = currentMap != null ? currentMap.Height : height;
+        return (layer - mapHeight / 2f) * cellSpacing.y;
+    }
+
+    private int GetCurrentVisibleLayer()
+    {
+        RunStateManager runState = RunStateManager.EnsureExists();
+
+        if (runState.pendingSelectedNode != null)
+        {
+            return runState.pendingSelectedNode.Layer;
+        }
+
+        if (runState.currentSelectedNode != null)
+        {
+            return runState.currentSelectedNode.Layer;
+        }
+
+        IReadOnlyList<string> availableIds = runState.AvailableNextNodeIds;
+        int lowestAvailableLayer = int.MaxValue;
+
+        for (int i = 0; i < availableIds.Count; i++)
+        {
+            string[] idParts = availableIds[i].Split('_');
+
+            if (idParts.Length == 0)
+            {
+                continue;
+            }
+
+            int layer;
+
+            if (int.TryParse(idParts[0], out layer) && layer < lowestAvailableLayer)
+            {
+                lowestAvailableLayer = layer;
+            }
+        }
+
+        if (lowestAvailableLayer != int.MaxValue)
+        {
+            return lowestAvailableLayer;
+        }
+
+        return 0;
     }
 
     private Color GetNodeStateColor(MapNode node, bool isCleared, bool isAvailable)
@@ -514,8 +682,62 @@ public class MapUIRenderer : MonoBehaviour
                 break;
 
             case RoomType.Event:
-                CompleteSimpleRoomAndStayOnMap(node);
+                LoadRandomEventScene();
                 break;
+        }
+    }
+
+    private void LoadRandomEventScene()
+    {
+        int randomSceneIndex = Random.Range(0, 4);
+        string selectedSceneName;
+
+        switch (randomSceneIndex)
+        {
+            case 0:
+                selectedSceneName = shopSceneName;
+                break;
+
+            case 1:
+                selectedSceneName = battleSceneName;
+                break;
+
+            case 2:
+                selectedSceneName = restSceneName;
+                break;
+
+            default:
+                selectedSceneName = chestSceneName;
+                break;
+        }
+
+        Debug.Log("Event room selected random scene: " + selectedSceneName);
+        SceneManager.LoadScene(selectedSceneName);
+        ApplyGameStateForScene(selectedSceneName);
+    }
+
+    private void ApplyGameStateForScene(string sceneName)
+    {
+        if (GameManager.Instance == null)
+        {
+            return;
+        }
+
+        if (sceneName == battleSceneName)
+        {
+            GameManager.Instance.currentState = GameState.Preparation;
+            return;
+        }
+
+        if (sceneName == shopSceneName)
+        {
+            GameManager.Instance.currentState = GameState.Shopping;
+            return;
+        }
+
+        if (sceneName == restSceneName)
+        {
+            GameManager.Instance.currentState = GameState.Rest;
         }
     }
 
@@ -524,5 +746,25 @@ public class MapUIRenderer : MonoBehaviour
         RunStateManager runState = RunStateManager.EnsureExists();
         runState.CompletePendingRoom();
         RenderCurrentMap(node.Type + " room completed.");
+    }
+
+    private void RefreshPlayerInfo()
+    {
+        if (playerInfoText == null)
+        {
+            return;
+        }
+
+        PlayerManager playerManager = PlayerManager.EnsureExists();
+        int cardCount = HandManager.Instance != null ? HandManager.Instance.CardCount : 0;
+
+        playerInfoText.text = "Lives: "
+            + playerManager.health
+            + " / "
+            + PlayerManager.DefaultLives
+            + "\nGold: "
+            + playerManager.money
+            + "\nCards: "
+            + cardCount;
     }
 }

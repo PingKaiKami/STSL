@@ -1,36 +1,52 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+public enum MerchandiseActionType
+{
+    StatModifier,
+    AddCardToDeck,
+    RemoveTargetCard
+}
 
 public class Merchandise : MonoBehaviour
 {
     private Vector3 screenPoint;
     private Vector3 offset;
     private int originalLayer;
+    private Vector3 currentTargetLocal;
+    private bool isDragging;
+    private bool isHovering;
+    private Card targetCard;
 
-    [Header("基礎資訊")]
+    [Header("Shop Item")]
+    public MerchandiseActionType actionType = MerchandiseActionType.StatModifier;
     public string obj_name;
+    public int price;
+    public string cardId;
+    public string unitPrefabId;
 
-    [Header("移動設定")]
+    [Header("Movement")]
     public float smoothSpeed = 10f;
-    public Vector3 baseLocalPosition;   // 記錄商店或背包分配的「基礎」位置
-    private Vector3 currentTargetLocal; // 計算懸停後的「實際」目標位置
-    private bool isDragging = false;
+    public Vector3 baseLocalPosition;
+    public float moveUpOffset = 1.0f;
 
-    [Header("懸停設定")]
-    public float moveUpOffset = 1.0f;   // 滑鼠懸停時向上偏移的距離
-    private bool isHovering = false;    // 記錄滑鼠是否懸停
-    
-    [Header("商品屬性變數")]
+    [Header("Card Stat Modifiers")]
     public float att;
     public float def;
     public float hp;
+    public float maxHp;
 
-    private Card targetCard; // 用於記錄目前商品拖拽到哪一個玩家上方
-
-    void Update()
+    private void Start()
     {
-        // 只有在不在拖拽時，才執行平滑移動（歸位或懸停浮起）
+        if (baseLocalPosition == Vector3.zero)
+        {
+            baseLocalPosition = transform.localPosition;
+        }
+
+        RefreshText();
+    }
+
+    private void Update()
+    {
         if (!isDragging)
         {
             currentTargetLocal = baseLocalPosition;
@@ -41,43 +57,46 @@ public class Merchandise : MonoBehaviour
             }
 
             transform.localPosition = Vector3.Lerp(
-                transform.localPosition, 
-                currentTargetLocal, 
+                transform.localPosition,
+                currentTargetLocal,
                 Time.deltaTime * smoothSpeed
             );
         }
-        
-        // 如果正在拖拽，持續掃描滑鼠下方有沒有 Player
-        if (isDragging) 
+
+        if (isDragging)
         {
-            ScanForPlayerUnderCard();
+            ScanForCardUnderMouse();
         }
     }
 
-    void ScanForPlayerUnderCard()
+    private void ScanForCardUnderMouse()
     {
+        if (Camera.main == null)
+        {
+            targetCard = null;
+            return;
+        }
+
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Collider2D[] hits = Physics2D.OverlapPointAll(mousePos);
 
-        targetCard = null; // 每幀重置
+        targetCard = null;
 
-        foreach (var hit in hits)
+        for (int i = 0; i < hits.Length; i++)
         {
-            Card c = hit.GetComponent<Card>();
-            
-            // 找到了 Player 且不是自己
-            if (c != null && hit.gameObject != gameObject)
+            Card card = hits[i].GetComponent<Card>();
+
+            if (card != null && hits[i].gameObject != gameObject)
             {
-                targetCard = c;
-                break; 
+                targetCard = card;
+                return;
             }
         }
     }
 
-    void OnMouseEnter() 
+    private void OnMouseEnter()
     {
-        // 限制只有在準備階段且沒有在拖拽時才能觸發懸停
-        if (GameManager.Instance.currentState != GameState.Shopping || isDragging) 
+        if (!CanUseShopInput() || isDragging)
         {
             return;
         }
@@ -85,62 +104,216 @@ public class Merchandise : MonoBehaviour
         isHovering = true;
     }
 
-    void OnMouseExit() 
+    private void OnMouseExit()
     {
         isHovering = false;
     }
-    
-    void OnMouseDown()
+
+    private void OnMouseDown()
     {
-        if (GameManager.Instance.currentState != GameState.Shopping) 
+        if (!CanUseShopInput() || Camera.main == null)
         {
             return;
         }
 
         isDragging = true;
         originalLayer = gameObject.layer;
-        gameObject.layer = 2; // 切換到 Ignore Raycast 層，避免擋到射線
+        gameObject.layer = 2;
 
-        screenPoint = Camera.main.WorldToScreenPoint(gameObject.transform.position);
+        screenPoint = Camera.main.WorldToScreenPoint(transform.position);
         Vector3 cursorScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
-        offset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(cursorScreenPoint);
+        offset = transform.position - Camera.main.ScreenToWorldPoint(cursorScreenPoint);
     }
 
-    void OnMouseUp()
+    private void OnMouseUp()
     {
-        isDragging = false;
-        isHovering = false; 
-        
-        // 執行放置或裝備判定
-        CheckForPlace();
-
-        gameObject.layer = originalLayer;
-        GameManager.Instance.SetAreaActive(false);
-    }
-
-    void OnMouseDrag()
-    {
-        if (GameManager.Instance.currentState != GameState.Shopping) 
+        if (!isDragging)
         {
             return;
         }
 
-        Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
-        Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint) + offset;
-        transform.position = curPosition;
+        isDragging = false;
+        isHovering = false;
+        gameObject.layer = originalLayer;
+        TryUse();
     }
 
-    void CheckForPlace()
+    private void OnMouseDrag()
     {
-        // 檢查 1：如果放開滑鼠時，下方正對著一個 Player，就把裝備塞給他！
-        if (targetCard != null)
+        if (!CanUseShopInput() || Camera.main == null)
         {
-            // 呼叫 Player 身上的 UpdateStats，把商品的數值加進去
-            targetCard.UpdateStats(att, def, hp);
-            
-            Debug.Log($"已將 {obj_name} 裝備給 {targetCard.gameObject.name}！");
-            Destroy(gameObject); // 裝備成功後銷毀商品物件
             return;
+        }
+
+        Vector3 cursorScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
+        transform.position = Camera.main.ScreenToWorldPoint(cursorScreenPoint) + offset;
+    }
+
+    public void Configure(
+        MerchandiseActionType newActionType,
+        string newName,
+        int newPrice,
+        float newAtt,
+        float newDef,
+        float newHp,
+        float newMaxHp,
+        string newCardId,
+        string newUnitPrefabId
+    )
+    {
+        actionType = newActionType;
+        obj_name = newName;
+        price = newPrice;
+        att = newAtt;
+        def = newDef;
+        hp = newHp;
+        maxHp = newMaxHp;
+        cardId = newCardId;
+        unitPrefabId = newUnitPrefabId;
+        baseLocalPosition = transform.localPosition;
+        RefreshText();
+    }
+
+    public void RefreshText()
+    {
+        Merchandise_text text = GetComponentInChildren<Merchandise_text>();
+
+        if (text != null)
+        {
+            text.UpdateText();
+        }
+    }
+
+    private void TryUse()
+    {
+        switch (actionType)
+        {
+            case MerchandiseActionType.AddCardToDeck:
+                TryBuyCard();
+                break;
+
+            case MerchandiseActionType.RemoveTargetCard:
+                TryRemoveTargetCard();
+                break;
+
+            default:
+                TryApplyStats();
+                break;
+        }
+    }
+
+    private void TryApplyStats()
+    {
+        if (targetCard == null)
+        {
+            return;
+        }
+
+        if (!TrySpendGold())
+        {
+            return;
+        }
+
+        targetCard.UpdateStats(att, def, hp, maxHp);
+
+        if (HandManager.Instance != null)
+        {
+            HandManager.Instance.SyncRunStateFromHand();
+        }
+
+        NotifyShop("Bought " + obj_name + " for " + price + " Gold.");
+        Destroy(gameObject);
+    }
+
+    private void TryBuyCard()
+    {
+        if (!TrySpendGold())
+        {
+            return;
+        }
+
+        string runtimeUnitPrefabId = string.IsNullOrEmpty(unitPrefabId) ? obj_name : unitPrefabId;
+
+        if (HandManager.Instance == null || !HandManager.Instance.AddCardByUnitId(runtimeUnitPrefabId))
+        {
+            PlayerManager.EnsureExists().ModifyMoney(price);
+            NotifyShop("Could not add card: " + obj_name + ".");
+            return;
+        }
+
+        NotifyShop("Bought card: " + obj_name + ".");
+        Destroy(gameObject);
+    }
+
+    private void TryRemoveTargetCard()
+    {
+        if (targetCard == null)
+        {
+            return;
+        }
+
+        if (!TrySpendGold())
+        {
+            return;
+        }
+
+        int cardIndex = targetCard.transform.GetSiblingIndex();
+        Transform parent = targetCard.transform.parent;
+
+        if (parent != null && parent.GetComponent<HandManager>() != null)
+        {
+            targetCard.transform.SetParent(null);
+            Destroy(targetCard.gameObject);
+        }
+        else
+        {
+            if (HandManager.Instance == null || !HandManager.Instance.RemoveCardAt(0))
+            {
+                PlayerManager.EnsureExists().ModifyMoney(price);
+                NotifyShop("No cards to remove.");
+                return;
+            }
+        }
+
+        string removedCardName = targetCard.cardName;
+
+        if (HandManager.Instance != null)
+        {
+            HandManager.Instance.SyncRunStateFromHand();
+        }
+
+        NotifyShop("Removed card: " + removedCardName + ".");
+        Destroy(gameObject);
+    }
+
+    private bool TrySpendGold()
+    {
+        if (price <= 0)
+        {
+            return true;
+        }
+
+        if (PlayerManager.EnsureExists().TrySpendGold(price))
+        {
+            return true;
+        }
+
+        NotifyShop("Not enough gold for " + obj_name + ".");
+        return false;
+    }
+
+    private bool CanUseShopInput()
+    {
+        return GameManager.Instance != null && GameManager.Instance.currentState == GameState.Shopping;
+    }
+
+    private void NotifyShop(string message)
+    {
+        ShopSceneController controller = FindObjectOfType<ShopSceneController>();
+
+        if (controller != null)
+        {
+            controller.RefreshShopUi(message);
         }
     }
 }
