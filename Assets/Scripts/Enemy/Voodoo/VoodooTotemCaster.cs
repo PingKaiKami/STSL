@@ -35,7 +35,7 @@ public class VoodooTotemCaster : Enemy
 
         placeTotemTimer -= Time.deltaTime;
 
-        if (CanPlaceTotem())
+        if (CanPlaceTotem() && !isMoving)
         {
             placeTotemTimer = placeTotemCooldown;
             StartCoroutine(PlaceTotemRoutine());

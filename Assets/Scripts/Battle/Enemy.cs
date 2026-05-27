@@ -468,6 +468,7 @@ public class Enemy : CharacterBase
     protected void UpdateMoveAnimation()
     {
         if (animator == null) return;
+        if (animator.GetBool("IsActing")) return;
 
         animator.SetBool("IsMoving", isMoving);
     }

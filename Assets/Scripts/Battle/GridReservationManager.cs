@@ -9,6 +9,14 @@ public static class GridReservationManager
     private static readonly Dictionary<GameObject, Vector2Int> ownerCells =
         new Dictionary<GameObject, Vector2Int>();
 
+    public static void ForceReserveCell(GameObject owner, Vector2Int targetCell)
+    {
+        if (owner == null) return;
+        ReleaseReservation(owner);
+        cellOwners[targetCell] = owner;
+        ownerCells[owner] = targetCell;
+    }
+
     public static bool TryReserveCell(GameObject owner, Vector2Int targetCell)
     {
         if (owner == null) return false;

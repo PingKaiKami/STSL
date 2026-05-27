@@ -43,7 +43,7 @@ public class VoodooFaithful : Enemy
 
         summonTimer -= Time.deltaTime;
 
-        if (CanSummon())
+        if (CanSummon() && !isMoving)
         {
             summonTimer = summonCooldown;
             StartCoroutine(SummonSpiritRoutine());
