@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -186,7 +185,7 @@ PrefabInstance:
     - target: {fileID: 7941869593486480209, guid: d1d39a116b82abc45ae57257c80fff06, type: 3}
       propertyPath: prefab
       value: 
-      objectReference: {fileID: 3131704080871625635, guid: 6c01ab2f2d3be404bb3c38ece9188989, type: 3}
+      objectReference: {fileID: 3131704080871625635, guid: 80952681153f2b04d9e18d7630c69abb, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1461,6 +1460,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spacing: 2.5
   basicCard: {fileID: 7292975580654577578, guid: d1d39a116b82abc45ae57257c80fff06, type: 3}
+  warriorPrefab: {fileID: 0}
 --- !u!4 &1575762207
 Transform:
   m_ObjectHideFlags: 0
@@ -2220,6 +2220,10 @@ MonoBehaviour:
   playerCount: 0
   enemyCount: 0
   isDebug: 1
+  mapSceneName: MapGenerationScene
+  failSceneName: FailScene
+  finalWinSceneName: FinalWinScene
+  victoryGoldReward: 20
   enemyRegistrationRules:
   - prefab: {fileID: 2686672020686658944, guid: 6ac819dbb21154f44a1ce6b5052d9c19, type: 3}
     registrationMode: 0
