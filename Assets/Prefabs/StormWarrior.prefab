@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 84ce2f114ad12bd4ebafc77060220324, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d06eabd974fb5e147b35c1d414560626, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -188,15 +188,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd0b82bd2759aaf4b8440c78bbd61ad7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillChargeRate: 50
+  skillChargeInterval: 0.001
   moveSpeed: 3
   attackTime: 1
   attackRange: 2.4
   unitName: 
+  maxHealth: 0
   health: 10000
   attack: 20
   defense: 10
-  animator: {fileID: 3529455217279158736}
+  teamDamageReduction: 0
+  sourceCardPrefab: {fileID: 0}
   animator: {fileID: 3529455217279158736}
   dodgeRate: 0
   critRate: 0
