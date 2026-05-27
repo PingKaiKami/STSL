@@ -174,6 +174,7 @@ public class CharacterBase : MonoBehaviour
     private void UpdateHealthBar()
     {
         if (healthFillRect == null) return;
+        if (maxHealth <= 0f) return;
         healthFillRect.offsetMax = new Vector2(-(1f - Mathf.Clamp01(health / maxHealth)) * 80f, 0f);
     }
 
@@ -264,8 +265,8 @@ public class CharacterBase : MonoBehaviour
         Vector2Int cell = GridReservationManager.WorldToGrid(transform.position);
         float cx = cell.x + 0.5f;
         float cy = cell.y + 0.5f;
-        if (Mathf.Abs(transform.position.x - cx) > 0.0f ||
-            Mathf.Abs(transform.position.y - cy) > 0.0f)
+        if (Mathf.Abs(transform.position.x - cx) > 0.05f ||
+            Mathf.Abs(transform.position.y - cy) > 0.05f)
         {
             transform.position = new Vector3(cx, cy, transform.position.z);
         }

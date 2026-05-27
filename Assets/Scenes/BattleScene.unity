@@ -605,6 +605,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4458256441309439565, guid: 40adc47a61232ac4babc1c6e96df3cbc, type: 3}
+      propertyPath: spiritPrefab
+      value: 
+      objectReference: {fileID: 5968985812013273816, guid: ef6f4bd30bf33934f96d878ae45c3908, type: 3}
+    - target: {fileID: 4458256441309439565, guid: 40adc47a61232ac4babc1c6e96df3cbc, type: 3}
       propertyPath: maxOwnSummons
       value: 4
       objectReference: {fileID: 0}
@@ -3926,6 +3930,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
+    - target: {fileID: 4458256441309439565, guid: 40adc47a61232ac4babc1c6e96df3cbc, type: 3}
+      propertyPath: spiritPrefab
+      value: 
+      objectReference: {fileID: 5968985812013273816, guid: ef6f4bd30bf33934f96d878ae45c3908, type: 3}
     - target: {fileID: 4458256441309439565, guid: 40adc47a61232ac4babc1c6e96df3cbc, type: 3}
       propertyPath: maxOwnSummons
       value: 4

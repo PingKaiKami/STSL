@@ -22,7 +22,8 @@ public class StormWarrior : Player
     public float magicDamageMultiplier = 1f;
 
     [Header("技能設定")]
-    public float windWallDuration  = 0.5f;    // 風牆持續秒數
+    public float windWallDuration      = 0.5f;  // 風牆持續秒數
+    public float windWallKnockbackRange = 3f;   // 擊退有效範圍（格）
     public float endureDodgeBonus  = 0.25f; // 忍耐時閃避加成
     public float endureCritBonus   = 0.30f; // 忍耐時必殺加成
 
@@ -271,6 +272,7 @@ public class StormWarrior : Player
             if (e == null || !e.activeInHierarchy) continue;
 
             Vector2 toEnemy = (Vector2)e.transform.position - myPos;
+            if (toEnemy.magnitude > windWallKnockbackRange) continue;
             if (Vector2.Dot(toEnemy.normalized, pushDir) <= 0.5f) continue;
 
             CharacterBase enemy = e.GetComponent<CharacterBase>();

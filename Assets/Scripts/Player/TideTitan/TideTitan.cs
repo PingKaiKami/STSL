@@ -85,7 +85,7 @@ public class TideTitan : Player
         if (isStandfast) damage *= 0.5f;
         base.TakeDamage(damage);
 
-        if (isTidalCounter && health > 0f)
+        if (isTidalCounter && health > 0f && attackTimer <= 0f)
             TidalCounterReact();
     }
 
