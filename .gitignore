@@ -33,5 +33,5 @@ ExportedObj/
 Crashlytics/
 
 /Assets/Scripts/Player/StormWarriar/JMO Assets
-/Assets/Scripts/Player/StormWarriar/Knight Files
+# /Assets/Scripts/Player/StormWarriar/Knight Files
 /Assets/Scripts/Player/StormWarriar/Pixel Art
