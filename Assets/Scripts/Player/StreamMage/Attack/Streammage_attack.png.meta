@@ -1,0 +1,664 @@
+fileFormatVersion: 2
+guid: 23678ddc007f0924e8ae29b57cfad61b
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Streammage_attack_0
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 957
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5570135, y: 0.12584992}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 801b8b8130a2e5b459d55ba57892d3ef
+      internalID: 292393909
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_1
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 960
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.58552045, y: 0.094670616}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41f8b21b2591b2e4b80515e121c42449
+      internalID: -1925086653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_2
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 955
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.578393, y: 0.14455745}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 757866cfa8e2797498815b64ab6a83ac
+      internalID: -319961042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_3
+      rect:
+        serializedVersion: 2
+        x: 642
+        y: 956
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.42873302, y: 0.15079321}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25ea78f7e87d57546aabc3b5b2075fb9
+      internalID: -2125643423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_4
+      rect:
+        serializedVersion: 2
+        x: 835
+        y: 955
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.50712717, y: 0.12584992}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1cf4805c37bcf0f4d953e58c6a4b74e3
+      internalID: -1968475815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_5
+      rect:
+        serializedVersion: 2
+        x: 1033
+        y: 954
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.52850574, y: 0.12584992}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4834c1710606a814181534ac051d319d
+      internalID: -2103242671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_6
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 659
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5356333, y: 0.15079321}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1aabe28018a4fe54ba2c3bcdba35d92d
+      internalID: 1528025728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_7
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 656
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.54988724, y: 0.15079321}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9186c1b1be7d094498f82891d992337
+      internalID: 1484431751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_8
+      rect:
+        serializedVersion: 2
+        x: 407
+        y: 656
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.50712657, y: 0.17573649}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 429f025a0ea4de24294cec8e43a16e22
+      internalID: -628035702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_9
+      rect:
+        serializedVersion: 2
+        x: 645
+        y: 656
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.54988605, y: 0.100906625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c4428a0657a1fcc4198803ae670099ac
+      internalID: 556793282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_10
+      rect:
+        serializedVersion: 2
+        x: 645
+        y: 656
+        width: 210
+        height: 240
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 595a71de65317114aa685600f07602f9
+      internalID: -264649102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_11
+      rect:
+        serializedVersion: 2
+        x: 846
+        y: 656
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5, y: 0.17573649}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ecd3b51c24862f4cb0c75bb171a9af8
+      internalID: 1755288026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_12
+      rect:
+        serializedVersion: 2
+        x: 1042
+        y: 656
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.48574683, y: 0.18820827}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 24ef40505ed60eb43b8f925444a5f27b
+      internalID: 376133060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_13
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 373
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5071265, y: 0.12584978}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6ea39248b6b1694db55440fd49a7f21
+      internalID: 464388663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_14
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 377
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.48574653, y: 0.113378525}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8293d42331e70f24e941cf1d5be83a0f
+      internalID: -1052545928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_15
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 373
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999985, y: 0.13832168}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 165bc5d4125ddb0458a3cd8ee4d24448
+      internalID: 1779795531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_16
+      rect:
+        serializedVersion: 2
+        x: 604
+        y: 373
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49287313, y: 0.11337827}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 717f17fafd7d2bf469041b5dd76f090a
+      internalID: 1408343735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_17
+      rect:
+        serializedVersion: 2
+        x: 833
+        y: 373
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.4429865, y: 0.12585004}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dda4a009279fc7c488a6e911fe7edfa7
+      internalID: -1482673932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_18
+      rect:
+        serializedVersion: 2
+        x: 1026
+        y: 374
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.4999994, y: 0.11961403}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64c99d07a8ee7b64c96f3b15b01215f6
+      internalID: -927256701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_19
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 87
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5213799, y: 0.12584998}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75ed6f9ed2860c242ab7f02b68499ecd
+      internalID: -73907654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_20
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 84
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5000003, y: 0.13208571}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d07da48346c352240b19367496d895e5
+      internalID: 80666348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_21
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 85
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49287283, y: 0.11961422}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc8b374663b7cc745ad04c8fa7e13e32
+      internalID: 1237117153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_22
+      rect:
+        serializedVersion: 2
+        x: 604
+        y: 85
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.4714928, y: 0.11337802}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd3bd5e75b2014a4cb3993e5369e8e17
+      internalID: -1568526747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_23
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 85
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.48574683, y: 0.10714229}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1fdde44d77440884f9b88eaf013644a3
+      internalID: 1454720425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_attack_24
+      rect:
+        serializedVersion: 2
+        x: 1011
+        y: 84
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.52850634, y: 0.113378495}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7bbd8f4c0e2e6664eb9798e25721ae4d
+      internalID: -1203793112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Streammage_attack_0: 292393909
+      Streammage_attack_1: -1925086653
+      Streammage_attack_10: -264649102
+      Streammage_attack_11: 1755288026
+      Streammage_attack_12: 376133060
+      Streammage_attack_13: 464388663
+      Streammage_attack_14: -1052545928
+      Streammage_attack_15: 1779795531
+      Streammage_attack_16: 1408343735
+      Streammage_attack_17: -1482673932
+      Streammage_attack_18: -927256701
+      Streammage_attack_19: -73907654
+      Streammage_attack_2: -319961042
+      Streammage_attack_20: 80666348
+      Streammage_attack_21: 1237117153
+      Streammage_attack_22: -1568526747
+      Streammage_attack_23: 1454720425
+      Streammage_attack_24: -1203793112
+      Streammage_attack_3: -2125643423
+      Streammage_attack_4: -1968475815
+      Streammage_attack_5: -2103242671
+      Streammage_attack_6: 1528025728
+      Streammage_attack_7: 1484431751
+      Streammage_attack_8: -628035702
+      Streammage_attack_9: 556793282
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

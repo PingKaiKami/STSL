@@ -1,0 +1,642 @@
+fileFormatVersion: 2
+guid: 16aff410e720c0c458be07def3ba613d
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: TideTitanAttack_
+      rect:
+        serializedVersion: 2
+        x: 1018
+        y: 468
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.59727967, y: 0.114034556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de028656bc02c3447ad7b5931d992580
+      internalID: -1420315256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_1
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 976
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.47755107, y: 0.08252724}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea0a55011f95d0948938b2eabca38268
+      internalID: -1707467316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_2
+      rect:
+        serializedVersion: 2
+        x: 239
+        y: 976
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.5673468, y: 0.114034556}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1612838a6e1c3bf41901be2ebe35d711
+      internalID: -1003468691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_3
+      rect:
+        serializedVersion: 2
+        x: 443
+        y: 978
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.5224487, y: 0.11403423}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a1eeae3ae1560d468d761926c266f26
+      internalID: -568631158
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_4
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 976
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.38027132, y: 0.09040431}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba6e0a8527bd5644f998e5d6b6b6a525
+      internalID: -1267259131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_5
+      rect:
+        serializedVersion: 2
+        x: 846
+        y: 972
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.32789093, y: 0.09040399}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f683cf65b61a1e41baa2132d9b6006f
+      internalID: 362590232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_6
+      rect:
+        serializedVersion: 2
+        x: 1035
+        y: 972
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.5224487, y: 0.1061578}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e090974e348a7c84885fa2b238b43de5
+      internalID: -747196378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_7
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 733
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.48503396, y: 0.13766512}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef081d049ff672c45baf76467d4cd806
+      internalID: 1319080377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_8
+      rect:
+        serializedVersion: 2
+        x: 239
+        y: 728
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.55238116, y: 0.16129535}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c9ef0f1fb3e9bf43af9311c6d9025b5
+      internalID: -331825210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_9
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 732
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.5523813, y: 0.09040431}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2bc8c2ee5ec78d945b5d694501374d0a
+      internalID: 947646990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_10
+      rect:
+        serializedVersion: 2
+        x: 635
+        y: 733
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.41768676, y: 0.08252724}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 579a819a216fdf24182947c10f3a5da1
+      internalID: 244381630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_11
+      rect:
+        serializedVersion: 2
+        x: 841
+        y: 730
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.35782287, y: 0.12978804}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7dbd5e4006e1aab4e8e6a4834d29755d
+      internalID: 1996843993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_12
+      rect:
+        serializedVersion: 2
+        x: 1030
+        y: 732
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.48503295, y: 0.12191162}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9b26ed89dacc3e4e85bd8960cf81060
+      internalID: -637322509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_13
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 470
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.5299321, y: 0.16917275}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 429e8a701175b464a9c22c6bcb74f338
+      internalID: -276450717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_14
+      rect:
+        serializedVersion: 2
+        x: 237
+        y: 468
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.49251693, y: 0.13766496}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9c47fdb6b368304880ce69d8ebaaa88
+      internalID: -489128262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_15
+      rect:
+        serializedVersion: 2
+        x: 431
+        y: 472
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.55986357, y: 0.098281056}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 194a0b5b5725e78488c9ae3c854a124b
+      internalID: 1032483416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_16
+      rect:
+        serializedVersion: 2
+        x: 626
+        y: 475
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.5673468, y: 0.098281056}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dafba5d0e8b00b04eb2d6a4f75949e93
+      internalID: -1997213130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_17
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 474
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.47755128, y: 0.090404145}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb70a8637ce197643a0b5dd74cadd0dc
+      internalID: 1890836146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_18
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 236
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.45510215, y: 0.12978853}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d2546752d5e18447bed607e5a4c26c5
+      internalID: 1509094444
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_19
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 233
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.60476226, y: 0.12978789}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a949a9f37f849804398ebb336c15d1d1
+      internalID: 2100727692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_20
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 233
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.522449, y: 0.09040431}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20a3bd0b6dc611f459a6285176f882d4
+      internalID: -292410926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_21
+      rect:
+        serializedVersion: 2
+        x: 634
+        y: 232
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.33537352, y: 0.14554186}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e2f8182f07bdfd439d0c2d0991694eb
+      internalID: 1659553484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_22
+      rect:
+        serializedVersion: 2
+        x: 838
+        y: 230
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.3727887, y: 0.098280974}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f2e12976132d7849a785587551ba4fe
+      internalID: 768379796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TideTitanAttack_24
+      rect:
+        serializedVersion: 2
+        x: 1032
+        y: 229
+        width: 200
+        height: 190
+      alignment: 9
+      pivot: {x: 0.4925165, y: 0.121911705}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2517a734c5c15f49b36d8661bf8cd2c
+      internalID: 122562785
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      TideTitanAttack_: -1420315256
+      TideTitanAttack_1: -1707467316
+      TideTitanAttack_10: 244381630
+      TideTitanAttack_11: 1996843993
+      TideTitanAttack_12: -637322509
+      TideTitanAttack_13: -276450717
+      TideTitanAttack_14: -489128262
+      TideTitanAttack_15: 1032483416
+      TideTitanAttack_16: -1997213130
+      TideTitanAttack_17: 1890836146
+      TideTitanAttack_18: 1509094444
+      TideTitanAttack_19: 2100727692
+      TideTitanAttack_2: -1003468691
+      TideTitanAttack_20: -292410926
+      TideTitanAttack_21: 1659553484
+      TideTitanAttack_22: 768379796
+      TideTitanAttack_24: 122562785
+      TideTitanAttack_3: -568631158
+      TideTitanAttack_4: -1267259131
+      TideTitanAttack_5: 362590232
+      TideTitanAttack_6: -747196378
+      TideTitanAttack_7: 1319080377
+      TideTitanAttack_8: -331825210
+      TideTitanAttack_9: 947646990
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

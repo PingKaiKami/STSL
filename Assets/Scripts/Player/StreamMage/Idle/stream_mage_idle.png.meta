@@ -1,0 +1,664 @@
+fileFormatVersion: 2
+guid: 437e2c67e261519458af68d05d6843fb
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: stream_mage_idle_0
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 956
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5427599, y: 0.113378145}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80ce7859d9af4a647b46dc147441fbbb
+      internalID: 57216457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_1
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 956
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.535633, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9ddd46453cf71148a905f6e8f21cf8a
+      internalID: -834811189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_2
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 957
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.52850664, y: 0.12584992}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2faec47334dfaf43be3e6617afc5279
+      internalID: 1564176682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_3
+      rect:
+        serializedVersion: 2
+        x: 624
+        y: 957
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49287313, y: 0.16326497}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 827b57efb34123e4db03344d85860886
+      internalID: -310216710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_4
+      rect:
+        serializedVersion: 2
+        x: 837
+        y: 957
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.50712717, y: 0.15079294}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 53fd3a46a6aac7640b3982cc2b604db4
+      internalID: 1815507153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_5
+      rect:
+        serializedVersion: 2
+        x: 1027
+        y: 957
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5213786, y: 0.113378145}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b32d688ce57b4548a9c00e385590f7b
+      internalID: 1568760051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_6
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 677
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5712666, y: 0.10090688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f92e618dfa45f0941b3f4a24a173502c
+      internalID: -2053191677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_7
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 676
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.46436638, y: 0.13208593}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cba4409118e3f004ba3db0a4fb9d0c94
+      internalID: -1058705371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_8
+      rect:
+        serializedVersion: 2
+        x: 412
+        y: 675
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5570135, y: 0.09467087}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: faef8139b39967f42beff4205531291a
+      internalID: 305788951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_9
+      rect:
+        serializedVersion: 2
+        x: 619
+        y: 674
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.4429862, y: 0.06349182}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0dde347fcdfe284d9c1c30c08f0a902
+      internalID: 1287116729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_10
+      rect:
+        serializedVersion: 2
+        x: 815
+        y: 673
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47149366, y: 0.08219935}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bab4bbbcbb2bf2b4abd3379441394eb1
+      internalID: -1555201742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_11
+      rect:
+        serializedVersion: 2
+        x: 1013
+        y: 673
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.48574626, y: 0.13832168}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e395749704396304d98303e7230b4871
+      internalID: -222471771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_12
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 378
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.51425314, y: 0.12585029}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 971488ad461031949be5198640399474
+      internalID: -1203440800
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_13
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 377
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.54275966, y: 0.13832168}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f14e8d491dc03943b44df82274fa6b1
+      internalID: 1611026125
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_14
+      rect:
+        serializedVersion: 2
+        x: 427
+        y: 376
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.51425314, y: 0.12584978}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 418142abfdf366b49945e359ed245dd4
+      internalID: -343585136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_15
+      rect:
+        serializedVersion: 2
+        x: 627
+        y: 375
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47861996, y: 0.09467112}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7bc2e714294856844b9d7c6221fd0303
+      internalID: 1936233839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_16
+      rect:
+        serializedVersion: 2
+        x: 828
+        y: 374
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47861966, y: 0.13208567}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 190b05624f3bb234685d445e0a869421
+      internalID: -29754153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_17
+      rect:
+        serializedVersion: 2
+        x: 1021
+        y: 373
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47861966, y: 0.08219897}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1968d807a13a2c64aa1cea5271b448f0
+      internalID: 2027977962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_18
+      rect:
+        serializedVersion: 2
+        x: 1021
+        y: 373
+        width: 210
+        height: 240
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7f9e8ab714bc344e84b52c9d6ed8dfe
+      internalID: -1008643846
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_19
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 87
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.52850676, y: 0.07596315}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79ac0bd06cbf9a54f8025a7a69253b5b
+      internalID: -526325288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_20
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 88
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5213799, y: 0.088435106}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e4b2798933dd314699d6850fdd0fa9c
+      internalID: -19810106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_21
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 88
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.54988694, y: 0.063491695}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04f20d894ff4ad148a2a54bd5c78a331
+      internalID: 1658792153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_22
+      rect:
+        serializedVersion: 2
+        x: 619
+        y: 88
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.52850634, y: 0.063491695}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94abbbc67ee2ef8458f4b566df7f33d5
+      internalID: 1091715614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_23
+      rect:
+        serializedVersion: 2
+        x: 814
+        y: 87
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5142529, y: 0.100906566}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c058942637cc0fd40a5efd8928b8379f
+      internalID: -1185353947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stream_mage_idle_24
+      rect:
+        serializedVersion: 2
+        x: 1013
+        y: 84
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.507126, y: 0.09467084}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f3222fd00502be4bade54c446e2d762
+      internalID: 935092590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      stream_mage_idle_0: 57216457
+      stream_mage_idle_1: -834811189
+      stream_mage_idle_10: -1555201742
+      stream_mage_idle_11: -222471771
+      stream_mage_idle_12: -1203440800
+      stream_mage_idle_13: 1611026125
+      stream_mage_idle_14: -343585136
+      stream_mage_idle_15: 1936233839
+      stream_mage_idle_16: -29754153
+      stream_mage_idle_17: 2027977962
+      stream_mage_idle_18: -1008643846
+      stream_mage_idle_19: -526325288
+      stream_mage_idle_2: 1564176682
+      stream_mage_idle_20: -19810106
+      stream_mage_idle_21: 1658792153
+      stream_mage_idle_22: 1091715614
+      stream_mage_idle_23: -1185353947
+      stream_mage_idle_24: 935092590
+      stream_mage_idle_3: -310216710
+      stream_mage_idle_4: 1815507153
+      stream_mage_idle_5: 1568760051
+      stream_mage_idle_6: -2053191677
+      stream_mage_idle_7: -1058705371
+      stream_mage_idle_8: 305788951
+      stream_mage_idle_9: 1287116729
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

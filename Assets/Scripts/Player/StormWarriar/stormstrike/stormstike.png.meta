@@ -1,0 +1,642 @@
+fileFormatVersion: 2
+guid: b10870074a6881e4cabdfe8aeccd7bb6
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: stormstike_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 977
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.46436664, y: 0.09467087}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a27698a5a88fe4445aa3ea3e3627ee62
+      internalID: 1956654506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_1
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 973
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.46436664, y: 0.09467087}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8fda21076b2d44c419daa5aa94bae12a
+      internalID: 103377106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_2
+      rect:
+        serializedVersion: 2
+        x: 373
+        y: 970
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.46436664, y: 0.09467087}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd6a7264229d0234982ffbe3a589a86a
+      internalID: 2017112708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_3
+      rect:
+        serializedVersion: 2
+        x: 590
+        y: 973
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.3717195, y: 0.09467036}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6677788cfcebf2b4fafc00278793dc4c
+      internalID: 387921698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_4
+      rect:
+        serializedVersion: 2
+        x: 811
+        y: 972
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.3717195, y: 0.09467036}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b2331256fdc36d4cb67d41e924aa38f
+      internalID: -395786522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_5
+      rect:
+        serializedVersion: 2
+        x: 1040
+        y: 973
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.3717195, y: 0.09467036}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6683ab1243ac4e4d8c92c5838e3e3a5
+      internalID: -1853747530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_6
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 687
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.3717195, y: 0.09467036}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1607d202b9c49a948b0e131379c706f8
+      internalID: 780941977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_7
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 681
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.3717195, y: 0.09467036}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0497c8576b4da074eb9f0ce439696b7a
+      internalID: -141840557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_8
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 684
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.50712585, y: 0.08843409}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7be83d75bd688f448935c4bfc1af28c
+      internalID: 1884994402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_9
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 688
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5783927, y: 0.08843384}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71985e863f7bae84bb78ba10222823b8
+      internalID: -1253529531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_10
+      rect:
+        serializedVersion: 2
+        x: 773
+        y: 689
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.69954544, y: 0.10090535}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c42e67e0336b6f14c8a7c06cf613b9ae
+      internalID: 383402124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_11
+      rect:
+        serializedVersion: 2
+        x: 1033
+        y: 680
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5142514, y: 0.100904845}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22e007c982c17254fa5e13851ceefaed
+      internalID: -1322542016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_12
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 403
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5142514, y: 0.100904845}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70aed89bc2a8ef8469c38a66e9a2da58
+      internalID: 1808595687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_13
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 406
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5142514, y: 0.100904845}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84b33a4cc9c57b540ad8bceb9bf6f590
+      internalID: 1966874253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_14
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 405
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5142514, y: 0.100904845}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 758ecacebdbac4342add68d15aba9be4
+      internalID: 207431695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_15
+      rect:
+        serializedVersion: 2
+        x: 673
+        y: 402
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.3147051, y: 0.10714022}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 262e94b56a3f5b14893f4ac2e6a3e4b4
+      internalID: 1287894474
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_16
+      rect:
+        serializedVersion: 2
+        x: 874
+        y: 403
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.3574646, y: 0.107140094}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6872cdde360d924c83c826dd7d66595
+      internalID: 1471569571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_17
+      rect:
+        serializedVersion: 2
+        x: 1044
+        y: 403
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5926444, y: 0.13831888}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f80bd5f89667d8846852db84756b19e1
+      internalID: 1196214403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_18
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 113
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.48574442, y: 0.10713952}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0cbd492529571c4d8fded146729ad27
+      internalID: -2133695723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_19
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 109
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.48574442, y: 0.10713952}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 389d25b75ace8a64ebb259a945d87623
+      internalID: -111275904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_20
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 109
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.48574442, y: 0.10713952}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3080cac853e45554eb6005d6ce934bd3
+      internalID: 140649256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_21
+      rect:
+        serializedVersion: 2
+        x: 626
+        y: 110
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.3574643, y: 0.10713952}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d2b0ba8ec0f67d4e9c14f2e927aeaa9
+      internalID: 26304820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_22
+      rect:
+        serializedVersion: 2
+        x: 848
+        y: 112
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.31470424, y: 0.10713952}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf5c970832172eb408174961a4814e1d
+      internalID: -373813066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stormstike_23
+      rect:
+        serializedVersion: 2
+        x: 1044
+        y: 109
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47149017, y: 0.10090332}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ce503f9a8e0cc04aba42da5c286c1f3
+      internalID: -1828778851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      stormstike_0: 1956654506
+      stormstike_1: 103377106
+      stormstike_10: 383402124
+      stormstike_11: -1322542016
+      stormstike_12: 1808595687
+      stormstike_13: 1966874253
+      stormstike_14: 207431695
+      stormstike_15: 1287894474
+      stormstike_16: 1471569571
+      stormstike_17: 1196214403
+      stormstike_18: -2133695723
+      stormstike_19: -111275904
+      stormstike_2: 2017112708
+      stormstike_20: 140649256
+      stormstike_21: 26304820
+      stormstike_22: -373813066
+      stormstike_23: -1828778851
+      stormstike_3: 387921698
+      stormstike_4: -395786522
+      stormstike_5: -1853747530
+      stormstike_6: 780941977
+      stormstike_7: -141840557
+      stormstike_8: 1884994402
+      stormstike_9: -1253529531
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

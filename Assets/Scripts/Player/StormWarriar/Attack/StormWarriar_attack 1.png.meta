@@ -1,0 +1,642 @@
+fileFormatVersion: 2
+guid: 86f2006319757d04b92ed37c929ac16c
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: StormWarriar_attack_0
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 954
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.50712657, y: 0.07596334}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da45ed557225c8749bf4d01c28c53a29
+      internalID: 1550814049
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_1
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 954
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.34321347, y: 0.100906625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ecff8a446544bc4fba809cc5fbe7947
+      internalID: 654471222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_2
+      rect:
+        serializedVersion: 2
+        x: 441
+        y: 950
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.40735388, y: 0.13208567}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23230b83343d6d549b808de042497b16
+      internalID: -1646785096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_3
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 953
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.38597324, y: 0.10090637}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f1bee9491add9f44847b0e3a88f6bcd
+      internalID: 1584230813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_4
+      rect:
+        serializedVersion: 2
+        x: 852
+        y: 958
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.45723963, y: 0.0946701}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d92fd675d4beb24996a1659211219dd
+      internalID: 10107553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_6
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 679
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.4699178, y: 0.079772346}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05ce6c57bbfa23b4ba07dd8a59d9ca00
+      internalID: -975135455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_7
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 678
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5, y: 0.12585017}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b57235fe4c8cdd84587fb9512ecdf8cb
+      internalID: 1007640752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_8
+      rect:
+        serializedVersion: 2
+        x: 660
+        y: 678
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.4429862, y: 0.088435106}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f3c860dbd836bf4f9bc4bbe1758b6ec
+      internalID: -249870015
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_9
+      rect:
+        serializedVersion: 2
+        x: 852
+        y: 682
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.4714934, y: 0.06972758}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 031b083c762f36f418e12257e5fb01e6
+      internalID: -1976779652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_10
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 390
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5, y: 0.13832156}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e44d3a3b2da0c10449a458a0c2ff9f63
+      internalID: 1282632044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_11
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 394
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.46436638, y: 0.10090688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6343ff4b38db954b9fe9edff7208de4
+      internalID: -1430075015
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_12
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 397
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.42160702, y: 0.10090688}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c091c1df72b63934c89d3dbbc367ae0f
+      internalID: 1984225387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_13
+      rect:
+        serializedVersion: 2
+        x: 648
+        y: 396
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5071263, y: 0.06972758}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6adaffb13b1d7f647a9e2a3842aeab9b
+      internalID: 1550725282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_14
+      rect:
+        serializedVersion: 2
+        x: 830
+        y: 398
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.48574683, y: 0.09467074}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 667330273ad9b424880f458b63d6c48b
+      internalID: 2070168603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_15
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 114
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.44298682, y: 0.06972752}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e389bc4f999d77545886708944b6598f
+      internalID: -1335592838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_16
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 114
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.42873317, y: 0.100906625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0cf7951363d9514983cd59b90f18aed
+      internalID: 316401393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_17
+      rect:
+        serializedVersion: 2
+        x: 415
+        y: 118
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.4429869, y: 0.10090713}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2133c873b03dc9d4c9f9e6fea7eb3b87
+      internalID: 110375751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_18
+      rect:
+        serializedVersion: 2
+        x: 661
+        y: 115
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.40735298, y: 0.11961435}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 691a60ef4c38e54429747b75773575ed
+      internalID: 53167479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_19
+      rect:
+        serializedVersion: 2
+        x: 851
+        y: 117
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.46436623, y: 0.107142895}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9420677fde8f09849a40b8e4d57106f6
+      internalID: 481902016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_5
+      rect:
+        serializedVersion: 2
+        x: 1045
+        y: 954
+        width: 199
+        height: 240
+      alignment: 9
+      pivot: {x: 0.45723963, y: 0.0946701}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5862111a5dd5a4644a606ea7f526529f
+      internalID: 1292933119
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_20
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 675
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.45723963, y: 0.0946701}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49634027f1673e94bad8199d189c6dcd
+      internalID: -407232539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_21
+      rect:
+        serializedVersion: 2
+        x: 1035
+        y: 681
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.46436653, y: 0.069727324}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e77185d32a51fb429487e3d343d9fbf
+      internalID: 2043104572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_22
+      rect:
+        serializedVersion: 2
+        x: 1023
+        y: 401
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.48574683, y: 0.09467074}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c76483ab9c6aa334ca94853e87925d3a
+      internalID: 383216625
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_attack_23
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 107
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.46436653, y: 0.1009072}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cf66df0805f7a28459265e070923edc3
+      internalID: 1109772085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      StormWarriar_attack_0: 1550814049
+      StormWarriar_attack_1: 654471222
+      StormWarriar_attack_10: 1282632044
+      StormWarriar_attack_11: -1430075015
+      StormWarriar_attack_12: 1984225387
+      StormWarriar_attack_13: 1550725282
+      StormWarriar_attack_14: 2070168603
+      StormWarriar_attack_15: -1335592838
+      StormWarriar_attack_16: 316401393
+      StormWarriar_attack_17: 110375751
+      StormWarriar_attack_18: 53167479
+      StormWarriar_attack_19: 481902016
+      StormWarriar_attack_2: -1646785096
+      StormWarriar_attack_20: -407232539
+      StormWarriar_attack_21: 2043104572
+      StormWarriar_attack_22: 383216625
+      StormWarriar_attack_23: 1109772085
+      StormWarriar_attack_3: 1584230813
+      StormWarriar_attack_4: 10107553
+      StormWarriar_attack_5: 1292933119
+      StormWarriar_attack_6: -975135455
+      StormWarriar_attack_7: 1007640752
+      StormWarriar_attack_8: -249870015
+      StormWarriar_attack_9: -1976779652
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

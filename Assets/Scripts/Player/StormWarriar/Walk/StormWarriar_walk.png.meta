@@ -1,0 +1,664 @@
+fileFormatVersion: 2
+guid: 10773a286a8458e4589e8bc8d43df0ec
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: StormWarriar_walk_0
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 933
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 272ff1d260321374a8ecbb7967f9332d
+      internalID: 1236537768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_1
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 929
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a614b401b1c20044b27b6fa6f08c304
+      internalID: -1705188202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_2
+      rect:
+        serializedVersion: 2
+        x: 433
+        y: 928
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 701ec27f67ac8f442a375018399a1429
+      internalID: 25093116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_3
+      rect:
+        serializedVersion: 2
+        x: 625
+        y: 935
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c5a3faa7f258bbb47ae4b1f68bb60d54
+      internalID: 1229376312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_4
+      rect:
+        serializedVersion: 2
+        x: 817
+        y: 934
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bce6bc4c6833faa41a9e06814c34d820
+      internalID: -1435270848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_5
+      rect:
+        serializedVersion: 2
+        x: 1019
+        y: 930
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8203d29d5f3650b4da85374329e16d01
+      internalID: 1648431606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_6
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 671
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9319c8d5bc2b34944a103623689832ca
+      internalID: -1566503860
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_7
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 668
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8957c9241db7c0478ea193a60a061ae
+      internalID: 1172953411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_8
+      rect:
+        serializedVersion: 2
+        x: 423
+        y: 667
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a724a390800e93d48af797b477f934fb
+      internalID: -983829019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_9
+      rect:
+        serializedVersion: 2
+        x: 627
+        y: 667
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45d5ce32a51571b46933a02d110b7fff
+      internalID: 352448449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_10
+      rect:
+        serializedVersion: 2
+        x: 816
+        y: 671
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3aa54b18e3a9e5c499234e8adeeb8f86
+      internalID: -885327519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_11
+      rect:
+        serializedVersion: 2
+        x: 1014
+        y: 667
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e02ad725ec3e8574495190b248cab0d2
+      internalID: 754699416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_12
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 392
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f593db77c8b5dd54bbb02e2d4a7b9a76
+      internalID: -1189943316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_13
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 391
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb3bdcfebcd54ab4ea75194f552ef9d0
+      internalID: 1781563115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_14
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 392
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6073c1d22587e0b41b24ceabe9e48b15
+      internalID: 785512743
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_15
+      rect:
+        serializedVersion: 2
+        x: 412
+        y: 395
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4bd8bf0aff1540d4eb475cf0bbb1c2b1
+      internalID: -224478058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_16
+      rect:
+        serializedVersion: 2
+        x: 611
+        y: 394
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c344140f6855e541ab33c0893da5db5
+      internalID: 1957920908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_17
+      rect:
+        serializedVersion: 2
+        x: 807
+        y: 391
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d9e369622ec3764e8f39f679861e1cc
+      internalID: 682926864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_18
+      rect:
+        serializedVersion: 2
+        x: 1006
+        y: 391
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 416e83db4cf9ad04ea0d01af5bcc3bc8
+      internalID: -1807606493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_19
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 123
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae57b336eb42ddc4d822de8dd8450b35
+      internalID: 1890266784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_20
+      rect:
+        serializedVersion: 2
+        x: 210
+        y: 123
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7b63ef7b45a8e04a8d26d2ff8e30662
+      internalID: 106580633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_21
+      rect:
+        serializedVersion: 2
+        x: 411
+        y: 123
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9201c92515af77a408ca6ed5a8b4cc20
+      internalID: 1632273518
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_22
+      rect:
+        serializedVersion: 2
+        x: 610
+        y: 117
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a71cd33c185b76b4bb1b7428b574907c
+      internalID: 1935617639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_23
+      rect:
+        serializedVersion: 2
+        x: 799
+        y: 120
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1630f12ccfc90d4cb9517476ba90ab9
+      internalID: 637521348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_walk_24
+      rect:
+        serializedVersion: 2
+        x: 998
+        y: 116
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862017, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73aa3813dfb8bc742920670f9e451fa2
+      internalID: -1848554923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      StormWarriar_walk_0: 1236537768
+      StormWarriar_walk_1: -1705188202
+      StormWarriar_walk_10: -885327519
+      StormWarriar_walk_11: 754699416
+      StormWarriar_walk_12: -1189943316
+      StormWarriar_walk_13: 1781563115
+      StormWarriar_walk_14: 785512743
+      StormWarriar_walk_15: -224478058
+      StormWarriar_walk_16: 1957920908
+      StormWarriar_walk_17: 682926864
+      StormWarriar_walk_18: -1807606493
+      StormWarriar_walk_19: 1890266784
+      StormWarriar_walk_2: 25093116
+      StormWarriar_walk_20: 106580633
+      StormWarriar_walk_21: 1632273518
+      StormWarriar_walk_22: 1935617639
+      StormWarriar_walk_23: 637521348
+      StormWarriar_walk_24: -1848554923
+      StormWarriar_walk_3: 1229376312
+      StormWarriar_walk_4: -1435270848
+      StormWarriar_walk_5: 1648431606
+      StormWarriar_walk_6: -1566503860
+      StormWarriar_walk_7: 1172953411
+      StormWarriar_walk_8: -983829019
+      StormWarriar_walk_9: 352448449
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

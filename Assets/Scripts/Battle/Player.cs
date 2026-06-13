@@ -15,6 +15,8 @@ public class Player : CharacterBase
     {
         base.Start();
         baseMoveSpeed = moveSpeed;
+        if (animator == null)
+            animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -177,7 +179,7 @@ public class Player : CharacterBase
         lastSafeWorldPosition = transform.position;
     }
 
-    private GameObject FindNearestEnemy()
+    protected virtual GameObject FindNearestEnemy()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
@@ -225,13 +227,21 @@ public class Player : CharacterBase
         }
 
         CharacterBase enemyStats = target.GetComponent<CharacterBase>();
-
-
         if (enemyStats != null)
         {
+            float hpBefore = enemyStats.health;
             enemyStats.TakeDamage(attack);
+            bool killed = hpBefore > 0f && enemyStats.health <= 0f;
+            OnAttackLanded(enemyStats, killed);
         }
     }
+
+    /// <summary>
+    /// 攻擊命中後的 hook。子類 override 此方法來實作各自的充能邏輯。
+    /// 例：直接傷害角色在此呼叫 GainSkillCharge()；
+    ///     投射物角色改由 projectile callback 充能，可不 override。
+    /// </summary>
+    protected virtual void OnAttackLanded(CharacterBase victim, bool killed) { }
 
     protected void FaceTarget(GameObject target)
     {
