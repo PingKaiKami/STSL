@@ -130,6 +130,7 @@ public class Enemy : CharacterBase
 
     protected virtual void CombatLogic()
     {
+        if (HasStatus(StatusEffect.Stun)) return;
         if (isMoving) return;
 
         Vector2Int currentCell = WorldToGrid(transform.position);

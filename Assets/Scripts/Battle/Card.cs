@@ -188,7 +188,10 @@ public class Card : MonoBehaviour
                 }
 
                 GameObject playerObj = Instantiate(unitPrefab, hit.gameObject.transform.position, Quaternion.identity);
-                
+                // Vector3 spawnPos = hit.gameObject.transform.position;
+                // spawnPos += new Vector3(0f, 0.5f, 0f);
+
+                // GameObject playerObj = Instantiate(unitPrefab, spawnPos, Quaternion.identity);
                 // 2. 將這張卡片的「當前數據」（可能是殘血）同步給場上角色的 CharacterBase
                 CharacterBase cb = playerObj.GetComponent<CharacterBase>();
                 if (cb != null)

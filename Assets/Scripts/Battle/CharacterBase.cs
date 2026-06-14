@@ -59,6 +59,9 @@ public class CharacterBase : MonoBehaviour
 
     private RectTransform healthFillRect;
     private RectTransform skillFillRect;
+    private RectTransform sanctuaryFillRect;
+
+    public float shield = 0f;
     protected float skillCharge = 0f;
     public float skillChargeInterval = 0.001f; // 每幾秒增加 1 點衝能
     private float skillChargeTimer = 0f;
@@ -91,12 +94,22 @@ public class CharacterBase : MonoBehaviour
         Debug.Log($"{unitName} 恢復 {amount:F1} HP，剩餘血量：{health}");
     }
 
-    /// <summary>穿透防禦的真實傷害，不受 defense 影響。</summary>
+    /// <summary>穿透防禦的真實傷害，不受 defense 影響，但仍被護盾吸收。</summary>
     public void TakeTrueDamage(float damage)
     {
         float actual = Mathf.Max(damage, 0f);
+
+        // 護盾優先吸收真實傷害
+        if (shield > 0f)
+        {
+            float absorbed = Mathf.Min(shield, actual);
+            shield -= absorbed;
+            actual -= absorbed;
+            UpdateSanctuaryBar();
+        }
+
         health -= actual;
-        DamagePopup.Create(transform.position, actual);
+        if (actual > 0f) DamagePopup.Create(transform.position, actual);
         UpdateHealthBar();
         Debug.Log($"{unitName} 受到 {actual} 點真實傷害，剩餘血量：{health}");
         if (health <= 0f) Die();
@@ -107,17 +120,48 @@ public class CharacterBase : MonoBehaviour
         if (teamDamageReduction > 0f)
             damage *= (1f - teamDamageReduction);
         float actualDamage = damage <= 0f ? 0f : Mathf.Max(damage - defense, 1f);
-        health -= actualDamage;
 
-        DamagePopup.Create(transform.position, actualDamage);
+        // 護盾優先吸收傷害
+        if (shield > 0f)
+        {
+            float absorbed = Mathf.Min(shield, actualDamage);
+            shield -= absorbed;
+            actualDamage -= absorbed;
+            UpdateSanctuaryBar();
+        }
+
+        health -= actualDamage;
+        if (actualDamage > 0f) DamagePopup.Create(transform.position, actualDamage);
         UpdateHealthBar();
 
         Debug.Log($"{unitName} 受到了 {actualDamage} 點傷害，剩餘血量：{health}");
 
-        if (health <= 0)
+        if (health <= 0f)
         {
             Die();
         }
+    }
+
+    public void AddShield(float amount)
+    {
+        shield = Mathf.Min(shield + amount, maxHealth);
+        Debug.Log($"[Shield] {unitName} 獲得護盾 {amount:F0}，當前護盾={shield:F0}，maxHP={maxHealth:F0}，rect={(sanctuaryFillRect != null ? "OK" : "NULL")}");
+        UpdateSanctuaryBar();
+    }
+
+    public void ClearShield()
+    {
+        shield = 0f;
+        HideSanctuaryBar();
+    }
+
+    private void UpdateSanctuaryBar()
+    {
+        if (maxHealth <= 0f) return;
+        if (shield <= 0f)
+            HideSanctuaryBar();
+        else
+            ShowSanctuaryBar(shield / maxHealth);
     }
 
     private void CreateHealthBar()
@@ -136,12 +180,36 @@ public class CharacterBase : MonoBehaviour
         canvasRect.sizeDelta = new Vector2(80f, 18f);
         canvasRect.localScale = new Vector3(0.012f, 0.012f, 1f);
 
-        // HP bar (top portion)
-        healthFillRect = CreateBarRect(canvasObj.transform,
-            new Color(0.1f, 0.1f, 0.1f), new Color(0.85f, 0.1f, 0.1f),
-            new Vector2(0f, 10f / 18f), new Vector2(1f, 1f));
+        Vector2 hpAnchorMin = new Vector2(0f, 10f / 18f);
+        Vector2 hpAnchorMax = new Vector2(1f, 1f);
 
-        // Skill bar (bottom portion, blue), starts empty
+        // 1. HP 背景（最底層）
+        GameObject hpBg = new GameObject("HpBG");
+        hpBg.transform.SetParent(canvasObj.transform, false);
+        hpBg.AddComponent<Image>().color = new Color(0.1f, 0.1f, 0.1f);
+        RectTransform hpBgRect = hpBg.GetComponent<RectTransform>();
+        hpBgRect.anchorMin = hpAnchorMin; hpBgRect.anchorMax = hpAnchorMax;
+        hpBgRect.offsetMin = Vector2.zero; hpBgRect.offsetMax = Vector2.zero;
+
+        // 2. HP 紅色填充
+        GameObject hpFill = new GameObject("HpFill");
+        hpFill.transform.SetParent(canvasObj.transform, false);
+        hpFill.AddComponent<Image>().color = new Color(0.85f, 0.1f, 0.1f);
+        healthFillRect = hpFill.GetComponent<RectTransform>();
+        healthFillRect.anchorMin = hpAnchorMin; healthFillRect.anchorMax = hpAnchorMax;
+        healthFillRect.offsetMin = Vector2.zero; healthFillRect.offsetMax = Vector2.zero;
+
+        // 3. 護盾黃色條（渲染在 HP fill 前面，從右側顯示，初始隱藏）
+        GameObject sanctuaryObj = new GameObject("SanctuaryFill");
+        sanctuaryObj.transform.SetParent(canvasObj.transform, false);
+        sanctuaryObj.AddComponent<Image>().color = new Color(1f, 0.85f, 0f, 1f); // 亮黃色，完全不透明
+        sanctuaryFillRect = sanctuaryObj.GetComponent<RectTransform>();
+        sanctuaryFillRect.anchorMin = new Vector2(0f, 8f / 18f); // 整個 HP 區域高度（含背景）
+        sanctuaryFillRect.anchorMax = new Vector2(1f, 1f);
+        sanctuaryFillRect.offsetMin = Vector2.zero; sanctuaryFillRect.offsetMax = Vector2.zero;
+        sanctuaryObj.SetActive(false);
+
+        // 4. Skill bar (bottom portion, blue), starts empty
         skillFillRect = CreateBarRect(canvasObj.transform,
             new Color(0.1f, 0.1f, 0.1f), new Color(0.15f, 0.45f, 0.95f),
             new Vector2(0f, 0f), new Vector2(1f, 8f / 18f));
@@ -182,6 +250,40 @@ public class CharacterBase : MonoBehaviour
     {
         if (skillFillRect == null) return;
         skillFillRect.offsetMax = new Vector2(-(1f - Mathf.Clamp01(skillCharge / 100f)) * 80f, 0f);
+    }
+
+    // 護盾黃色條：從右側填充 ratio 寬度（最小 8px），顯示於 HP 條前面
+    public void ShowSanctuaryBar(float ratio)
+    {
+        if (sanctuaryFillRect == null) { Debug.LogWarning($"[Shield] {unitName} sanctuaryFillRect is NULL"); return; }
+        sanctuaryFillRect.gameObject.SetActive(true);
+        float width = Mathf.Max(Mathf.Clamp01(ratio) * 80f, 8f); // 至少 8px 可見
+        sanctuaryFillRect.offsetMin = new Vector2(80f - width, 0f);
+        sanctuaryFillRect.offsetMax = Vector2.zero;
+        Debug.Log($"[Shield] {unitName} ShowSanctuaryBar ratio={ratio:F2} width={width:F1}px active={sanctuaryFillRect.gameObject.activeSelf}");
+    }
+
+    public void HideSanctuaryBar()
+    {
+        if (sanctuaryFillRect != null)
+            sanctuaryFillRect.gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// 直接增加技能條充能，並同步更新 UI。
+    /// 子類在命中、擊殺等事件中呼叫此方法實作各自的充能邏輯。
+    /// </summary>
+    protected void GainSkillCharge(float amount)
+    {
+        if (amount <= 0f || skillCharge >= 100f) return;
+        skillCharge = Mathf.Min(skillCharge + amount, 100f);
+        UpdateSkillBar();
+        if (skillCharge >= 100f)
+        {
+            UseSkill();
+            skillCharge = 0f;
+            UpdateSkillBar();
+        }
     }
 
     protected void UpdateSkillCharge()

@@ -6,39 +6,70 @@ using UnityEngine;
 /// 潮汐泰坦 — 堅守防線，以鋼鐵意志保護隊友
 ///
 /// 技能優先序：
-///   1. 堅守      — 本輪衝能週期掉血 ≥ 30% maxHP → 減傷 50%，封鎖普攻
-///   2. 深海庇護  — 範圍內敵人數 ≥ 範圍內友方數 → 隊友全體減傷 10%
-///   3. 潮汐反擊  — 其餘情況 → 受傷時回復 5% HP 並立刻反攻
+///   1. 潮汐反擊  — 最優先，持續 3 次技能施放週期；受傷時回復 5% HP 並立刻反攻
+///              結束後冷卻 1 次技能施放；不阻擋其他技能同時施放
+///   2. 深海庇護  — 範圍內敵人 ≥ 範圍內友方 → 隊友全體獲得護盾
+///   3. 堅守      — 其餘情況：減傷 50%、攻擊力 -20%、不封鎖普攻、加速技能蓄力
+///
+/// 充能條件：
+///   受傷充能（damage × skillChargeOnDamageRatio）＋時間自然蓄力
+///
+/// 移動邏輯：
+///   1. 優先朝向正在圍攻友軍的敵人（威脅被包圍隊友的敵人）
+///   2. 次之找離最近隊友最近的敵人
 /// </summary>
 public class TideTitan : Player
 {
-    [Header("Animation")]
-    public new Animator animator;
-
     [Header("技能設定")]
-    public float sanctuaryRadius    = 5f;    // 深海庇護：判定半徑（格）
-    public float sanctuaryReduction = 0.10f; // 深海庇護：隊友減傷比例
+    public float sanctuaryRadius      = 5f;
+    public float sanctuaryShieldRatio = 0.20f;
+    public float sanctuaryDuration    = 5f;
 
-    // 動畫基準速度
-    private float baseWalkSpeed;
-    private float baseAttackTime;
+    [Header("技能充能")]
+    public float skillChargeOnDamageRatio = 0.2f; // 受傷充能：charge += damage × ratio
+
+    [Header("目標選定")]
+    [Range(0f, 1f)] public float aggressiveChance = 0f; // 0% 進攻 / 100% 防守
+
+    [Header("堅守設定")]
+    public float standfastAttackMultiplier     = 0.8f;  // 攻擊力倍率（-20%）
+    public float standfastExtraChargePerSecond = 30f;   // 堅守期間每秒額外充能
+
+    [Header("盾牌特效")]
+    public GameObject shieldEffectPrefab;
+
+    // 動畫
+    private float   baseWalkSpeed;
+    private float   baseAttackTime;
+    private Vector2 prevPosition;
+
+    // 鎖定目標
+    private GameObject lockedTarget = null;
 
     // 技能狀態
     private bool isStandfast       = false;
     private bool isTidalCounter    = false;
     private bool isSanctuaryActive = false;
 
-    // 堅守用：上一次技能觸發時的血量快照
-    private float healthSnapshot;
+    // 潮汐反擊狀態機
+    private int tidalCounterUsesLeft = 0; // 剩餘生效次數
+    private int tidalCounterCooldown = 0; // 冷卻剩餘次數（以技能施放次數計）
+
+    // 深海庇護
+    private Coroutine                 sanctuaryCoroutine;
+    private readonly List<GameObject> shieldEffects = new List<GameObject>();
+
+    // 堅守充能累積（分數部分）
+    private float standfastChargeAccum = 0f;
 
     // ─── 初始化 ────────────────────────────────────────────────────
 
     protected override void Start()
     {
         unitName            = "潮汐泰坦";
-        health              = 1000f;
-        attack              = 15f;
-        defense             = 8f;
+        health              = 500f;
+        attack              = 10f;
+        defense             = 4f;
         attackRange         = 1.5f;
         moveSpeed           = 2f;
         attackTime          = 1.5f;
@@ -49,7 +80,7 @@ public class TideTitan : Player
         baseAttackTime = attackTime;
         base.Start();
 
-        healthSnapshot = health;
+        prevPosition = transform.position;
     }
 
     private void ApplyEquipment()
@@ -58,6 +89,40 @@ public class TideTitan : Player
     }
 
     // ─── 動畫同步 ──────────────────────────────────────────────────
+
+    private void LateUpdate()
+    {
+        if (animator != null)
+        {
+            Vector2 delta = (Vector2)transform.position - prevPosition;
+            if (isMoving && delta.sqrMagnitude > 0.0001f)
+            {
+                int dirVal;
+                if (Mathf.Abs(delta.x) >= Mathf.Abs(delta.y))
+                    dirVal = delta.x > 0 ? 3 : 2;
+                else
+                    dirVal = delta.y > 0 ? 1 : 0;
+                animator.SetInteger("Direction", dirVal);
+            }
+        }
+        prevPosition = transform.position;
+
+        // 堅守：每幀累積額外充能
+        if (isStandfast)
+        {
+            standfastChargeAccum += standfastExtraChargePerSecond * Time.deltaTime;
+            if (standfastChargeAccum >= 1f)
+            {
+                int give = Mathf.FloorToInt(standfastChargeAccum);
+                GainSkillCharge(give);
+                standfastChargeAccum -= give;
+            }
+        }
+        else
+        {
+            standfastChargeAccum = 0f;
+        }
+    }
 
     protected override void OnMoveStart()
     {
@@ -85,7 +150,13 @@ public class TideTitan : Player
         if (isStandfast) damage *= 0.5f;
         base.TakeDamage(damage);
 
-        if (isTidalCounter && health > 0f && attackTimer <= 0f)
+        // 快照反擊狀態（GainSkillCharge 可能觸發 UseSkill 改變 isTidalCounter）
+        bool shouldCounter = isTidalCounter && health > 0f;
+
+        if (health > 0f)
+            GainSkillCharge(damage * skillChargeOnDamageRatio);
+
+        if (shouldCounter)
             TidalCounterReact();
     }
 
@@ -93,7 +164,8 @@ public class TideTitan : Player
 
     protected override void Attack(GameObject target)
     {
-        if (isStandfast) return; // 堅守中封鎖普攻
+        // 堅守不封鎖普攻，但攻擊力 -20%
+        float effectiveAttack = isStandfast ? attack * standfastAttackMultiplier : attack;
 
         if (animator != null)
         {
@@ -106,7 +178,7 @@ public class TideTitan : Player
         CharacterBase enemy = target.GetComponent<CharacterBase>();
         if (enemy == null) return;
 
-        enemy.TakeDamage(attack);
+        enemy.TakeDamage(effectiveAttack);
         StartCoroutine(ResetAnimatorSpeed(attackTime));
     }
 
@@ -120,92 +192,159 @@ public class TideTitan : Player
 
     protected override void UseSkill()
     {
-        ExitCurrentSkills();
+        // 技能1：潮汐反擊（最優先，每次 UseSkill 都推進狀態機，不阻擋其他技能）
+        AdvanceTidalCounter();
 
-        // 技能1：堅守 — 本週期掉血 ≥ 30% maxHP
-        if (healthSnapshot - health >= maxHealth * 0.30f)
-        {
-            ActivateStandfast();
-            healthSnapshot = health;
-            return;
-        }
-
-        // 技能2：深海庇護 — 範圍內敵人 ≥ 範圍內友方
+        // 技能2：深海庇護（第二優先）
         if (CountEnemiesInRange() >= CountAlliesInRange())
         {
+            DeactivateStandfast();
             ActivateSanctuary();
-            healthSnapshot = health;
             return;
         }
 
-        // 技能3：潮汐反擊（預設）
-        ActivateTidalCounter();
-        healthSnapshot = health;
-    }
-
-    private void ExitCurrentSkills()
-    {
-        isStandfast    = false;
-        isTidalCounter = false;
+        // 技能3：堅守（預設 fallback）
         ExitSanctuary();
+        ActivateStandfast();
     }
 
-    // ─── 技能1：堅守 ──────────────────────────────────────────────
+    // ─── 技能1：潮汐反擊 ─────────────────────────────────────────
 
-    private void ActivateStandfast()
+    private void AdvanceTidalCounter()
     {
-        isStandfast = true;
-        Debug.Log($"{unitName} 堅守！減傷 50%，封鎖普攻");
+        // 冷卻中：消耗一次冷卻機會
+        if (tidalCounterCooldown > 0)
+        {
+            tidalCounterCooldown--;
+            if (tidalCounterCooldown <= 0)
+                Debug.Log($"{unitName} 潮汐反擊冷卻結束，可再次發動");
+            return;
+        }
+
+        // 啟動（若尚未啟動）
+        if (!isTidalCounter)
+        {
+            isTidalCounter       = true;
+            tidalCounterUsesLeft = 3;
+            Debug.Log($"{unitName} 潮汐反擊發動！持續 3 次技能施放週期");
+        }
+
+        // 消耗一次並立即反攻
+        tidalCounterUsesLeft--;
+        Debug.Log($"{unitName} 潮汐反擊剩餘 {tidalCounterUsesLeft} 次");
+        TidalCounterReact();
+
+        if (tidalCounterUsesLeft <= 0)
+        {
+            isTidalCounter       = false;
+            tidalCounterCooldown = 1;
+            Debug.Log($"{unitName} 潮汐反擊結束，冷卻 1 次技能施放");
+        }
+    }
+
+    private void TidalCounterReact()
+    {
+        Heal(maxHealth * 0.01f);
+        GameObject targetObj = (lockedTarget != null && lockedTarget.activeInHierarchy)
+            ? lockedTarget : FindNearestEnemyObj();
+        if (targetObj == null) return;
+
+        CharacterBase enemy = targetObj.GetComponent<CharacterBase>();
+        if (enemy != null)
+        {
+            if (animator != null)
+            {
+                FaceTarget(targetObj);
+                animator.SetTrigger("Attack");
+            }
+            enemy.TakeDamage(attack * 0.75f);
+            Debug.Log($"{unitName} 潮汐反擊！回復 5% HP 並反攻 {enemy.unitName}");
+        }
+        attackTimer = attackTime;
     }
 
     // ─── 技能2：深海庇護 ──────────────────────────────────────────
 
     private void ActivateSanctuary()
     {
+        if (sanctuaryCoroutine != null)
+        {
+            StopCoroutine(sanctuaryCoroutine);
+            sanctuaryCoroutine = null;
+        }
+
         isSanctuaryActive = true;
+        shieldEffects.Clear();
+
         foreach (GameObject p in GameObject.FindGameObjectsWithTag("Player"))
         {
-            if (p == gameObject || !p.activeInHierarchy) continue;
+            if (!p.activeInHierarchy) continue;
             CharacterBase ally = p.GetComponent<CharacterBase>();
-            if (ally != null)
-                ally.teamDamageReduction = Mathf.Clamp01(ally.teamDamageReduction + sanctuaryReduction);
+            ally?.AddShield(ally.maxHealth * sanctuaryShieldRatio);
+            SpawnShieldEffect(p.transform);
         }
-        Debug.Log($"{unitName} 深海庇護！隊友全體減傷 {sanctuaryReduction:P0}");
+        Debug.Log($"{unitName} 深海庇護！隊友獲得最大生命值 {sanctuaryShieldRatio:P0} 護盾，持續 {sanctuaryDuration} 秒");
+
+        sanctuaryCoroutine = StartCoroutine(SanctuaryTimer());
+    }
+
+    private IEnumerator SanctuaryTimer()
+    {
+        yield return new WaitForSeconds(sanctuaryDuration);
+        ExitSanctuary();
     }
 
     private void ExitSanctuary()
     {
         if (!isSanctuaryActive) return;
         isSanctuaryActive = false;
+
+        if (sanctuaryCoroutine != null)
+        {
+            StopCoroutine(sanctuaryCoroutine);
+            sanctuaryCoroutine = null;
+        }
+
         foreach (GameObject p in GameObject.FindGameObjectsWithTag("Player"))
         {
-            if (p == gameObject || !p.activeInHierarchy) continue;
+            if (!p.activeInHierarchy) continue;
             CharacterBase ally = p.GetComponent<CharacterBase>();
-            if (ally != null)
-                ally.teamDamageReduction = Mathf.Max(ally.teamDamageReduction - sanctuaryReduction, 0f);
+            ally?.ClearShield();
         }
+
+        foreach (GameObject fx in shieldEffects)
+            if (fx != null) Destroy(fx);
+        shieldEffects.Clear();
+
         Debug.Log($"{unitName} 深海庇護解除");
     }
 
-    // ─── 技能3：潮汐反擊 ─────────────────────────────────────────
-
-    private void ActivateTidalCounter()
+    private void SpawnShieldEffect(Transform allyTransform)
     {
-        isTidalCounter = true;
-        Debug.Log($"{unitName} 潮汐反擊就緒！受傷時回血 5% 並立刻反攻");
+        if (shieldEffectPrefab == null) return;
+        GameObject fx = Instantiate(shieldEffectPrefab, allyTransform.position, Quaternion.identity);
+        fx.GetComponent<ShieldEffect>()?.Init(allyTransform, sanctuaryDuration);
+        shieldEffects.Add(fx);
     }
 
-    private void TidalCounterReact()
-    {
-        Heal(maxHealth * 0.05f);
-        GameObject target = FindNearestEnemyObj();
-        if (target == null) return;
+    // ─── 技能3：堅守 ──────────────────────────────────────────────
 
-        Attack(target);
-        attackTimer = attackTime;
+    private void ActivateStandfast()
+    {
+        if (isStandfast) return;
+        isStandfast          = true;
+        standfastChargeAccum = 0f;
+        Debug.Log($"{unitName} 堅守！減傷 50%、攻擊力 -20%、加速充能");
     }
 
-    // ─── 輔助方法 ─────────────────────────────────────────────────
+    private void DeactivateStandfast()
+    {
+        if (!isStandfast) return;
+        isStandfast          = false;
+        standfastChargeAccum = 0f;
+    }
+
+    // ─── 輔助：計數 ────────────────────────────────────────────────
 
     private int CountEnemiesInRange()
     {
@@ -233,6 +372,123 @@ public class TideTitan : Player
         return count;
     }
 
+    // ─── 移動目標選取 ──────────────────────────────────────────────
+
+    protected override GameObject FindNearestEnemy()
+    {
+        if (lockedTarget != null && lockedTarget.activeInHierarchy)
+            return lockedTarget;
+
+        lockedTarget = Random.value < aggressiveChance ? FindAggressiveTarget() : FindDefensiveTarget();
+        return lockedTarget ?? FindNearestEnemyObj();
+    }
+
+    /// <summary>
+    /// 進攻型：可擊殺 → 血量最低 → 離自己最遠（大評分差確保嚴格優先序）
+    /// </summary>
+    private GameObject FindAggressiveTarget()
+    {
+        GameObject[] enemies  = GameObject.FindGameObjectsWithTag("Enemy");
+        GameObject   best     = null;
+        float        bestScore = float.NegativeInfinity;
+        Vector2      myPos    = transform.position;
+
+        foreach (GameObject e in enemies)
+        {
+            if (e == null || !e.activeInHierarchy) continue;
+            CharacterBase cb = e.GetComponent<CharacterBase>();
+            if (cb == null) continue;
+
+            float score = 0f;
+            if (cb.health <= attack) score += 10000f;          // 可擊殺
+            score += 5000f / (cb.health + 1f);                 // 血量越低越高分
+            score += Vector2.Distance(e.transform.position, myPos); // 離自己越遠越高分
+            if (score > bestScore) { bestScore = score; best = e; }
+        }
+        return best ?? FindNearestEnemyObj();
+    }
+
+    /// <summary>
+    /// 防守型：威脅被圍攻友軍的敵人 → 威脅最近隊友的敵人 → 最近敵人
+    /// </summary>
+    private GameObject FindDefensiveTarget()
+    {
+        GameObject besiegedAlly = FindMostBesiegedAlly();
+        if (besiegedAlly != null)
+        {
+            GameObject threat = FindNearestEnemyTo(besiegedAlly.transform.position);
+            if (threat != null) return threat;
+        }
+
+        GameObject nearestAlly = FindNearestAllyExcludeSelf();
+        if (nearestAlly != null)
+        {
+            GameObject threat = FindNearestEnemyTo(nearestAlly.transform.position);
+            if (threat != null) return threat;
+        }
+
+        return FindNearestEnemyObj();
+    }
+
+    /// <summary>找被最多敵人包圍的友軍（至少 2 名敵人才算圍攻）。</summary>
+    private GameObject FindMostBesiegedAlly()
+    {
+        GameObject[] allies  = GameObject.FindGameObjectsWithTag("Player");
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+        GameObject bestAlly = null;
+        int        maxCount = 1; // 門檻：超過 1 才算「被圍攻」
+
+        foreach (GameObject ally in allies)
+        {
+            if (ally == null || !ally.activeInHierarchy) continue;
+            Vector2 allyPos = ally.transform.position;
+            int count = 0;
+            foreach (GameObject e in enemies)
+            {
+                if (e == null || !e.activeInHierarchy) continue;
+                if (Vector2.Distance(e.transform.position, allyPos) <= sanctuaryRadius)
+                    count++;
+            }
+            if (count > maxCount) { maxCount = count; bestAlly = ally; }
+        }
+        return bestAlly;
+    }
+
+    /// <summary>找距離 TideTitan 最近的隊友（排除自身）。</summary>
+    private GameObject FindNearestAllyExcludeSelf()
+    {
+        GameObject[] allies  = GameObject.FindGameObjectsWithTag("Player");
+        GameObject   nearest = null;
+        float        minDist = Mathf.Infinity;
+        Vector2      myPos   = transform.position;
+
+        foreach (GameObject p in allies)
+        {
+            if (p == null || !p.activeInHierarchy || p == gameObject) continue;
+            float d = Vector2.Distance(p.transform.position, myPos);
+            if (d < minDist) { minDist = d; nearest = p; }
+        }
+        return nearest;
+    }
+
+    /// <summary>找距離指定位置最近的存活敵人。</summary>
+    private GameObject FindNearestEnemyTo(Vector2 pos)
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        GameObject   nearest = null;
+        float        minDist = Mathf.Infinity;
+
+        foreach (GameObject e in enemies)
+        {
+            if (e == null || !e.activeInHierarchy) continue;
+            float d = Vector2.Distance(e.transform.position, pos);
+            if (d < minDist) { minDist = d; nearest = e; }
+        }
+        return nearest;
+    }
+
+    /// <summary>找距離 TideTitan 自身最近的存活敵人。</summary>
     private GameObject FindNearestEnemyObj()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");

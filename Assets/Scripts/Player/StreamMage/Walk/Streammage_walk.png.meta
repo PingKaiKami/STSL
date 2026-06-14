@@ -1,0 +1,642 @@
+fileFormatVersion: 2
+guid: dab56d34bf50bf046b72647b884867ff
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Streammage_walk_0
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 957
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.54276013, y: 0.12584992}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd148aa774783444ca47e7224f88baab
+      internalID: -9498826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_1
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 957
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49287313, y: 0.13208593}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23739d51d3cb82348a65e9aca5eb882d
+      internalID: 956547293
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_2
+      rect:
+        serializedVersion: 2
+        x: 409
+        y: 956
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.51425344, y: 0.12584992}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4874aa2632f607b4da38ac91694ec9b2
+      internalID: -658536360
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_3
+      rect:
+        serializedVersion: 2
+        x: 622
+        y: 954
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.4429862, y: 0.13208567}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff980bd8f5bfded4b9b96d360f13fa52
+      internalID: -1089533173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_4
+      rect:
+        serializedVersion: 2
+        x: 813
+        y: 954
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.46436653, y: 0.16326472}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b1c662be31515543bf2c1f11b94ddaa
+      internalID: 77249318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_5
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 954
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.507126, y: 0.12584992}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7b7960ab0dae8e478870d9e565ff3f1
+      internalID: 1456715436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_6
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 673
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.54988664, y: 0.100906625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b318a601d5066441ad6b539451ad8b5
+      internalID: 2139477392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_7
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 673
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5356335, y: 0.10714264}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 336802f5ed4ca824e80b857d6c1d3695
+      internalID: -1051580743
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_8
+      rect:
+        serializedVersion: 2
+        x: 412
+        y: 673
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.52138, y: 0.14455745}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c9b414d99d3ddc41b536854878f7b3a
+      internalID: 1245287716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_9
+      rect:
+        serializedVersion: 2
+        x: 611
+        y: 671
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5356329, y: 0.088435106}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 683f667f30b0e5b4e8f46914342fca09
+      internalID: 1814079224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_10
+      rect:
+        serializedVersion: 2
+        x: 818
+        y: 671
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.46436653, y: 0.119614154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4af2ba164e1c02f498b10190a01de770
+      internalID: -1308279889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_11
+      rect:
+        serializedVersion: 2
+        x: 1018
+        y: 671
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.43585962, y: 0.13832168}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b296db99bbd7e54fb9de73ee99464e4
+      internalID: -625978897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_12
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 391
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.53563327, y: 0.06349182}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7cae9f8144ae9774ab8a6842a73cd9dd
+      internalID: 1948551343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_13
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 391
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.45724037, y: 0.100906625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05e8c1cb0b4d5244781c5c70ba84e76c
+      internalID: -1307675312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_14
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 391
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.4358599, y: 0.05725581}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d61f8fcd281cd74785045f2f22b0fce
+      internalID: 1206536433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_15
+      rect:
+        serializedVersion: 2
+        x: 613
+        y: 390
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.4786194, y: 0.069727324}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96769e6b7a2a7dc43abc851ef758b6aa
+      internalID: 159772586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_16
+      rect:
+        serializedVersion: 2
+        x: 812
+        y: 388
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.47862026, y: 0.100906625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c074ab501b47d2946a3dbcd1a7b5eaad
+      internalID: 1743497817
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_17
+      rect:
+        serializedVersion: 2
+        x: 1015
+        y: 387
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.45723993, y: 0.08219948}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a398f2a57e307d041b816ff3a368e4cd
+      internalID: 1974208666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_18
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 97
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5213802, y: 0.12585}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3041a65cfea0b494b93daeb1da7d057c
+      internalID: 582891194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_19
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 101
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.45723993, y: 0.08843514}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 119f14c5e1582984bb646a9d16a2e526
+      internalID: 1471417293
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_20
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 98
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.4714931, y: 0.06972745}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6098841626ec5c4b9ce40228230e00e
+      internalID: 789751435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_21
+      rect:
+        serializedVersion: 2
+        x: 614
+        y: 98
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5142529, y: 0.12584998}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb625bba0540a304bbcf79f63490499e
+      internalID: -563501118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_22
+      rect:
+        serializedVersion: 2
+        x: 812
+        y: 98
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.5, y: 0.08219894}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7951cc84ad233c14a9fbac7e81c2f844
+      internalID: -1404706461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Streammage_walk_23
+      rect:
+        serializedVersion: 2
+        x: 1015
+        y: 101
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.4999994, y: 0.100906625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f7532d2364cac946b84ba34defcff38
+      internalID: -364133323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Streammage_walk_0: -9498826
+      Streammage_walk_1: 956547293
+      Streammage_walk_10: -1308279889
+      Streammage_walk_11: -625978897
+      Streammage_walk_12: 1948551343
+      Streammage_walk_13: -1307675312
+      Streammage_walk_14: 1206536433
+      Streammage_walk_15: 159772586
+      Streammage_walk_16: 1743497817
+      Streammage_walk_17: 1974208666
+      Streammage_walk_18: 582891194
+      Streammage_walk_19: 1471417293
+      Streammage_walk_2: -658536360
+      Streammage_walk_20: 789751435
+      Streammage_walk_21: -563501118
+      Streammage_walk_22: -1404706461
+      Streammage_walk_23: -364133323
+      Streammage_walk_3: -1089533173
+      Streammage_walk_4: 77249318
+      Streammage_walk_5: 1456715436
+      Streammage_walk_6: 2139477392
+      Streammage_walk_7: -1051580743
+      Streammage_walk_8: 1245287716
+      Streammage_walk_9: 1814079224
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

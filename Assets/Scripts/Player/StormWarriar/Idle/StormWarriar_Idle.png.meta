@@ -1,0 +1,642 @@
+fileFormatVersion: 2
+guid: 3fe91128ab43fe945b80604e73052d30
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: StormWarriar_Idle_0
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 967
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.46436664, y: 0.069727324}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd949e932d4a3994798a04ffbc8b4fe9
+      internalID: 1726997203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_1
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 966
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.46436664, y: 0.069727324}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 358eebcabc041404c8db65dd282c8360
+      internalID: -1395722174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_2
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 963
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.50712657, y: 0.06972682}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9280f9776bcc12c489c76dd26ca4a3f0
+      internalID: -2023287787
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_3
+      rect:
+        serializedVersion: 2
+        x: 629
+        y: 964
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.4714928, y: 0.06972631}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e81f40d6abcc8e4b8caa689acf55bd0
+      internalID: 98631495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_4
+      rect:
+        serializedVersion: 2
+        x: 819
+        y: 964
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.4714928, y: 0.06972631}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: becfc3208743c9a45b55c9b20628fa87
+      internalID: 129405670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_5
+      rect:
+        serializedVersion: 2
+        x: 1028
+        y: 958
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999884, y: 0.0697258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9d4eae1f6b79de42aab2d98e9bb544f
+      internalID: -1094282273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_6
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 677
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999884, y: 0.0697258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1539d2ddf059e94bb5c646589cc2354
+      internalID: 730166107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_7
+      rect:
+        serializedVersion: 2
+        x: 205
+        y: 676
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999884, y: 0.0697258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f48e155d38cd7543ab7b156d213e1b1
+      internalID: 630550378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_8
+      rect:
+        serializedVersion: 2
+        x: 413
+        y: 676
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999884, y: 0.0697258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5fbd5011e7119c46b4b4ffbcddf3002
+      internalID: 445533745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_9
+      rect:
+        serializedVersion: 2
+        x: 612
+        y: 673
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999884, y: 0.0697258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b4eee9140713b9c46bf03ad95a636d7b
+      internalID: 1058217060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_10
+      rect:
+        serializedVersion: 2
+        x: 807
+        y: 676
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999884, y: 0.0697258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6cfe4d2b0a16af14db0d80cb1257fe0b
+      internalID: 551123150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_11
+      rect:
+        serializedVersion: 2
+        x: 1008
+        y: 675
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999884, y: 0.0697258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62723ef74f59eff4495440c784faac34
+      internalID: 1092318022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_12
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 376
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999884, y: 0.0697258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11be4ec9d2577c14c9c65b000eb9b65a
+      internalID: 1126190812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_13
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 377
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999884, y: 0.0697258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b09212fd322197444a65825737f86019
+      internalID: -303587637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_14
+      rect:
+        serializedVersion: 2
+        x: 412
+        y: 373
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999884, y: 0.0697258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed658ba503a09324498e718df12baf8b
+      internalID: -1068829571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_15
+      rect:
+        serializedVersion: 2
+        x: 611
+        y: 372
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999884, y: 0.0697258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aeaefcd113d158e40ab3279a7d7ac2ed
+      internalID: 1348999932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_16
+      rect:
+        serializedVersion: 2
+        x: 807
+        y: 375
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999884, y: 0.0697258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d204dcee6eff43149a9ec4fedbfe5b68
+      internalID: -996374913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_17
+      rect:
+        serializedVersion: 2
+        x: 1012
+        y: 374
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999884, y: 0.0697258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c906628c931e8d48a55da40189cd248
+      internalID: -2027584867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_18
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 91
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999884, y: 0.0697258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42d5ece813c432845bdbd2890d7dd47c
+      internalID: -1174579116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_19
+      rect:
+        serializedVersion: 2
+        x: 212
+        y: 88
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999884, y: 0.0697258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd08003d00038154d9824c18a96cc323
+      internalID: -429285332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_20
+      rect:
+        serializedVersion: 2
+        x: 422
+        y: 88
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999884, y: 0.0697258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f24d877c661ba024a8c912c839b76da3
+      internalID: -148471204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_21
+      rect:
+        serializedVersion: 2
+        x: 621
+        y: 84
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999884, y: 0.0697258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1cadf58215bb8b46aca6958b014fd98
+      internalID: -120754754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_22
+      rect:
+        serializedVersion: 2
+        x: 825
+        y: 85
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999884, y: 0.0697258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36c9b9cb7f372b0419c7d004b5e57034
+      internalID: 107495542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: StormWarriar_Idle_23
+      rect:
+        serializedVersion: 2
+        x: 1036
+        y: 84
+        width: 210
+        height: 240
+      alignment: 9
+      pivot: {x: 0.49999884, y: 0.0697258}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3e4c02a2cf30a34db6e0138c87b2d1f
+      internalID: -1547730728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      StormWarriar_Idle_0: 1726997203
+      StormWarriar_Idle_1: -1395722174
+      StormWarriar_Idle_10: 551123150
+      StormWarriar_Idle_11: 1092318022
+      StormWarriar_Idle_12: 1126190812
+      StormWarriar_Idle_13: -303587637
+      StormWarriar_Idle_14: -1068829571
+      StormWarriar_Idle_15: 1348999932
+      StormWarriar_Idle_16: -996374913
+      StormWarriar_Idle_17: -2027584867
+      StormWarriar_Idle_18: -1174579116
+      StormWarriar_Idle_19: -429285332
+      StormWarriar_Idle_2: -2023287787
+      StormWarriar_Idle_20: -148471204
+      StormWarriar_Idle_21: -120754754
+      StormWarriar_Idle_22: 107495542
+      StormWarriar_Idle_23: -1547730728
+      StormWarriar_Idle_3: 98631495
+      StormWarriar_Idle_4: 129405670
+      StormWarriar_Idle_5: -1094282273
+      StormWarriar_Idle_6: 730166107
+      StormWarriar_Idle_7: 630550378
+      StormWarriar_Idle_8: 445533745
+      StormWarriar_Idle_9: 1058217060
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
