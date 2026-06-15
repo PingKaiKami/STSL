@@ -20,7 +20,7 @@ public class MapUIRenderer : MonoBehaviour
     [Header("Room Weights")]
     public float shopWeight = 5f;
     public float restWeight = 12f;
-    public float eventWeight = 22f;
+    public float redistributedQuestionMarkWeight = 22f;
     public float eliteWeightAct1 = 8f;
     public float eliteWeightAfterAct1 = 12f;
 
@@ -68,7 +68,6 @@ public class MapUIRenderer : MonoBehaviour
     public Color eliteColor = new Color(0.95f, 0.55f, 0.55f, 1f);
     public Color shopColor = new Color(0.95f, 0.82f, 0.45f, 1f);
     public Color restColor = new Color(0.55f, 0.85f, 0.95f, 1f);
-    public Color eventColor = new Color(0.72f, 0.62f, 0.95f, 1f);
     public Color chestColor = new Color(0.85f, 0.65f, 0.35f, 1f);
     public Color bossColor = new Color(0.9f, 0.25f, 0.25f, 1f);
     public Color lineColor = new Color(0.25f, 0.25f, 0.25f, 1f);
@@ -155,7 +154,7 @@ public class MapUIRenderer : MonoBehaviour
         config.actIndex = actIndex;
         config.shopWeight = shopWeight;
         config.restWeight = restWeight;
-        config.eventWeight = eventWeight;
+        config.redistributedQuestionMarkWeight = redistributedQuestionMarkWeight;
         config.eliteWeightAct1 = eliteWeightAct1;
         config.eliteWeightAfterAct1 = eliteWeightAfterAct1;
         config.minimumShopCount = minimumShopCount;
@@ -586,9 +585,6 @@ public class MapUIRenderer : MonoBehaviour
             case RoomType.Rest:
                 return restColor;
 
-            case RoomType.Event:
-                return eventColor;
-
             case RoomType.Chest:
                 return chestColor;
 
@@ -615,9 +611,6 @@ public class MapUIRenderer : MonoBehaviour
 
             case RoomType.Rest:
                 return "Rest";
-
-            case RoomType.Event:
-                return "?";
 
             case RoomType.Chest:
                 return "Chest";
@@ -680,64 +673,6 @@ public class MapUIRenderer : MonoBehaviour
             case RoomType.Chest:
                 SceneManager.LoadScene(chestSceneName);
                 break;
-
-            case RoomType.Event:
-                LoadRandomEventScene();
-                break;
-        }
-    }
-
-    private void LoadRandomEventScene()
-    {
-        int randomSceneIndex = Random.Range(0, 4);
-        string selectedSceneName;
-
-        switch (randomSceneIndex)
-        {
-            case 0:
-                selectedSceneName = shopSceneName;
-                break;
-
-            case 1:
-                selectedSceneName = battleSceneName;
-                break;
-
-            case 2:
-                selectedSceneName = restSceneName;
-                break;
-
-            default:
-                selectedSceneName = chestSceneName;
-                break;
-        }
-
-        Debug.Log("Event room selected random scene: " + selectedSceneName);
-        SceneManager.LoadScene(selectedSceneName);
-        ApplyGameStateForScene(selectedSceneName);
-    }
-
-    private void ApplyGameStateForScene(string sceneName)
-    {
-        if (GameManager.Instance == null)
-        {
-            return;
-        }
-
-        if (sceneName == battleSceneName)
-        {
-            GameManager.Instance.currentState = GameState.Preparation;
-            return;
-        }
-
-        if (sceneName == shopSceneName)
-        {
-            GameManager.Instance.currentState = GameState.Shopping;
-            return;
-        }
-
-        if (sceneName == restSceneName)
-        {
-            GameManager.Instance.currentState = GameState.Rest;
         }
     }
 

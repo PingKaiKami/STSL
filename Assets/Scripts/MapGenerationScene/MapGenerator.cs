@@ -8,7 +8,6 @@ public enum RoomType
     Elite,
     Shop,
     Rest,
-    Event,
     Chest,
     Boss
 }
@@ -120,7 +119,7 @@ public class MapGenerationConfig
 
     public float shopWeight = 5f;
     public float restWeight = 12f;
-    public float eventWeight = 22f;
+    public float redistributedQuestionMarkWeight = 22f;
     public float eliteWeightAct1 = 8f;
     public float eliteWeightAfterAct1 = 12f;
 
@@ -484,7 +483,7 @@ public static class SlayLikeMapGenerator
         bool canPlacePriorityRoom = !HasParentPriorityRoom(node) && !HasChildPriorityRoom(node);
         bool parentHasShop = HasParentOfType(node, RoomType.Shop);
         bool parentHasRest = HasParentOfType(node, RoomType.Rest);
-        bool parentHasEvent = HasParentOfType(node, RoomType.Event);
+        bool parentHasChest = HasParentOfType(node, RoomType.Chest);
         bool parentHasElite = HasParentOfType(node, RoomType.Elite);
 
         float eliteWeight;
@@ -498,13 +497,18 @@ public static class SlayLikeMapGenerator
             eliteWeight = config.eliteWeightAfterAct1;
         }
 
+        float questionMarkWeight = Mathf.Max(0f, config.redistributedQuestionMarkWeight);
+        float redistributedWeight = questionMarkWeight / 4f;
         float normalWeight = 100f
             - config.shopWeight
             - config.restWeight
-            - config.eventWeight
+            - questionMarkWeight
             - eliteWeight;
 
-        normalWeight = Mathf.Max(1f, normalWeight);
+        normalWeight = Mathf.Max(1f, normalWeight) + redistributedWeight;
+        float shopWeight = config.shopWeight + redistributedWeight;
+        float restWeight = config.restWeight + redistributedWeight;
+        float chestWeight = redistributedWeight;
 
         List<RoomWeight> weights = new List<RoomWeight>();
 
@@ -515,19 +519,19 @@ public static class SlayLikeMapGenerator
             weights.Add(new RoomWeight(RoomType.Elite, eliteWeight));
         }
 
-        if (!parentHasEvent)
-        {
-            weights.Add(new RoomWeight(RoomType.Event, config.eventWeight));
-        }
-
         if (canPlacePriorityRoom && !parentHasShop)
         {
-            weights.Add(new RoomWeight(RoomType.Shop, config.shopWeight));
+            weights.Add(new RoomWeight(RoomType.Shop, shopWeight));
         }
 
         if (canPlacePriorityRoom && !parentHasRest)
         {
-            weights.Add(new RoomWeight(RoomType.Rest, config.restWeight));
+            weights.Add(new RoomWeight(RoomType.Rest, restWeight));
+        }
+
+        if (canPlacePriorityRoom && !parentHasChest && chestWeight > 0f)
+        {
+            weights.Add(new RoomWeight(RoomType.Chest, chestWeight));
         }
 
         float totalWeight = 0f;
