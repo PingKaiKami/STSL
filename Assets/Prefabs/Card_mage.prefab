@@ -368,8 +368,8 @@ MonoBehaviour:
   moveUpOffset: 1.5
   prefab: {fileID: 1153602903333247467, guid: 873da7ce8677fe84db66809fa30128ec, type: 3}
   cardName: StreamMage
-  att: 40
-  def: 0
+  att: 25
+  def: 2
   hp: 100
   maxHp: 100
   sourceCardPrefab: {fileID: 1153602903333247467, guid: 873da7ce8677fe84db66809fa30128ec, type: 3}

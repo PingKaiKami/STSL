@@ -98,8 +98,8 @@ MonoBehaviour:
   moveUpOffset: 1.5
   prefab: {fileID: 1153602903333247467, guid: 182ba3c4691448b4ebb2167b26f1b3eb, type: 3}
   cardName: TideTitan
-  att: 10
-  def: 10
+  att: 15
+  def: 8
   hp: 100
   maxHp: 100
   sourceCardPrefab: {fileID: 1153602903333247467, guid: 182ba3c4691448b4ebb2167b26f1b3eb, type: 3}

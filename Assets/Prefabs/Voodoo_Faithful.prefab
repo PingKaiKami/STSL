@@ -60,8 +60,8 @@ MonoBehaviour:
   unitName: Faithful
   maxHealth: 0
   health: 100
-  attack: 15
-  defense: 8
+  attack: 10
+  defense: 10
   teamDamageReduction: 0
   maxSearchDepth: 20
   animator: {fileID: 1055506580434182341}

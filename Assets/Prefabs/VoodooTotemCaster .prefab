@@ -108,7 +108,7 @@ MonoBehaviour:
   maxHealth: 0
   health: 50
   attack: 10
-  defense: 10
+  defense: 15
   teamDamageReduction: 0
   maxSearchDepth: 50
   animator: {fileID: 2113450388508722358}
