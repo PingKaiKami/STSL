@@ -134,7 +134,7 @@ public class CharacterBase : MonoBehaviour
         if (actualDamage > 0f) DamagePopup.Create(transform.position, actualDamage);
         UpdateHealthBar();
 
-        Debug.Log($"{unitName} 受到了 {actualDamage} 點傷害，剩餘血量：{health}");
+        // Debug.Log($"{unitName} 受到了 {actualDamage} 點傷害，剩餘血量：{health}");
 
         if (health <= 0f)
         {

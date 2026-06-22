@@ -72,7 +72,9 @@ public class MapGenerationSceneBootstrap : MonoBehaviour
         renderer.statusText = statusText;
         renderer.playerInfoText = playerInfoText;
         renderer.generateButton = newRunButton;
-        renderer.battleSceneName = "BattleScene";
+        renderer.normalBattleSceneName = "BattleScene_normal";
+        renderer.eliteBattleSceneName = "BattleScene_elite";
+        renderer.bossBattleSceneName = "BattleScene_boss";
         renderer.shopSceneName = "ShopScene";
         renderer.restSceneName = "RestScene";
         renderer.chestSceneName = "ChestScene";

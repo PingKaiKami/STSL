@@ -155,6 +155,14 @@ MonoBehaviour:
   placeableArea: {fileID: 0}
   playerCount: 0
   enemyCount: 0
+  isDebug: 0
+  mapSceneName: MapGenerationScene
+  failSceneName: FailScene
+  finalWinSceneName: FinalWinScene
+  victoryGoldReward: 20
+  enemyRegistrationRules: []
+  defaultEnemyRegistrationMode: 0
+  defaultPlayerRegistrationMode: 0
 --- !u!4 &127264358
 Transform:
   m_ObjectHideFlags: 0
@@ -268,6 +276,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spacing: 2.5
+  basicCard: {fileID: 0}
+  warriorPrefab: {fileID: 0}
 --- !u!4 &872143137
 Transform:
   m_ObjectHideFlags: 0
@@ -316,6 +326,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapSceneName: MapGenerationScene
+  cardPrice: 45
+  swordPrice: 20
+  shieldPrice: 40
+  armorPrice: 10
+  swordAttackBonus: 5
+  shieldDefenseBonus: 5
+  armorMaxHpBonus: 20
+  goldText: {fileID: 0}
+  deckText: {fileID: 0}
+  statusText: {fileID: 0}
+  itemRoot: {fileID: 0}
+  leaveButton: {fileID: 0}
+  merchandiseStartPosition: {x: -6, y: 1.1, z: 0}
+  merchandiseSpacing: 3
+  merchandiseSize: {x: 2.2, y: 3.2}
+  merchandiseBackgroundColor: {r: 1, g: 1, b: 1, a: 1}
+  merchandiseBorderColor: {r: 0.37, g: 0.12, b: 0, a: 1}
+  merchandiseTextColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!4 &908365738
 Transform:
   m_ObjectHideFlags: 0
@@ -985,6 +1013,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db706b3c0a1c7e64aaedaeaebff6b031, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DefaultGold: 0
   money: 0
   health: 0
 --- !u!4 &1822990601
@@ -1514,6 +1543,7 @@ MonoBehaviour:
   att: 10
   def: 0
   hp: 0
+  maxHp: 0
 --- !u!1 &9050934414548087054
 GameObject:
   m_ObjectHideFlags: 0

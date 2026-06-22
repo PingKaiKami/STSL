@@ -12,7 +12,7 @@ public class BattleSceneController : MonoBehaviour
     public string finalWinSceneName = "FinalWinScene";
 
     [Header("Rewards")]
-    public int victoryGoldReward = 20;
+    public int victoryGoldReward = 10;
 
     public void WinBattleForTest()
     {
@@ -24,7 +24,17 @@ public class BattleSceneController : MonoBehaviour
             HandManager.Instance.RecallAllPlayersToHand();
         }
 
-        PlayerManager.EnsureExists().ModifyMoney(victoryGoldReward);
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        
+        if(currentSceneName == "BattleScene_normal")
+        {
+            PlayerManager.EnsureExists().ModifyMoney(victoryGoldReward);
+        }
+        else
+        {
+            PlayerManager.EnsureExists().ModifyMoney(victoryGoldReward * 2);
+        }
+
         runState.CompletePendingRoom();
         GameManager.Instance.currentState = GameState.MapSelection;
 
@@ -39,35 +49,9 @@ public class BattleSceneController : MonoBehaviour
 
     public void LoseBattleForTest()
     {
-        RunStateManager runState = RunStateManager.EnsureExists();
-        PlayerManager playerManager = PlayerManager.EnsureExists();
-        bool hasLivesLeft = playerManager.LoseLife();
-
-        if (HandManager.Instance != null)
-        {
-            HandManager.Instance.RecallAllPlayersToHand();
-        }
-
-        if (!hasLivesLeft)
-        {
-            GameManager.Instance.currentState = GameState.Menu;
-            SceneManager.LoadScene(failSceneName);
-            Debug.Log("Game Over");
-            return;
-        }
-
-        if (runState.IsPendingBossRoom())
-        {
-            Debug.Log("Player lives after loss: " + playerManager.health);
-            GameManager.Instance.currentState = GameState.MapSelection;
-            SceneManager.LoadScene(mapSceneName);
-            return;
-        }
-
-        runState.CompletePendingRoom();
-
-        Debug.Log("Player lives after loss: " + playerManager.health);
-        GameManager.Instance.currentState = GameState.MapSelection;
-        SceneManager.LoadScene(mapSceneName);
+        GameManager.Instance.currentState = GameState.Menu;
+        SceneManager.LoadScene(failSceneName);
+        Debug.Log("Game Over");
+        return;
     }
 }

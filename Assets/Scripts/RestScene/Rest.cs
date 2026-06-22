@@ -10,7 +10,7 @@ public class Rest : MonoBehaviour
     {
         if (HandManager.Instance != null)
         {
-            HandManager.Instance.RestoreAllCardsToFullHealth();
+            HandManager.Instance.RestoreAllCardsHealth();
         }
 
         RunStateManager.EnsureExists().CompletePendingRoom();

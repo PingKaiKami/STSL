@@ -343,6 +343,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c04d3fc4173e45e4ca62f9df5944a934, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &685685862
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 685685864}
+  - component: {fileID: 685685863}
+  m_Layer: 0
+  m_Name: SpeedController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &685685863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685685862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e622132d7e4cc34a873a0eade91748c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3
+--- !u!4 &685685864
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685685862}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &857352963
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,6 +419,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spacing: 2.5
   basicCard: {fileID: 7292975580654577578, guid: d1d39a116b82abc45ae57257c80fff06, type: 3}
+  warriorPrefab: {fileID: 0}
 --- !u!4 &857352965
 Transform:
   m_ObjectHideFlags: 0
@@ -421,6 +467,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db706b3c0a1c7e64aaedaeaebff6b031, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DefaultGold: 0
   money: 0
   health: 0
 --- !u!4 &1383663426
@@ -673,7 +720,14 @@ MonoBehaviour:
   placeableArea: {fileID: 0}
   playerCount: 0
   enemyCount: 0
-  isDebug: 1
+  isDebug: 0
+  mapSceneName: MapGenerationScene
+  failSceneName: FailScene
+  finalWinSceneName: FinalWinScene
+  victoryGoldReward: 10
+  enemyRegistrationRules: []
+  defaultEnemyRegistrationMode: 0
+  defaultPlayerRegistrationMode: 0
 --- !u!4 &1632378207
 Transform:
   m_ObjectHideFlags: 0
@@ -1132,3 +1186,4 @@ SceneRoots:
   - {fileID: 1632378207}
   - {fileID: 857352965}
   - {fileID: 1383663426}
+  - {fileID: 685685864}

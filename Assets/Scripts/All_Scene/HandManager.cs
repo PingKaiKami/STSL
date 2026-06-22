@@ -165,7 +165,7 @@ public class HandManager : MonoBehaviour
         return true;
     }
 
-    public void RestoreAllCardsToFullHealth()
+    public void RestoreAllCardsHealth()
     {
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -178,7 +178,7 @@ public class HandManager : MonoBehaviour
 
             if (card.maxHp > 0f)
             {
-                card.UpdateStats(0f, 0f, card.maxHp - card.hp);
+                card.UpdateStats(0f, 0f, card.maxHp * 0.3f);
             }
         }
 

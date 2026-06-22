@@ -133,12 +133,15 @@ public class Player : CharacterBase
             secondaryDir = diff.x > 0 ? MoveDirection.Right : MoveDirection.Left;
         }
 
-        if (TryMoveWithReservation(primaryDir))
-        {
-            return;
-        }
+        if (TryMoveWithReservation(primaryDir)) return;
+        if (TryMoveWithReservation(secondaryDir)) return;
 
-        TryMoveWithReservation(secondaryDir);
+        MoveDirection[] allDirs = { MoveDirection.Up, MoveDirection.Down, MoveDirection.Left, MoveDirection.Right };
+        foreach (MoveDirection dir in allDirs)
+        {
+            if (dir == primaryDir || dir == secondaryDir) continue;
+            if (TryMoveWithReservation(dir)) return;
+        }
     }
 
     private bool TryMoveWithReservation(MoveDirection dir)

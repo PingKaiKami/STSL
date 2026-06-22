@@ -3,9 +3,7 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance;
-
-    public const int DefaultLives = 3;
-    public const int DefaultGold = 99;
+    public int DefaultGold = 0;
 
     [Header("Global Player State")]
     public int money;
@@ -49,25 +47,16 @@ public class PlayerManager : MonoBehaviour
     public void InitializeNewRun()
     {
         money = DefaultGold;
-        health = DefaultLives;
     }
 
     public void ClearRunState()
     {
         money = 0;
-        health = DefaultLives;
     }
 
     public void Normalize()
     {
         money = Mathf.Max(0, money);
-
-        if (health <= 0)
-        {
-            health = DefaultLives;
-        }
-
-        health = Mathf.Clamp(health, 0, DefaultLives);
     }
 
     public bool ModifyMoney(int amount)
@@ -90,24 +79,5 @@ public class PlayerManager : MonoBehaviour
         }
 
         return ModifyMoney(-amount);
-    }
-
-    public bool ModifyHealth(int amount)
-    {
-        int nextHealth = health + amount;
-
-        if (nextHealth < 0)
-        {
-            health = 0;
-            return false;
-        }
-
-        health = Mathf.Clamp(nextHealth, 0, DefaultLives);
-        return health > 0;
-    }
-
-    public bool LoseLife()
-    {
-        return ModifyHealth(-1);
     }
 }

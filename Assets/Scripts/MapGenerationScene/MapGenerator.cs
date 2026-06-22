@@ -118,15 +118,15 @@ public class MapGenerationConfig
 
     public int actIndex = 1;
 
-    public float shopWeight = 5f;
-    public float restWeight = 12f;
-    public float eventWeight = 22f;
-    public float eliteWeightAct1 = 8f;
+    public float shopWeight = 10f;
+    public float restWeight = 20f;
+    public float eventWeight = 0f;
+    public float eliteWeightAct1 = 10f;
     public float eliteWeightAfterAct1 = 12f;
 
     public int minimumShopCount = 2;
     public int minimumRestCount = 2;
-    public int minimumChestCount = 2;
+    public int minimumChestCount = 0;
 }
 
 public static class SlayLikeMapGenerator

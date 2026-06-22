@@ -9,9 +9,15 @@ EditorBuildSettings:
     path: Assets/Scenes/MapGenerationScene.unity
     guid: c8e8f1b04c8d4e8cb2df6f984d4b2350
   - enabled: 1
-    path: Assets/Scenes/BattleScene.unity
+    path: Assets/Scenes/BattleScene_normal.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
+    path: Assets/Scenes/BattleScene_elite.unity
+    guid: e53c0a1c34c98184fa9b968efe278661
+  - enabled: 1
+    path: Assets/Scenes/BattleScene_boss.unity
+    guid: 3d2c480bbc747954b9e6901b9885000b
+  - enabled: 0
     path: Assets/Scenes/MapScene.unity
     guid: 718eb22fa93e52040af99356574e1672
   - enabled: 1

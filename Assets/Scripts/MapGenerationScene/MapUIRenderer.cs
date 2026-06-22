@@ -18,16 +18,16 @@ public class MapUIRenderer : MonoBehaviour
     public int actIndex = 1;
 
     [Header("Room Weights")]
-    public float shopWeight = 5f;
-    public float restWeight = 12f;
-    public float eventWeight = 22f;
-    public float eliteWeightAct1 = 8f;
-    public float eliteWeightAfterAct1 = 12f;
+    public float shopWeight = 20f;
+    public float restWeight = 25f;
+    public float eventWeight = 0f;
+    public float eliteWeightAct1 = 15f;
+    public float eliteWeightAfterAct1 = 20f;
 
     [Header("Required Room Counts")]
     public int minimumShopCount = 2;
     public int minimumRestCount = 2;
-    public int minimumChestCount = 2;
+    public int minimumChestCount = 0;
 
     [Header("UI References")]
     public RectTransform mapRoot;
@@ -54,7 +54,9 @@ public class MapUIRenderer : MonoBehaviour
     public float currentLayerViewportY = -190f;
 
     [Header("Scene Loading")]
-    public string battleSceneName = "BattleScene";
+    public string normalBattleSceneName = "BattleScene_normal";
+    public string eliteBattleSceneName = "BattleScene_elite";
+    public string bossBattleSceneName = "BattleScene_boss";
     public string shopSceneName = "ShopScene";
     public string restSceneName = "RestScene";
     public string chestSceneName = "ChestScene";
@@ -661,9 +663,15 @@ public class MapUIRenderer : MonoBehaviour
         switch (node.Type)
         {
             case RoomType.Normal:
+                SceneManager.LoadScene(normalBattleSceneName);
+                GameManager.Instance.currentState = GameState.Preparation;
+                break;
             case RoomType.Elite:
+                SceneManager.LoadScene(eliteBattleSceneName);
+                GameManager.Instance.currentState = GameState.Preparation;
+                break;
             case RoomType.Boss:
-                SceneManager.LoadScene(battleSceneName);
+                SceneManager.LoadScene(bossBattleSceneName);
                 GameManager.Instance.currentState = GameState.Preparation;
                 break;
 
@@ -699,7 +707,7 @@ public class MapUIRenderer : MonoBehaviour
                 break;
 
             case 1:
-                selectedSceneName = battleSceneName;
+                selectedSceneName = normalBattleSceneName;
                 break;
 
             case 2:
@@ -723,7 +731,7 @@ public class MapUIRenderer : MonoBehaviour
             return;
         }
 
-        if (sceneName == battleSceneName)
+        if (sceneName == normalBattleSceneName || sceneName == eliteBattleSceneName || sceneName == bossBattleSceneName)
         {
             GameManager.Instance.currentState = GameState.Preparation;
             return;
@@ -758,11 +766,7 @@ public class MapUIRenderer : MonoBehaviour
         PlayerManager playerManager = PlayerManager.EnsureExists();
         int cardCount = HandManager.Instance != null ? HandManager.Instance.CardCount : 0;
 
-        playerInfoText.text = "Lives: "
-            + playerManager.health
-            + " / "
-            + PlayerManager.DefaultLives
-            + "\nGold: "
+        playerInfoText.text = "Gold: "
             + playerManager.money
             + "\nCards: "
             + cardCount;

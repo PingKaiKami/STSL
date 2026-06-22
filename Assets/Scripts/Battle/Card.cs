@@ -196,25 +196,36 @@ public class Card : MonoBehaviour
                 CharacterBase cb = playerObj.GetComponent<CharacterBase>();
                 if (cb != null)
                 {
-                    cb.unitName = this.cardName;
-                    cb.attack = this.att;
-                    cb.defense = this.def;
-                    cb.health = this.hp;      // 灌入當前血量
-                    cb.maxHealth = this.maxHp; // 灌入最大血量
-                    
-                    // 讓場上的 Player 腳本（如果有繼承 CharacterBase）記住原始 Prefab 檔案
                     Player p = playerObj.GetComponent<Player>();
                     if (p != null) p.sourceCardPrefab = unitPrefab;
                 }
+                StartCoroutine(UpdateStatsCoroutine(playerObj));
                 
                 slot.isOccupied = true;
                 hit.gameObject.GetComponent<SpriteRenderer>().enabled = false;
                 hit.enabled = false; 
 
                 // 3. 卡牌功成身退，摧毀物件
-                Destroy(gameObject); 
+                
             }
         }
+    }
+
+    private IEnumerator UpdateStatsCoroutine(GameObject playerObj)
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        CharacterBase cb = playerObj.GetComponent<CharacterBase>();
+        if (cb != null)
+        {
+            cb.unitName = cardName;
+            cb.attack = att;
+            cb.defense = def;
+            cb.health = hp;      // 灌入當前血量
+            cb.maxHealth = maxHp; // 灌入最大血量
+        }
+        yield return null;
+        Destroy(gameObject);
     }
 
     public void UpdateStats(float att_amount, float def_amount, float hp_amount, float maxHp_amount = 0f)
@@ -228,6 +239,7 @@ public class Card : MonoBehaviour
             maxHp = 1f;
         }
 
+        hp += maxHp_amount;
         hp += hp_amount;
 
         if (hp > maxHp)
