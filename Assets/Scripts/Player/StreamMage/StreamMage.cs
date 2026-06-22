@@ -35,6 +35,8 @@ public class StreamMage : Player
     public bool debugEnableWaterCurrentPull = true;
     public bool debugEnableWaterBullet      = true;
 
+    protected override bool DebugPathDraw => true;
+
     // 動畫基準速度
     private float baseWalkSpeed;
     private float baseAttackTime;
@@ -51,7 +53,7 @@ public class StreamMage : Player
     {
         unitName            = "StreamMage";
         health              = 200f;
-        attack              = 25f;
+        attack              = 20f;
         defense             = 3f;
         attackRange         = 3f;
         moveSpeed           = 3f;
@@ -200,6 +202,10 @@ public class StreamMage : Player
         Vector2 dirAway = ((Vector2)transform.position - (Vector2)enemyTransform.position).normalized;
         if (dirAway == Vector2.zero) dirAway = Vector2.right;
         Vector2 edgePos = (Vector2)enemyTransform.position + dirAway * attackRange;
+
+        // 目標位置在邊界外則放棄瞬移，從原地射擊
+        if (!GridAStarPathfinder.IsWithinBounds(GridAStarPathfinder.WorldToGrid(edgePos))) return;
+
         transform.position = new Vector3(edgePos.x, edgePos.y, transform.position.z);
     }
 
@@ -439,11 +445,21 @@ public class StreamMage : Player
 
     protected override GameObject FindNearestEnemy()
     {
-        if (lockedTarget != null && lockedTarget.activeInHierarchy)
+        // 鎖定目標若已進黑名單或死亡，清掉重選
+        if (lockedTarget != null && (!lockedTarget.activeInHierarchy || _skippedTargets.Contains(lockedTarget)))
+            lockedTarget = null;
+
+        if (lockedTarget != null)
             return lockedTarget;
 
-        lockedTarget = Random.value < aggressiveChance ? FindAggressiveTarget() : FindDefensiveTarget();
-        return lockedTarget ?? FindNearestEnemyObj();
+        GameObject candidate = Random.value < aggressiveChance ? FindAggressiveTarget() : FindDefensiveTarget();
+
+        // 最優候選也在黑名單 → 改用 base（已過濾黑名單）
+        if (candidate != null && _skippedTargets.Contains(candidate))
+            candidate = base.FindNearestEnemy();
+
+        lockedTarget = candidate;
+        return lockedTarget;
     }
 
     private GameObject FindAggressiveTarget()

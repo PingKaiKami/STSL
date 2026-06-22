@@ -181,7 +181,7 @@ public class StormWarrior : Player
 
         bool isCrit = Random.value < critRate;
         float dmg   = isCrit ? attack * 2f : attack;
-        if (isCrit) Debug.Log($"{unitName} 必殺！");
+        //if (isCrit) Debug.Log($"{unitName} 必殺！");
 
         Debug.Log($"{unitName} 攻擊 {enemy.unitName}，造成 {dmg} 傷害");
         enemy.TakeDamage(dmg);
@@ -406,13 +406,30 @@ public class StormWarrior : Player
 
     protected override GameObject FindNearestEnemy()
     {
-        // 鎖定目標仍存活 → 繼續追擊，不重選
-        if (lockedTarget != null && lockedTarget.activeInHierarchy)
+        // 鎖定目標進黑名單或死亡 → 清掉重選
+        if (lockedTarget != null && (!lockedTarget.activeInHierarchy || _skippedTargets.Contains(lockedTarget)))
+            lockedTarget = null;
+
+        if (lockedTarget != null)
             return lockedTarget;
 
-        // 目標已擊敗或尚無目標 → 50/50 重新選定
-        lockedTarget = Random.value < 0.5f ? FindAggressiveTarget() : FindDefensiveTarget();
-        return lockedTarget ?? FindNearestEnemyObj();
+        bool aggressive = Random.value < 0.5f;
+        GameObject newTarget = aggressive ? FindAggressiveTarget() : FindDefensiveTarget();
+        newTarget = newTarget ?? FindNearestEnemyObj();
+
+        // 最優候選也在黑名單 → 改用 base（已過濾黑名單）
+        if (newTarget != null && _skippedTargets.Contains(newTarget))
+            newTarget = base.FindNearestEnemy();
+
+        if (newTarget != lockedTarget)
+        {
+            string mode = aggressive ? "進攻" : "防守";
+            string name = newTarget != null ? newTarget.name : "無";
+            Debug.Log($"{unitName} 換目標 [{mode}] → {name}");
+            lockedTarget = newTarget;
+        }
+
+        return lockedTarget;
     }
 
     /// <summary>進攻型：可擊殺 → 血量最低 → 離自己最遠</summary>

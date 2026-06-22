@@ -376,11 +376,19 @@ public class TideTitan : Player
 
     protected override GameObject FindNearestEnemy()
     {
-        if (lockedTarget != null && lockedTarget.activeInHierarchy)
+        if (lockedTarget != null && (!lockedTarget.activeInHierarchy || _skippedTargets.Contains(lockedTarget)))
+            lockedTarget = null;
+
+        if (lockedTarget != null)
             return lockedTarget;
 
-        lockedTarget = Random.value < aggressiveChance ? FindAggressiveTarget() : FindDefensiveTarget();
-        return lockedTarget ?? FindNearestEnemyObj();
+        GameObject candidate = Random.value < aggressiveChance ? FindAggressiveTarget() : FindDefensiveTarget();
+
+        if (candidate != null && _skippedTargets.Contains(candidate))
+            candidate = base.FindNearestEnemy();
+
+        lockedTarget = candidate;
+        return lockedTarget;
     }
 
     /// <summary>
