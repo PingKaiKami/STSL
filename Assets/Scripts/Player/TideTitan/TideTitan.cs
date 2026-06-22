@@ -66,12 +66,12 @@ public class TideTitan : Player
 
     protected override void Start()
     {
-        unitName            = "潮汐泰坦";
+        unitName            = "TideTitan";
         health              = 500f;
         attack              = 10f;
         defense             = 4f;
         attackRange         = 1.5f;
-        moveSpeed           = 2f;
+        moveSpeed           = 3f;
         attackTime          = 1.5f;
         skillChargeInterval = 0.1f;
 

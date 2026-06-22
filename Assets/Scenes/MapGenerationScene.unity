@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db706b3c0a1c7e64aaedaeaebff6b031, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DefaultGold: 0
   money: 0
   health: 0
 --- !u!4 &368457245
@@ -199,6 +200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spacing: 2.5
   basicCard: {fileID: 0}
+  warriorPrefab: {fileID: 0}
 --- !u!4 &930593478
 Transform:
   m_ObjectHideFlags: 0
@@ -625,6 +627,13 @@ MonoBehaviour:
   playerCount: 0
   enemyCount: 0
   isDebug: 0
+  mapSceneName: MapGenerationScene
+  failSceneName: FailScene
+  finalWinSceneName: FinalWinScene
+  victoryGoldReward: 10
+  enemyRegistrationRules: []
+  defaultEnemyRegistrationMode: 0
+  defaultPlayerRegistrationMode: 0
 --- !u!4 &2120143479
 Transform:
   m_ObjectHideFlags: 0

@@ -31,6 +31,12 @@ public class ChestSceneController : MonoBehaviour
     public Text statusText;
     public Button claimButton;
 
+    [Header("Reward")]
+
+    public GameObject warrior;
+    public GameObject mage;
+    public GameObject titan;
+
     private ChestRewardData currentReward;
     private bool rewardClaimed;
 
@@ -59,7 +65,22 @@ public class ChestSceneController : MonoBehaviour
         {
             if (HandManager.Instance != null)
             {
-                HandManager.Instance.AddCardByUnitId(currentReward.rewardName);
+                if(currentReward.rewardName == "Warrior")
+                {
+                    HandManager.Instance.AddCard(warrior);
+                }
+                else if(currentReward.rewardName == "Mage")
+                {
+                    HandManager.Instance.AddCard(mage);
+                }
+                else if(currentReward.rewardName == "Titan")
+                {
+                    HandManager.Instance.AddCard(titan);
+                }
+                else
+                {
+                    Debug.LogError("bug");
+                }
             }
         }
 
@@ -77,24 +98,49 @@ public class ChestSceneController : MonoBehaviour
 
     private void RollReward()
     {
-        bool giveGold = UnityEngine.Random.Range(0, 2) == 0;
+        int rand = UnityEngine.Random.Range(0, 4);
 
-        if (giveGold)
+        switch (rand)
         {
-            currentReward = new ChestRewardData();
-            currentReward.rewardType = ChestRewardType.Gold;
-            currentReward.rewardId = "chest_gold";
-            currentReward.rewardName = "Gold";
-            currentReward.goldAmount = 40;
-            currentReward.description = "+" + currentReward.goldAmount + " Gold";
-            return;
+            case 0:
+                currentReward = new ChestRewardData();
+                currentReward.rewardType = ChestRewardType.Gold;
+                currentReward.rewardId = "chest_gold";
+                currentReward.rewardName = "Gold";
+                currentReward.goldAmount = 40;
+                currentReward.description = "+" + currentReward.goldAmount + " Gold";
+                break;
+
+            case 1:
+                currentReward = new ChestRewardData();
+                currentReward.rewardType = ChestRewardType.Follower;
+                currentReward.rewardId = "chest_follower_warrior";
+                currentReward.rewardName = "Warrior";
+                currentReward.description = "Follower card reward from a chest.";
+                break;
+            
+            case 2:
+                currentReward = new ChestRewardData();
+                currentReward.rewardType = ChestRewardType.Follower;
+                currentReward.rewardId = "chest_follower_mage";
+                currentReward.rewardName = "Mage";
+                currentReward.description = "Follower card reward from a chest.";
+                break;
+
+            case 3:
+                currentReward = new ChestRewardData();
+                currentReward.rewardType = ChestRewardType.Follower;
+                currentReward.rewardId = "chest_follower_titan";
+                currentReward.rewardName = "Titan";
+                currentReward.description = "Follower card reward from a chest.";
+                break;
+
+            default:
+                Debug.LogError("bug");
+                break;
         }
 
-        currentReward = new ChestRewardData();
-        currentReward.rewardType = ChestRewardType.Follower;
-        currentReward.rewardId = "chest_follower_warrior";
-        currentReward.rewardName = "Warrior";
-        currentReward.description = "Follower card reward from a chest.";
+        
     }
 
     private void RefreshUI()

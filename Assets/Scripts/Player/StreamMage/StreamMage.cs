@@ -49,7 +49,7 @@ public class StreamMage : Player
 
     protected override void Start()
     {
-        unitName            = "溪流法師";
+        unitName            = "StreamMage";
         health              = 200f;
         attack              = 25f;
         defense             = 3f;

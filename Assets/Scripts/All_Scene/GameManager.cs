@@ -417,7 +417,18 @@ public class GameManager : MonoBehaviour
                 HandManager.Instance.RecallAllPlayersToHand();
             }
 
-            PlayerManager.EnsureExists().ModifyMoney(victoryGoldReward);
+            string currentSceneName = SceneManager.GetActiveScene().name;
+            
+            if(currentSceneName == "BattleScene_normal")
+            {
+                PlayerManager.EnsureExists().ModifyMoney(victoryGoldReward);
+            }
+            else
+            {
+                PlayerManager.EnsureExists().ModifyMoney(victoryGoldReward * 2);
+            }
+
+            
 
             if (!isDebug)
             {
@@ -440,17 +451,13 @@ public class GameManager : MonoBehaviour
         else
         {
             RunStateManager runState = RunStateManager.EnsureExists();
-            PlayerManager playerManager = PlayerManager.EnsureExists();
-            bool hasLivesLeft = playerManager.LoseLife();
 
             if (HandManager.Instance != null)
             {
                 HandManager.Instance.RecallAllPlayersToHand();
             }
 
-            Debug.Log("Player lives after loss: " + playerManager.health);
-
-            if (!isDebug && !hasLivesLeft)
+            if (!isDebug)
             {
                 currentState = GameState.Menu;
                 SceneManager.LoadScene(failSceneName);

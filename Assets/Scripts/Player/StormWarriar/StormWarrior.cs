@@ -62,12 +62,12 @@ public class StormWarrior : Player
 
     protected override void Start()
     {
-        unitName             = "狂風戰士";
+        unitName             = "StormWarrior";
         health               = 300f;
         attack               = 20f;
         defense              = 2f;
         attackRange          = 1.5f;
-        moveSpeed            = 4f;
+        moveSpeed            = 3f;
         attackTime           = 1.0f;
         skillChargeInterval  = 0.05f;   // 每 1 秒 +1 衝能，改這裡即可
 

@@ -563,6 +563,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapSceneName: MapGenerationScene
+  hpText: {fileID: 0}
+  statusText: {fileID: 0}
+  restButton: {fileID: 0}
+  skipButton: {fileID: 0}
 --- !u!114 &1206094831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -576,6 +580,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapSceneName: MapGenerationScene
+  titleText: {fileID: 0}
+  rewardText: {fileID: 0}
+  statusText: {fileID: 0}
+  claimButton: {fileID: 0}
+  warrior: {fileID: 8449941709963339923, guid: 0966be59b497c384fb65c3ccadf813be, type: 3}
+  mage: {fileID: 3841714382545713402, guid: 1d6d4ce47fe886243b3ac6bdfe012b41, type: 3}
+  titan: {fileID: 2658174854702369890, guid: 6b21f3922fd3fc2419c117852b21d666, type: 3}
 --- !u!1 &1984859105
 GameObject:
   m_ObjectHideFlags: 0

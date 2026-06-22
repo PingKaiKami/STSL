@@ -24,10 +24,10 @@ public class RestSceneController : MonoBehaviour
     {
         if (HandManager.Instance != null)
         {
-            HandManager.Instance.RestoreAllCardsToFullHealth();
+            HandManager.Instance.RestoreAllCardsHealth();
         }
 
-        SetStatus("All pieces restored to full HP.");
+        SetStatus("All pieces restored some HP.");
         ReturnToMap();
     }
 
@@ -46,12 +46,7 @@ public class RestSceneController : MonoBehaviour
 
         if (hpText != null)
         {
-            hpText.text = "Lives: "
-                + playerManager.health
-                + " / "
-                + PlayerManager.DefaultLives
-                + "\nCards: "
-                + cardCount;
+            hpText.text = $"Cards :{cardCount}";
         }
 
         if (restButton != null)
@@ -64,7 +59,7 @@ public class RestSceneController : MonoBehaviour
             }
         }
 
-        SetStatus("Restore all surviving piece cards to full HP.");
+        SetStatus("Restore all surviving piece cards some HP.");
     }
 
     private void SetStatus(string message)

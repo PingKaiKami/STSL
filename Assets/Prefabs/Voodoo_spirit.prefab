@@ -46,20 +46,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2d67cea2cbce67419064cf9db56afb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shield: 0
+  skillChargeInterval: 0.001
   moveSpeed: 3
   attackTime: 1
   attackRange: 1
   unitName: Spirit
+  maxHealth: 0
   health: 2
-  attack: 9
+  attack: 10
   defense: 0
+  teamDamageReduction: 0
   maxSearchDepth: 20
   animator: {fileID: 6615021596647835741}
   debugOccupancy: 0
   deathAnimationDelay: 0.8
   attackAnimationDuration: 0.5
+  useProjectileAttack: 0
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 6
+  projectileLaunchDelay: 0.2
+  projectileSpawnDistance: 0.45
+  projectileHitRadius: 0.2
   lifeTime: 6
   baseAttackTime: 0.5
+  attackBonusPerTotem: 1
 --- !u!212 &8788271903489376293
 SpriteRenderer:
   m_ObjectHideFlags: 0
