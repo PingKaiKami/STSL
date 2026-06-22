@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : CharacterBase
@@ -5,6 +6,12 @@ public class Player : CharacterBase
     private bool hasReservedCell = false;
     private Vector3 lastSafeWorldPosition;
     private float baseMoveSpeed;
+
+    private const float StuckWindow = 0.025f;
+    private int        _sampledPathCost = int.MaxValue;
+    private float      _sampleTime      = -999f;
+    private GameObject _trackedTarget;
+    protected readonly HashSet<GameObject> _skippedTargets = new HashSet<GameObject>();
 
     [HideInInspector] public GameObject sourceCardPrefab;
 
@@ -94,42 +101,115 @@ public class Player : CharacterBase
         if (isMoving) return;
         SnapToGrid();
 
-        // 被嘲諷：強制以嘲諷來源為目標，否則尋找最近敵人
-        CharacterBase tauntSource = GetTauntSource();
-        GameObject targetEnemy = (tauntSource != null && tauntSource.gameObject.activeInHierarchy)
-            ? tauntSource.gameObject
-            : FindNearestEnemy();
-
-        if (targetEnemy == null)
+        // 最優先：出界時先回到界線內，不做任何戰鬥行為
+        Vector2Int myCell = WorldToGrid(transform.position);
+        if (!GridAStarPathfinder.IsWithinBounds(myCell))
         {
-            Debug.Log("場上沒有敵人");
+            ReturnToBounds(myCell);
             return;
         }
 
-        Vector2Int currentCell = WorldToGrid(transform.position);
+        CharacterBase tauntSource = GetTauntSource();
+        bool isTaunted = tauntSource != null && tauntSource.gameObject.activeInHierarchy;
+
+        GameObject targetEnemy = isTaunted ? tauntSource.gameObject : FindNearestEnemy();
+
+        if (targetEnemy == null)
+        {
+            // 所有目標都被跳過 → 清空重試
+            if (_skippedTargets.Count > 0)
+            {
+                _skippedTargets.Clear();
+                targetEnemy = FindNearestEnemy();
+            }
+            if (targetEnemy == null)
+            {
+                Debug.Log("場上沒有敵人");
+                return;
+            }
+        }
+
+        // 目標換了就重置取樣
+        if (targetEnemy != _trackedTarget)
+        {
+            _trackedTarget   = targetEnemy;
+            _sampledPathCost = int.MaxValue;
+            _sampleTime      = Time.time;
+        }
+
         Vector2Int targetCell = WorldToGrid(targetEnemy.transform.position);
 
-        int distance = GetGridDistance(currentCell, targetCell);
+        Vector2Int pathNextStep;
+        int pathCost;
+        bool pathFound = GridAStarPathfinder.TryFindNextStepToPosition(
+            gameObject, targetCell, attackRange, 20, out pathNextStep, out pathCost, false);
+        if (!pathFound) pathCost = int.MaxValue;
 
-        if (distance <= GetAttackRangeInGrid())
+        if (pathCost == 0)
         {
             TryAttack(targetEnemy);
             return;
         }
 
+        // 找不到路徑：跳過卡路偵測，貪婪移動盡量靠近
+        if (!pathFound)
+        {
+            MoveTowardEnemy(targetEnemy);
+            return;
+        }
+
+        // 卡路偵測：每 StuckWindow 秒取樣一次，本次沒比上次更短就換目標
+        if (!isTaunted)
+        {
+            if (Time.time - _sampleTime >= StuckWindow)
+            {
+                if (DebugPathDraw) Debug.Log($"[StuckCheck] {name} → {targetEnemy.name} 距離={pathCost} 步，最近步數={(_sampledPathCost == int.MaxValue ? "無" : _sampledPathCost.ToString())} 步");
+                if (pathCost >= _sampledPathCost)
+                {
+                    _skippedTargets.Add(targetEnemy);
+                    if (DebugPathDraw) Debug.Log($"[StuckCheck] {name} 沒進步，{targetEnemy.name} 加入黑名單（黑名單共 {_skippedTargets.Count} 個）");
+                    _trackedTarget   = null;
+                    _sampledPathCost = int.MaxValue;
+                    return;
+                }
+                _sampledPathCost = pathCost;
+                _sampleTime      = Time.time;
+            }
+        }
+
+        MoveTowardEnemy(targetEnemy);
+    }
+
+    protected virtual bool DebugPathDraw => false;
+
+    protected virtual void MoveTowardEnemy(GameObject target)
+    {
+        Vector2Int currentCell = GridAStarPathfinder.WorldToGrid(transform.position);
+        Vector2Int targetCell  = GridAStarPathfinder.WorldToGrid(target.transform.position);
+
+        // A* 優先
+        Vector2Int nextStep;
+        int cost;
+        if (GridAStarPathfinder.TryFindNextStepToPosition(gameObject, targetCell, attackRange, 20, out nextStep, out cost, DebugPathDraw))
+        {
+            Vector2Int asDiff = nextStep - currentCell;
+            MoveDirection aDir = Mathf.Abs(asDiff.x) >= Mathf.Abs(asDiff.y)
+                ? (asDiff.x > 0 ? MoveDirection.Right : MoveDirection.Left)
+                : (asDiff.y > 0 ? MoveDirection.Up    : MoveDirection.Down);
+            if (TryMoveWithReservation(aDir)) return;
+        }
+
+        // 貪婪 fallback
         Vector2Int diff = targetCell - currentCell;
-
-        MoveDirection primaryDir;
-        MoveDirection secondaryDir;
-
+        MoveDirection primaryDir, secondaryDir;
         if (Mathf.Abs(diff.x) > Mathf.Abs(diff.y))
         {
-            primaryDir = diff.x > 0 ? MoveDirection.Right : MoveDirection.Left;
-            secondaryDir = diff.y > 0 ? MoveDirection.Up : MoveDirection.Down;
+            primaryDir   = diff.x > 0 ? MoveDirection.Right : MoveDirection.Left;
+            secondaryDir = diff.y > 0 ? MoveDirection.Up    : MoveDirection.Down;
         }
         else
         {
-            primaryDir = diff.y > 0 ? MoveDirection.Up : MoveDirection.Down;
+            primaryDir   = diff.y > 0 ? MoveDirection.Up    : MoveDirection.Down;
             secondaryDir = diff.x > 0 ? MoveDirection.Right : MoveDirection.Left;
         }
 
@@ -144,10 +224,29 @@ public class Player : CharacterBase
         }
     }
 
-    private bool TryMoveWithReservation(MoveDirection dir)
+    private void ReturnToBounds(Vector2Int outCell)
+    {
+        MoveDirection[] dirs    = { MoveDirection.Up, MoveDirection.Down, MoveDirection.Left, MoveDirection.Right };
+        Vector2Int[]    offsets = { Vector2Int.up,    Vector2Int.down,    Vector2Int.left,    Vector2Int.right    };
+        for (int i = 0; i < dirs.Length; i++)
+        {
+            if (GridAStarPathfinder.IsWithinBounds(outCell + offsets[i]))
+            {
+                TryMoveWithReservation(dirs[i]);
+                return;
+            }
+        }
+        // 所有鄰格也超界（深度出界），隨意嘗試任一方向
+        foreach (MoveDirection dir in dirs)
+            if (TryMoveWithReservation(dir)) return;
+    }
+
+    protected bool TryMoveWithReservation(MoveDirection dir)
     {
         Vector2Int currentCell = WorldToGrid(transform.position);
         Vector2Int targetCell = currentCell + DirectionToCellOffset(dir);
+
+        if (!GridAStarPathfinder.IsWithinBounds(targetCell)) return false;
 
         if (!GridReservationManager.TryReserveCell(gameObject, targetCell))
         {
@@ -186,7 +285,6 @@ public class Player : CharacterBase
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
-
         GameObject nearest = null;
         float minDistance = Mathf.Infinity;
         Vector2 currentPos = transform.position;
@@ -195,17 +293,15 @@ public class Player : CharacterBase
         {
             if (enemy == null) continue;
             if (!enemy.activeInHierarchy) continue;
+            if (_skippedTargets.Contains(enemy)) continue;
 
             float dist = Vector2.Distance(enemy.transform.position, currentPos);
-
-
             if (dist < minDistance)
             {
                 nearest = enemy;
                 minDistance = dist;
             }
         }
-
 
         return nearest;
     }
@@ -279,16 +375,6 @@ public class Player : CharacterBase
         }
 
         return Vector2Int.zero;
-    }
-
-    private int GetAttackRangeInGrid()
-    {
-        return Mathf.Max(1, Mathf.FloorToInt(attackRange));
-    }
-
-    private int GetGridDistance(Vector2Int a, Vector2Int b)
-    {
-        return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
     }
 
     private Vector2Int WorldToGrid(Vector3 worldPosition)
