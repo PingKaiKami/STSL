@@ -18,16 +18,16 @@ public class MapUIRenderer : MonoBehaviour
     public int actIndex = 1;
 
     [Header("Room Weights")]
-    public float shopWeight = 20f;
-    public float restWeight = 25f;
-    public float eventWeight = 0f;
-    public float eliteWeightAct1 = 15f;
+    public float shopWeight = 15f;
+    public float restWeight = 20f;
+    public float eventWeight = 20f;
+    public float eliteWeightAct1 = 10f;
     public float eliteWeightAfterAct1 = 20f;
 
     [Header("Required Room Counts")]
     public int minimumShopCount = 2;
     public int minimumRestCount = 2;
-    public int minimumChestCount = 0;
+    public int minimumChestCount = 2;
 
     [Header("UI References")]
     public RectTransform mapRoot;
